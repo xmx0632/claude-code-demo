@@ -55,17 +55,26 @@ cd claude-code-demo/ruoyi-example
 
 ### 2. 数据库初始化
 
-本项目使用 **Flyway** 进行数据库版本控制，启动时会自动执行迁移脚本。
+本项目使用独立的 **database-migrations** 组件管理数据库版本。
 
-**方式一：使用 Flyway 自动迁移（推荐）**
+**方式一：使用 Flyway 命令行工具（推荐）**
 
 ```bash
-# 创建空数据库
-mysql -u root -p -e "CREATE DATABASE ruoyi_example DEFAULT CHARSET utf8mb4"
+# 1. 进入数据库迁移组件目录
+cd database-migrations
 
-# 修改 application.yml 中的数据库连接信息
-# 启动项目，Flyway 会自动执行所有迁移脚本
-mvn spring-boot:run
+# 2. 配置数据库连接
+cp flyway.conf flyway.local.conf
+vi flyway.local.conf  # 修改数据库连接信息
+
+# 3. 初始化数据库（可选）
+./scripts/init-db.sh
+
+# 4. 执行迁移
+./scripts/migrate.sh
+
+# 5. 查看迁移状态
+./scripts/info.sh
 ```
 
 **方式二：手动导入 SQL**
@@ -75,6 +84,8 @@ mvn spring-boot:run
 mysql -u root -p -e "CREATE DATABASE ruoyi_example DEFAULT CHARSET utf8mb4"
 mysql -u root -p ruoyi_example < docs/database-schema.sql
 ```
+
+**注意**：database-migrations 是独立组件，可在任何项目中复用。
 
 ### 3. 配置文件
 

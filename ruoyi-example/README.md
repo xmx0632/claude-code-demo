@@ -6,7 +6,7 @@
 
 - **简化架构**: 只包含核心功能，易于理解
 - **MyBatis-Plus**: 使用增强版 MyBatis，简化 CRUD 操作
-- **Flyway**: 数据库版本控制和增量迁移
+- **独立数据库迁移**: 使用独立的 Flyway 组件管理数据库版本
 - **RESTful API**: 标准的 REST 接口设计
 - **Swagger**: 集成 Knife4j 接口文档
 - **最佳实践**: 展示企业级代码规范
@@ -15,12 +15,12 @@
 
 - Spring Boot 3.2.0
 - MyBatis-Plus 3.5.5
-- Flyway 9.22.3
 - MySQL 8.0
 - Druid 1.2.20
 - Lombok
 - Hutool 5.8.24
 - Knife4j 4.3.0
+- Flyway 9.22.3（独立组件）
 
 ## 快速开始
 
@@ -32,15 +32,26 @@
 
 ### 2. 数据库初始化
 
-**方式一：使用 Flyway 自动迁移（推荐）**
+本项目使用独立的 **database-migrations** 组件管理数据库版本。
+
+**方式一：使用 Flyway 命令行工具（推荐）**
 
 ```bash
-# 创建空数据库
-mysql -u root -p -e "CREATE DATABASE ruoyi_example DEFAULT CHARSET utf8mb4"
+# 1. 进入数据库迁移组件目录
+cd ../database-migrations
 
-# 修改 application.yml 中的数据库连接信息
-# 启动项目，Flyway 会自动执行所有迁移脚本
-mvn spring-boot:run
+# 2. 配置数据库连接
+cp flyway.conf flyway.local.conf
+vi flyway.local.conf  # 修改数据库连接信息
+
+# 3. 初始化数据库（可选）
+./scripts/init-db.sh
+
+# 4. 执行迁移
+./scripts/migrate.sh
+
+# 5. 返回项目目录
+cd ../ruoyi-example
 ```
 
 **方式二：手动导入 SQL**
@@ -49,6 +60,13 @@ mvn spring-boot:run
 # 创建数据库并导入初始结构
 mysql -u root -p -e "CREATE DATABASE ruoyi_example DEFAULT CHARSET utf8mb4"
 mysql -u root -p ruoyi_example < docs/database-schema.sql
+```
+
+**查看迁移状态**：
+
+```bash
+cd ../database-migrations
+./scripts/info.sh
 ```
 
 ### 3. 修改配置
@@ -96,10 +114,6 @@ ruoyi-example/
 │       └── User.java
 ├── src/main/resources/
 │   ├── application.yml              # 应用配置
-│   ├── db/migration/                # Flyway 迁移脚本
-│   │   ├── V1__init_schema.sql
-│   │   ├── V2__insert_init_data.sql
-│   │   └── ...
 │   └── mapper/
 │       └── UserMapper.xml           # MyBatis XML
 └── docs/

@@ -15,20 +15,24 @@
 ```
 claude-code-demo/
 ├── README.md                    # 本文件
-├── Skills-Collection/          # Skills 示例集合
-│   ├── ruoyi-crud/             # CRUD 代码生成
-│   ├── code-review/            # 代码审查助手
-│   ├── api-doc/                # API 文档生成器
-│   ├── test-gen/               # 单元测试生成器
-│   ├── sql-optimizer/          # SQL 优化建议
-│   └── flyway-migration/       # Flyway 数据库迁移管理
-├── ruoyi-example/              # Ruoyi 示例项目
-└── docs/                       # 详细文档
-    ├── quick-start.md          # 快速入门
-    ├── happy-remote.md         # Happy 远程开发
-    ├── skills-guide.md         # Skills 开发指南
-    ├── best-practices.md       # 最佳实践
-    └── appendix.md             # 附录
+├── database-migrations/         # 独立数据库迁移组件
+│   ├── migrations/              # Flyway 迁移脚本
+│   ├── scripts/                 # 辅助脚本
+│   └── docs/                    # 组件文档
+├── Skills-Collection/           # Skills 示例集合
+│   ├── ruoyi-crud/              # CRUD 代码生成
+│   ├── code-review/             # 代码审查助手
+│   ├── api-doc/                 # API 文档生成器
+│   ├── test-gen/                # 单元测试生成器
+│   ├── sql-optimizer/           # SQL 优化建议
+│   └── flyway-migration/        # Flyway 数据库迁移管理
+├── ruoyi-example/               # Ruoyi 示例项目
+└── docs/                        # 详细文档
+    ├── quick-start.md           # 快速入门
+    ├── happy-remote.md          # Happy 远程开发
+    ├── skills-guide.md          # Skills 开发指南
+    ├── best-practices.md        # 最佳实践
+    └── appendix.md              # 附录
 ```
 
 ## 快速开始

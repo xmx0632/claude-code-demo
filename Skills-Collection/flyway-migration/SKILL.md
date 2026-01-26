@@ -289,6 +289,107 @@ spring.flyway.baseline-on-migrate: true
 spring.flyway.baseline-version: 0
 ```
 
+## 独立组件集成
+
+本项目推荐使用独立的 **database-migrations** 组件，将数据库迁移脚本与应用代码分离。
+
+### 组件结构
+
+```
+database-migrations/
+├── flyway.conf          # Flyway 配置模板
+├── migrations/          # 迁移脚本目录
+├── scripts/             # 辅助脚本
+│   ├── migrate.sh      # 执行迁移
+│   ├── info.sh         # 查看状态
+│   ├── validate.sh     # 验证脚本
+│   └── rollback.sh     # 生成回滚
+└── docs/                # 文档
+    ├── conventions.md  # 编写规范
+    └── changelog.md    # 变更日志
+```
+
+### 使用独立组件
+
+**1. 配置数据库连接**
+
+```bash
+cd database-migrations
+cp flyway.conf flyway.local.conf
+vi flyway.local.conf  # 修改数据库连接信息
+```
+
+**2. 执行迁移**
+
+```bash
+./scripts/migrate.sh
+```
+
+**3. 查看状态**
+
+```bash
+./scripts/info.sh
+```
+
+**4. 验证脚本**
+
+```bash
+./scripts/validate.sh
+```
+
+### 集成到项目
+
+#### 方式 1: 命令行（推荐）
+
+在 CI/CD 流程中添加迁移步骤：
+
+```bash
+cd database-migrations
+./scripts/migrate.sh
+```
+
+#### 方式 2: Maven 插件
+
+```xml
+<plugin>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-maven-plugin</artifactId>
+    <configuration>
+        <configFiles>../database-migrations/flyway.conf</configFiles>
+        <locations>filesystem:../database-migrations/migrations</locations>
+    </configuration>
+</plugin>
+```
+
+#### 方式 3: Spring Boot（可选）
+
+如需在 Spring Boot 启动时自动迁移：
+
+```yaml
+spring:
+  flyway:
+    enabled: true
+    locations: filesystem:../database-migrations/migrations
+```
+
+### 优势
+
+- **可移植性**: 迁移脚本可在任何项目中使用
+- **独立管理**: 数据库变更有自己的版本控制
+- **团队协作**: DBA 可独立管理迁移脚本
+- **多项目共享**: 多个项目可共享同一套迁移脚本
+- **环境隔离**: 开发/测试/生产使用相同脚本
+
+### 生成的脚本位置
+
+使用此 Skill 时，迁移脚本将生成到独立组件目录：
+
+```
+/flyway-migration create --table=sys_user --type=add_column
+
+# 生成文件: database-migrations/migrations/V8__add_field_to_sys_user.sql
+```
+
 ## 相关工具
 
 - Flyway 官方文档: https://flywaydb.org/documentation/
