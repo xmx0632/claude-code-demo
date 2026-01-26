@@ -466,6 +466,218 @@
 
 ---
 
+## Git 工作流集成
+
+SDLC Framework 完全集成了 Git 工作流程，确保所有开发活动都遵循版本控制最佳实践。
+
+### 分支策略
+
+完整的 Git 工作流程详见: [Git 工作流程规范](../guides/git-workflow.md)
+
+**核心原则**:
+- ✅ **分支隔离**: 所有功能开发在独立分支进行
+- ✅ **PR 合并**: 代码只能通过 Pull Request 合并到 main
+- ✅ **代码审查**: 每个 PR 必须经过代码审查
+- ✅ **禁止直接提交**: main 分支禁止直接提交代码
+
+### 工作流与 Git 集成
+
+```mermaid
+gitGraph
+    commit id: "Initial"
+    commit id: "v1.0.0" tag: "v1.0.0"
+
+    branch feature/requirements
+    checkout feature/requirements
+    commit id: "需求文档"
+    commit id: "用户故事"
+
+    checkout main
+    merge feature/requirements tag: "PR #1"
+
+    branch feature/design
+    checkout feature/design
+    commit id: "线框图"
+    commit id: "UI 流程"
+
+    checkout main
+    merge feature/design tag: "PR #2"
+
+    branch feature/architecture
+    checkout feature/architecture
+    commit id: "架构设计"
+    commit id: "ADR 记录"
+
+    checkout main
+    merge feature/architecture tag: "PR #3"
+
+    branch feature/implementation
+    checkout feature/implementation
+    commit id: "数据库迁移"
+    commit id: "后端代码"
+    commit id: "前端代码"
+    commit id: "单元测试"
+
+    checkout main
+    merge feature/implementation tag: "PR #4"
+
+    commit id: "v1.1.0" tag: "v1.1.0"
+```
+
+### 阶段与分支映射
+
+每个 SDLC 阶段对应一个或多个 Git 分支和 PR：
+
+| SDLC 阶段 | Git 分支 | PR 示例 |
+|-----------|----------|---------|
+| 阶段 1: 需求分析 | `feature/requirements-user-auth` | #1 - 需求文档 |
+| 阶段 2: 产品设计 | `feature/design-user-auth` | #2 - 设计文档 |
+| 阶段 3: 架构设计 | `feature/architecture-user-auth` | #3 - 架构文档 |
+| 阶段 4: 详细设计 | `feature/detailed-design-user-auth` | #4 - API 规范 |
+| 阶段 5: 数据库迁移 | `feature/db-migration-user-auth` | #5 - 迁移脚本 |
+| 阶段 6: 代码开发 | `feature/user-auth-implementation` | #6 - 功能实现 |
+| 阶段 7-8: 测试 | `feature/test-user-auth` | #7 - 测试代码 |
+| 阶段 9-11: 验收 | `feature/acceptance-user-auth` | #8 - 验收文档 |
+| 阶段 12-15: 文档 | `feature/docs-user-auth` | #9 - 用户和运维文档 |
+
+### 典型工作流
+
+#### 开始新项目/功能
+
+```bash
+# 1. 更新 main 分支
+./SDLC-Framework/scripts/update-main.sh
+
+# 2. 创建功能分支
+./SDLC-Framework/scripts/start-feature.sh user-auth-system
+
+# 3. 执行需求分析
+/requirements-analysis "创建用户认证系统"
+
+# 4. 提交需求文档
+git add docs/requirements/
+git commit -m "docs(requirements): 添加用户认证系统需求文档"
+
+# 5. 推送并创建 PR
+./SDLC-Framework/scripts/finish-feature.sh
+```
+
+#### 实现阶段
+
+```bash
+# 1. 创建实现分支
+./SDLC-Framework/scripts/start-feature.sh user-auth-implementation
+
+# 2. 执行架构和详细设计
+/architecture-design
+/detailed-design
+
+# 3. 生成代码
+/flyway-migration create --table=sys_user --type=create_table
+/ruoyi-crud sys_user
+
+# 4. 编写测试
+/test-gen UserService
+
+# 5. 代码审查
+/code-review
+
+# 6. 提交所有变更
+git add .
+git commit -m "feat(auth): 实现用户认证功能
+
+- 创建数据库迁移脚本
+- 生成 CRUD 代码
+- 实现业务逻辑
+- 编写单元测试
+
+Closes #6"
+
+# 7. 推送并创建 PR
+git push -u origin feature/user-auth-implementation
+gh pr create --title "feat: 实现用户认证功能" --body "请查看 PR 模板"
+```
+
+#### 完成功能
+
+```bash
+# 1. 确保 PR 通过所有 CI 检查
+# 2. 获得代码审查批准
+# 3. 合并 PR（Squash and merge）
+# 4. 更新本地 main
+./SDLC-Framework/scripts/update-main.sh
+
+# 5. 删除功能分支
+git branch -d feature/user-auth-implementation
+
+# 6. 创建版本标签
+git tag -a v1.1.0 -m "Release v1.1.0: 用户认证系统"
+git push origin v1.1.0
+```
+
+### Git 辅助脚本
+
+Framework 提供了三个辅助脚本简化 Git 操作：
+
+| 脚本 | 功能 | 用法 |
+|------|------|------|
+| `start-feature.sh` | 创建功能分支 | `./scripts/start-feature.sh <name>` |
+| `finish-feature.sh` | 完成 PR | `./scripts/finish-feature.sh` |
+| `update-main.sh` | 更新 main | `./scripts/update-main.sh` |
+
+详见: [辅助脚本文档](../scripts/README.md)
+
+### 分支保护规则
+
+**main 分支**必须启用以下保护规则：
+
+```
+✅ 禁止直接推送
+✅ 要求 PR 审查（至少 1 人批准）
+✅ 要求 CI 检查通过
+✅ 要求分支最新（合并前同步）
+✅ 要求解决所有审查评论
+```
+
+详见: [Git 工作流程规范](../guides/git-workflow.md#分支保护规则)
+
+### 提交规范
+
+遵循 [Conventional Commits](https://www.conventionalcommits.org/)：
+
+```bash
+# 功能开发
+git commit -m "feat(auth): 添加用户登录功能"
+
+# Bug 修复
+git commit -m "fix(payment): 修复支付超时问题"
+
+# 文档更新
+git commit -m "docs(readme): 更新安装说明"
+
+# 重构
+git commit -m "refactor(service): 重构订单服务"
+
+# 测试
+git commit -m "test(user): 添加用户测试用例"
+```
+
+### PR 模板
+
+项目提供了标准的 PR 模板 (`.github/pull_request_template.md`)，包含：
+- 变更说明
+- 变更类型
+- 测试情况
+- 检查清单
+- 代码审查重点
+- 截图/演示
+- 部署说明
+- 回滚计划
+
+创建 PR 时会自动加载模板。
+
+---
+
 ## 自动化命令
 
 ### 执行完整工作流
