@@ -16,11 +16,13 @@
 - Spring Boot 3.2.0
 - MyBatis-Plus 3.5.5
 - MySQL 8.0
+- Redis 7
 - Druid 1.2.20
 - Lombok
 - Hutool 5.8.24
 - Knife4j 4.3.0
 - Flyway 9.22.3（独立组件）
+- Spring Boot Actuator（健康检查）
 
 ## 快速开始
 
@@ -95,6 +97,58 @@ mvn spring-boot:run
 
 - 应用地址: http://localhost:8080
 - 接口文档: http://localhost:8080/doc.html
+
+## Docker 启动（推荐）
+
+项目提供了完整的 Docker Compose 配置，可以一键启动所有依赖服务。
+
+### 使用 Docker Compose 启动
+
+```bash
+# 1. 进入 docker 目录
+cd ../docker
+
+# 2. 创建环境变量文件
+cp .env.example .env
+
+# 3. 修改 .env 文件中的密码（重要！）
+vi .env
+
+# 4. 启动所有服务（MySQL、Redis、应用）
+./scripts/start.sh
+
+# 5. 执行数据库迁移
+docker-compose exec ruoyi-app sh -c "cd /app/database-migrations && ./scripts/migrate.sh"
+
+# 6. 查看服务状态
+docker-compose ps
+
+# 7. 查看日志
+./scripts/logs.sh
+```
+
+### 访问服务
+
+- 应用地址: http://localhost:8080
+- 接口文档: http://localhost:8080/doc.html
+- 健康检查: http://localhost:8080/actuator/health
+- MySQL: localhost:3306
+- Redis: localhost:6379
+
+### 管理命令
+
+```bash
+# 停止服务
+./scripts/stop.sh
+
+# 查看日志
+./scripts/logs.sh [服务名]
+
+# 完全清理（删除数据）
+./scripts/clean.sh
+```
+
+详细文档请参考：[Docker 组件说明](../docker/README.md)
 
 ## 项目结构
 

@@ -19,6 +19,11 @@ claude-code-demo/
 │   ├── migrations/              # Flyway 迁移脚本
 │   ├── scripts/                 # 辅助脚本
 │   └── docs/                    # 组件文档
+├── docker/                      # Docker 基础服务配置
+│   ├── docker-compose.yml       # Docker Compose 配置
+│   ├── services/                # 服务配置（MySQL、Redis）
+│   ├── app/                     # 应用容器配置
+│   └── scripts/                 # 管理脚本
 ├── Skills-Collection/           # Skills 示例集合
 │   ├── ruoyi-crud/              # CRUD 代码生成
 │   ├── code-review/             # 代码审查助手
