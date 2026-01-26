@@ -34,6 +34,11 @@
    - 数据流设计
    - 数据一致性策略
 
+6. **架构可视化**
+   - 使用 Mermaid 绘制系统架构图
+   - 绘制关键流程图
+   - 绘制交互时序图
+
 ## 工具配置
 
 ```yaml
@@ -140,6 +145,240 @@ allowed-tools:
 [角色/姓名]
 ```
 
+## Mermaid 架构图设计
+
+作为架构师，使用 Mermaid 创建可视化的架构图是重要的技能。
+
+### 1. 系统架构图 (System Architecture Diagram)
+
+使用 Mermaid `graph` 或 `flowchart` 展示系统整体架构：
+
+```mermaid
+graph TB
+    subgraph "前端层"
+        Web[Web 应用]
+        Mobile[移动应用]
+    end
+
+    subgraph "网关层"
+        Gateway[API 网关]
+    end
+
+    subgraph "服务层"
+        Service1[用户服务]
+        Service2[订单服务]
+        Service3[支付服务]
+    end
+
+    subgraph "数据层"
+        DB[(MySQL)]
+        Redis[(Redis)]
+        MQ[消息队列]
+    end
+
+    Web --> Gateway
+    Mobile --> Gateway
+    Gateway --> Service1
+    Gateway --> Service2
+    Gateway --> Service3
+    Service1 --> DB
+    Service1 --> Redis
+    Service2 --> DB
+    Service2 --> MQ
+    Service3 --> DB
+```
+
+### 2. 组件图 (Component Diagram)
+
+使用 Mermaid 展示组件之间的关系：
+
+```mermaid
+graph LR
+    subgraph "用户模块"
+        UserController[UserController]
+        UserService[UserService]
+        UserMapper[UserMapper]
+    end
+
+    subgraph "订单模块"
+        OrderController[OrderController]
+        OrderService[OrderService]
+        OrderMapper[OrderMapper]
+    end
+
+    UserController --> UserService
+    UserService --> UserMapper
+    OrderController --> OrderService
+    OrderService --> OrderMapper
+    UserService -.-> OrderService
+```
+
+### 3. 部署架构图 (Deployment Architecture)
+
+使用 Mermaid 展示部署拓扑：
+
+```mermaid
+graph TB
+    subgraph "负载均衡层"
+        LB[负载均衡器]
+    end
+
+    subgraph "应用服务器集群"
+        App1[应用服务器 1]
+        App2[应用服务器 2]
+        App3[应用服务器 3]
+    end
+
+    subgraph "数据库层"
+        Master[MySQL 主库]
+        Slave1[MySQL 从库 1]
+        Slave2[MySQL 从库 2]
+    end
+
+    LB --> App1
+    LB --> App2
+    LB --> App3
+    App1 --> Master
+    App2 --> Master
+    App3 --> Master
+    Master --> Slave1
+    Master --> Slave2
+```
+
+### 4. 时序图 (Sequence Diagram)
+
+使用 Mermaid `sequenceDiagram` 展示交互流程：
+
+```mermaid
+sequenceDiagram
+    actor User as 用户
+    participant Frontend as 前端
+    participant API as API 网关
+    participant Service as 订单服务
+    participant DB as 数据库
+
+    User->>Frontend: 创建订单
+    Frontend->>API: POST /api/orders
+    API->>Service: 创建订单请求
+    Service->>DB: 保存订单
+    DB-->>Service: 订单已保存
+    Service-->>API: 订单创建成功
+    API-->>Frontend: 返回订单信息
+    Frontend-->>User: 显示订单详情
+```
+
+### 5. 状态图 (State Diagram)
+
+使用 Mermaid `stateDiagram` 展示状态转换：
+
+```mermaid
+stateDiagram-v2
+    [*] --> 待支付: 创建订单
+    待支付 --> 已支付: 支付成功
+    待支付 --> 已取消: 取消订单
+    已支付 --> 待发货: 商家接单
+    待发货 --> 已发货: 物流发货
+    已发货 --> 已完成: 用户确认
+    已支付 --> 已退款: 申请退款
+```
+
+### 6. 实体关系图 (ER Diagram)
+
+使用 Mermaid `erDiagram` 展示数据模型：
+
+```mermaid
+erDiagram
+    USER ||--o{ ORDER : places
+    USER {
+        int id PK
+        string username
+        string email
+        string password
+    }
+    ORDER ||--|{ ORDER_ITEM : contains
+    ORDER {
+        int id PK
+        int user_id FK
+        datetime created_at
+        string status
+    }
+    ORDER_ITEM {
+        int id PK
+        int order_id FK
+        int product_id FK
+        int quantity
+    }
+    PRODUCT ||--o{ ORDER_ITEM : ""
+    PRODUCT {
+        int id PK
+        string name
+        decimal price
+    }
+```
+
+### 7. 类图 (Class Diagram)
+
+使用 Mermaid `classDiagram` 展示类结构：
+
+```mermaid
+classDiagram
+    class UserController {
+        +IUserService userService
+        +create(UserDTO dto)
+        +update(UserDTO dto)
+        +delete(Long id)
+        +getById(Long id)
+    }
+    class IUserService {
+        <<interface>>
+        +insert(UserDTO dto)
+        +update(UserDTO dto)
+        +deleteById(Long id)
+        +getById(Long id)
+    }
+    class UserServiceImpl {
+        +UserMapper userMapper
+        +insert(UserDTO dto)
+        +update(UserDTO dto)
+        +deleteById(Long id)
+        +getById(Long id)
+    }
+    class UserMapper {
+        <<interface>>
+        +selectById(Long id)
+        +insert(User user)
+        +updateById(User user)
+        +deleteById(Long id)
+    }
+    class User {
+        -Long id
+        -String username
+        -String email
+    }
+
+    UserController --> IUserService
+    IUserService <|.. UserServiceImpl
+    UserServiceImpl --> UserMapper
+    UserMapper --> User
+```
+
+### Mermaid 图表生成流程
+
+1. **确定图表类型**: 根据要展示的内容选择合适的 Mermaid 图表类型
+2. **收集信息**: 从需求和设计中提取关键元素
+3. **设计结构**: 规划节点、连接和层次
+4. **编写 Mermaid 代码**: 使用 Mermaid 语法创建图表
+5. **验证和优化**: 确保图表清晰、准确、易懂
+
+### Mermaid 图表最佳实践
+
+1. **简洁明了**: 避免过度复杂，突出重点
+2. **层次清晰**: 使用子图（subgraph）组织复杂架构
+3. **颜色标注**: 使用样式区分不同类型的组件
+4. **方向一致**: 统一使用 TB（从上到下）或 LR（从左到右）
+5. **交互流程**: 时序图要清晰展示消息传递顺序
+6. **状态完整**: 状态图要覆盖所有可能的状态转换
+
 ## 输出文档
 
 ### 1. 架构设计文档 (Architecture Design Document)
@@ -176,31 +415,47 @@ allowed-tools:
 - 数据加密
 - 网络安全
 
-## 3. 架构模式
+## 3. 架构图
+### 3.1 系统架构图
+[使用 Mermaid graph 展示整体架构]
+
+### 3.2 组件图
+[使用 Mermaid graph 展示组件关系]
+
+### 3.3 部署架构图
+[使用 Mermaid graph 展示部署拓扑]
+
+### 3.4 时序图
+[使用 Mermaid sequenceDiagram 展示关键交互]
+
+### 3.5 状态图
+[使用 Mermaid stateDiagram 展示状态转换]
+
+## 4. 架构模式
 - 选择的模式
 - 选择理由
 - 应用方式
 
-## 4. 技术栈
+## 5. 技术栈
 - 前端技术
 - 后端技术
 - 数据库
 - 中间件
 - 基础设施
 
-## 5. 质量属性
+## 6. 质量属性
 - 性能
 - 可扩展性
 - 可靠性
 - 安全性
 - 可维护性
 
-## 6. 接口设计
+## 7. 接口设计
 - 内部接口
 - 外部接口
 - API 规范
 
-## 7. 架构决策
+## 8. 架构决策
 - 关键决策列表
 - ADR 索引
 ```
@@ -209,15 +464,28 @@ allowed-tools:
 
 **位置**: `docs/architecture/adr-records.md`
 
-### 3. 组件图 (Component Diagram)
+### 3. Mermaid 架构图集
+
+**位置**: `docs/architecture/diagrams.md`
+
+**包含图表**:
+- 系统架构图 (Mermaid graph)
+- 组件图 (Mermaid graph)
+- 部署架构图 (Mermaid graph)
+- 时序图 (Mermaid sequenceDiagram)
+- 状态图 (Mermaid stateDiagram)
+- ER 图 (Mermaid erDiagram)
+- 类图 (Mermaid classDiagram)
+
+### 4. 组件图文档 (Component Diagram)
 
 **位置**: `docs/architecture/component-diagram.md`
 
-### 4. 部署架构图 (Deployment Architecture)
+### 5. 部署架构文档 (Deployment Architecture)
 
 **位置**: `docs/architecture/deployment-architecture.md`
 
-### 5. 技术栈文档 (Technology Stack)
+### 6. 技术栈文档 (Technology Stack)
 
 **位置**: `docs/architecture/technology-stack.md`
 
@@ -233,6 +501,11 @@ allowed-tools:
 - [ ] 技术选型有充分理由
 - [ ] 架构符合约束条件
 - [ ] 风险已识别
+- [ ] Mermaid 架构图已创建（系统架构图、组件图、部署图）
+- [ ] Mermaid 时序图已创建（关键交互流程）
+- [ ] Mermaid 状态图已创建（状态转换）
+- [ ] Mermaid ER 图已创建（数据模型）
+- [ ] 图表清晰、准确、易懂
 
 ## 常见架构模式
 

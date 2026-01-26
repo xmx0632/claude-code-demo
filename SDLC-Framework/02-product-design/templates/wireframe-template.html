@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[页面名称] - 线框图</title>
+    <style>
+        /* ========== 基础样式 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        /* ========== 线框图容器 ========== */
+        .wireframe {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border: 3px dashed #1890ff;
+            padding: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .wireframe-header {
+            background: #1890ff;
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wireframe-body {
+            padding: 20px;
+        }
+
+        /* ========== 页面头部 ========== */
+        .page-header {
+            border: 2px solid #333;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafafa;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* ========== 导航栏 ========== */
+        .navbar {
+            border: 2px solid #666;
+            padding: 0 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            min-height: 50px;
+        }
+
+        .nav-brand {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1890ff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 5px;
+        }
+
+        .nav-item {
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #333;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+
+        .nav-item:hover {
+            background: #e6f7ff;
+            border-color: #1890ff;
+        }
+
+        .nav-item.active {
+            background: #1890ff;
+            color: white;
+            border-color: #1890ff;
+        }
+
+        /* ========== 侧边栏 ========== */
+        .sidebar {
+            border: 2px solid #666;
+            padding: 15px;
+            width: 200px;
+            float: left;
+            margin-right: 20px;
+            background: #fafafa;
+        }
+
+        .sidebar-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .sidebar-item:hover {
+            background: #e6f7ff;
+            border-color: #1890ff;
+        }
+
+        .sidebar-item.active {
+            background: #1890ff;
+            color: white;
+        }
+
+        /* ========== 主内容区 ========== */
+        .main-content {
+            border: 2px solid #999;
+            padding: 20px;
+            min-height: 400px;
+            background: white;
+            overflow: hidden;
+        }
+
+        .content-with-sidebar {
+            margin-left: 220px;
+        }
+
+        /* ========== 按钮样式 ========== */
+        .btn {
+            border: 2px solid #333;
+            padding: 8px 16px;
+            display: inline-block;
+            background: #e0e0e0;
+            cursor: pointer;
+            text-decoration: none;
+            color: #333;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-primary {
+            background: #1890ff;
+            color: white;
+            border-color: #1890ff;
+        }
+
+        .btn-primary:hover {
+            background: #40a9ff;
+        }
+
+        .btn-success {
+            background: #52c41a;
+            color: white;
+            border-color: #52c41a;
+        }
+
+        .btn-danger {
+            background: #f5222d;
+            color: white;
+            border-color: #f5222d;
+        }
+
+        /* ========== 表单元素 ========== */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .input {
+            border: 2px solid #666;
+            padding: 8px 12px;
+            width: 100%;
+            max-width: 300px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: #1890ff;
+        }
+
+        textarea.input {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        select.input {
+            cursor: pointer;
+        }
+
+        /* ========== 卡片 ========== */
+        .card {
+            border: 2px solid #666;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .card-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card-body {
+            color: #666;
+        }
+
+        /* ========== 表格 ========== */
+        .table-container {
+            border: 2px solid #666;
+            padding: 0;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background: #f5f5f5;
+            font-weight: 500;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        /* ========== 工具栏 ========== */
+        .toolbar {
+            border: 2px solid #999;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafafa;
+        }
+
+        .toolbar-left,
+        .toolbar-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* ========== 分页 ========== */
+        .pagination {
+            border: 2px solid #666;
+            padding: 10px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            background: #fafafa;
+        }
+
+        .page-item {
+            border: 1px solid #ddd;
+            padding: 5px 12px;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .page-item.active {
+            background: #1890ff;
+            color: white;
+        }
+
+        /* ========== 模态框 ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: white;
+            border: 3px solid #333;
+            padding: 0;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            border-bottom: 2px solid #eee;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            border-top: 2px solid #eee;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* ========== 列表项 ========== */
+        .list-item {
+            border: 2px solid #666;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .list-item:hover {
+            border-color: #1890ff;
+            background: #f9f9f9;
+        }
+
+        /* ========== 标签 ========== */
+        .tag {
+            border: 1px solid #666;
+            padding: 2px 8px;
+            font-size: 12px;
+            background: #f0f0f0;
+            border-radius: 2px;
+            display: inline-block;
+        }
+
+        .tag-blue {
+            background: #e6f7ff;
+            border-color: #91d5ff;
+            color: #1890ff;
+        }
+
+        .tag-green {
+            background: #f6ffed;
+            border-color: #b7eb8f;
+            color: #52c41a;
+        }
+
+        .tag-red {
+            background: #fff1f0;
+            border-color: #ffa39e;
+            color: #f5222d;
+        }
+
+        /* ========== 徽章 ========== */
+        .badge {
+            border: 1px solid #666;
+            padding: 4px 8px;
+            font-size: 12px;
+            background: #f5222d;
+            color: white;
+            border-radius: 10px;
+        }
+
+        /* ========== 分隔线 ========== */
+        .divider {
+            border-top: 2px dashed #ccc;
+            margin: 20px 0;
+        }
+
+        /* ========== 空状态 ========== */
+        .empty-state {
+            border: 2px dashed #ccc;
+            padding: 40px;
+            text-align: center;
+            color: #999;
+        }
+
+        /* ========== 加载中 ========== */
+        .loading {
+            border: 2px solid #999;
+            padding: 40px;
+            text-align: center;
+            color: #666;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1890ff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 768px) {
+            .wireframe {
+                margin: 0;
+                border-width: 2px;
+            }
+
+            .sidebar {
+                float: none;
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .content-with-sidebar {
+                margin-left: 0;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* ========== 工具提示 ========== */
+        [title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== 线框图内容开始 ========== -->
+    <div class="wireframe">
+        <div class="wireframe-header">
+            <span>[页面名称] - 线框图</span>
+            <span>版本: 1.0 | 日期: [日期]</span>
+        </div>
+
+        <div class="wireframe-body">
+            <!-- 页面头部 -->
+            <header class="page-header">
+                <h1 class="page-title">[页面标题]</h1>
+                <div class="page-actions">
+                    <button class="btn">操作 1</button>
+                    <button class="btn btn-primary">操作 2</button>
+                </div>
+            </header>
+
+            <!-- 导航栏 -->
+            <nav class="navbar">
+                <div class="nav-brand">[品牌名称]</div>
+                <div class="nav-links">
+                    <a href="#" class="nav-item active">首页</a>
+                    <a href="#" class="nav-item">功能1</a>
+                    <a href="#" class="nav-item">功能2</a>
+                    <a href="#" class="nav-item">设置</a>
+                </div>
+            </nav>
+
+            <!-- 主内容区 -->
+            <div style="display: flex;">
+                <!-- 侧边栏 -->
+                <aside class="sidebar">
+                    <div class="sidebar-item active">菜单项 1</div>
+                    <div class="sidebar-item">菜单项 2</div>
+                    <div class="sidebar-item">菜单项 3</div>
+                </aside>
+
+                <!-- 主内容 -->
+                <main class="main-content content-with-sidebar">
+                    <!-- 工具栏 -->
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <button class="btn btn-primary">新增</button>
+                            <button class="btn">批量操作</button>
+                        </div>
+                        <div class="toolbar-right">
+                            <div class="search-box">
+                                <input type="text" class="input" placeholder="搜索..." style="max-width: 200px;">
+                                <button class="btn">搜索</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 表格 -->
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox"></th>
+                                    <th>列 1</th>
+                                    <th>列 2</th>
+                                    <th>列 3</th>
+                                    <th>列 4</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>数据 1</td>
+                                    <td>数据 2</td>
+                                    <td><span class="tag tag-blue">状态</span></td>
+                                    <td>2024-01-01</td>
+                                    <td>
+                                        <button class="btn">编辑</button>
+                                        <button class="btn btn-danger">删除</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>数据 2</td>
+                                    <td>数据 3</td>
+                                    <td><span class="tag tag-green">状态</span></td>
+                                    <td>2024-01-02</td>
+                                    <td>
+                                        <button class="btn">编辑</button>
+                                        <button class="btn btn-danger">删除</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 分页 -->
+                    <div class="pagination">
+                        <span class="page-item">上一页</span>
+                        <span class="page-item active">1</span>
+                        <span class="page-item">2</span>
+                        <span class="page-item">3</span>
+                        <span class="page-item">下一页</span>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 示例模态框 ========== -->
+    <div class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>模态框标题</h3>
+                <button class="btn">✕</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label class="form-label">字段名称</label>
+                        <input type="text" class="input" placeholder="请输入...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">选择项</label>
+                        <select class="input">
+                            <option>选项 1</option>
+                            <option>选项 2</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn">取消</button>
+                <button class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+    <!-- ========== 线框图内容结束 ========== -->
+
+    <script>
+        // 简单的交互演示
+        document.addEventListener('DOMContentLoaded', function() {
+            // 鼠标悬停效果提示
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('按钮被点击:', this.textContent);
+                    alert('这是一个线框图演示，实际功能待实现');
+                });
+            });
+
+            // 侧边栏菜单切换
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    sidebarItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // 导航菜单切换
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    navItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
