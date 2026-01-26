@@ -1,0 +1,97 @@
+# SDLC Framework Configuration
+# 软件开发生命周期框架全局配置文件
+
+framework:
+  name: "SDLC Framework"
+  version: "1.0.0"
+  description: "完整的软件开发生命周期框架，支持从需求分析到系统部署的全流程开发"
+
+# 默认阶段配置
+defaults:
+  # 默认模板目录
+  templates_dir: "./templates"
+  # 默认输出目录
+  output_dir: "./output"
+  # 默认文档格式
+  doc_format: "markdown"
+  # 默认代码语言
+  code_language: "java"
+
+# 阶段配置
+stages:
+  enabled:
+    - requirements-analysis
+    - product-design
+    - architecture-design
+    - detailed-design
+    - database-migration
+    - code-development
+    - unit-testing
+    - integration-testing
+    - system-testing
+    - test-case-writing
+    - system-acceptance
+    - user-manual
+    - operations-manual
+    - deployment-instructions
+    - incremental-upgrade
+
+# 质量门禁默认配置
+quality_gates:
+  # 代码覆盖率阈值
+  code_coverage_threshold: 0.8
+  # 测试通过率阈值
+  test_pass_rate_threshold: 1.0
+  # 代码审查严重问题阈值
+  critical_issues_threshold: 0
+  # 文档完整性检查
+  documentation_required: true
+
+# Subagent 配置
+subagents:
+  default_agent: "general-purpose"
+  timeout_seconds: 300
+  max_retries: 3
+
+# 工作流配置
+workflows:
+  default_workflow: "full-sdlc"
+  available_workflows:
+    - full-sdlc
+    - agile-sprint
+    - bug-fix
+
+# 输出配置
+output:
+  # 项目文档目录
+  docs_dir: "docs"
+  # 源代码目录
+  src_dir: "src"
+  # 测试目录
+  test_dir: "test"
+  # 数据库迁移目录
+  migration_dir: "database-migrations"
+
+# 集成配置
+integration:
+  # Skills Collection 目录
+  skills_collection_dir: "../Skills-Collection"
+  # 现有技能映射
+  existing_skills:
+    - ruoyi-crud
+    - code-review
+    - test-gen
+    - api-doc
+    - sql-optimizer
+    - flyway-migration
+
+# 自定义配置（可被项目级配置覆盖）
+customization:
+  # 允许自定义模板
+  allow_custom_templates: true
+  # 允许自定义质量门禁
+  allow_custom_quality_gates: true
+  # 允许跳过阶段
+  allow_stage_skipping: false
+  # 允许并行执行
+  allow_parallel_execution: true

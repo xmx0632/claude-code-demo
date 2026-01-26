@@ -1,0 +1,434 @@
+# Quality Gates Configuration
+# 质量门禁配置 - 定义每个阶段的质量标准和检查规则
+
+quality_gates:
+  # 阶段 1: 需求分析质量门禁
+  requirements-analysis:
+    - name: stakeholder_approval
+      description: "所有干系人已批准需求"
+      required: true
+      check_type: manual
+      severity: critical
+
+    - name: requirements_complete
+      description: "所有功能和非功能性需求已文档化"
+      required: true
+      check_type: automated
+      severity: critical
+      criteria:
+        - functional_requirements_count > 0
+        - non_functional_requirements_defined == true
+
+    - name: user_stories_defined
+      description: "所有用户故事已定义并包含验收标准"
+      required: true
+      check_type: manual
+      severity: high
+
+    - name: acceptance_criteria_complete
+      description: "每个用户故事都有明确的验收标准"
+      required: true
+      check_type: automated
+      severity: high
+      criteria:
+        - acceptance_criteria_count == user_stories_count
+
+  # 阶段 2: 产品设计质量门禁
+  product-design:
+    - name: design_review
+      description: "设计已由 UX 团队审查"
+      required: true
+      check_type: manual
+      severity: high
+
+    - name: wireframes_complete
+      description: "所有主要界面的线框图已完成"
+      required: true
+      check_type: manual
+      severity: high
+
+    - name: user_flow_defined
+      description: "用户流程图已定义并审查"
+      required: true
+      check_type: manual
+      severity: medium
+
+  # 阶段 3: 系统架构设计质量门禁
+  architecture-design:
+    - name: architecture_review
+      description: "架构已由高级架构师审查"
+      required: true
+      check_type: manual
+      severity: critical
+
+    - name: security_review
+      description: "安全影响已评估"
+      required: true
+      check_type: manual
+      severity: critical
+
+    - name: adr_complete
+      description: "所有主要决策已记录在 ADR 中"
+      required: true
+      check_type: automated
+      severity: high
+      criteria:
+        - adr_count > 0
+
+    - name: technology_stack_selected
+      description: "技术栈已选择并论证"
+      required: true
+      check_type: manual
+      severity: high
+
+    - name: scalability_considered
+      description: "可扩展性策略已定义"
+      required: true
+      check_type: manual
+      severity: high
+
+  # 阶段 4: 系统详细设计质量门禁
+  detailed-design:
+    - name: design_complete
+      description: "所有 API、数据模型和交互已文档化"
+      required: true
+      check_type: automated
+      severity: critical
+      criteria:
+        - api_specs_complete == true
+        - data_models_defined == true
+
+    - name: api_consistency
+      description: "API 设计符合 RESTful 规范"
+      required: true
+      check_type: manual
+      severity: high
+
+    - name: data_model_normalized
+      description: "数据模型符合数据库规范化要求"
+      required: true
+      check_type: manual
+      severity: high
+
+  # 阶段 5: 数据库迁移质量门禁
+  database-migration:
+    - name: migration_tested
+      description: "迁移脚本已在开发环境测试"
+      required: true
+      check_type: manual
+      severity: critical
+
+    - name: rollback_plan_exists
+      description: "回滚脚本已创建并测试"
+      required: true
+      check_type: automated
+      severity: critical
+      criteria:
+        - rollback_script_exists == true
+
+    - name: migration_validated
+      description: "迁移脚本语法已验证"
+      required: true
+      check_type: automated
+      severity: high
+      criteria:
+        - sql_syntax_valid == true
+
+    - name: indexes_defined
+      description: "必要的索引已定义"
+      required: true
+      check_type: manual
+      severity: medium
+
+  # 阶段 6: 代码开发质量门禁
+  code-development:
+    - name: code_review_passed
+      description: "代码审查已完成且无严重问题"
+      required: true
+      check_type: automated
+      severity: critical
+      criteria:
+        - critical_issues == 0
+        - major_issues <= 3
+
+    - name: unit_tests_written
+      description: "所有新代码都编写了单元测试"
+      required: true
+      check_type: automated
+      severity: high
+      criteria:
+        - test_coverage >= 0.6
+
+    - name: coding_standards_followed
+      description: "代码符合团队编码规范"
+      required: true
+      check_type: automated
+      severity: high
+      criteria:
+        - lint_errors == 0
+
+    - name: security_scan_passed
+      description: "安全扫描未发现高危漏洞"
+      required: true
+      check_type: automated
+      severity: critical
+      criteria:
+        - high_vulnerabilities == 0
+
+  # 阶段 7: 单元测试质量门禁
+  unit-testing:
+    - name: coverage_threshold_met
+      description: "代码覆盖率满足阈值 (80%)"
+      required: true
+      check_type: automated
+      severity: high
+      criteria:
+        - line_coverage >= 0.8
+        - branch_coverage >= 0.7
+
+    - name: all_tests_passing
+      description: "所有单元测试通过"
+      required: true
+      check_type: automated
+      severity: critical
+      criteria:
+        - test_failures == 0
+
+    - name: test_quality_check
+      description: "测试用例质量检查（断言完整、数据有效）"
+      required: true
+      check_type: manual
+      severity: medium
+
+  # 阶段 8: 集成测试质量门禁
+  integration-testing:
+    - name: all_tests_passing
+      description: "所有集成测试通过"
+      required: true
+      check_type: automated
+      severity: critical
+      criteria:
+        - test_failures == 0
+
+    - name: api_contract_valid
+      description: "API 契约符合规范"
+      required: true
+      check_type: automated
+      severity: high
+      criteria:
+        - api_contract_validation_passed == true
+
+    - name: integration_coverage
+      description: "关键集成路径已测试"
+      required: true
+      check_type: manual
+      severity: high
+
+  # 阶段 9: 系统测试方案质量门禁
+  system-testing:
+    - name: test_plan_approved
+      description: "测试计划已由 QA 负责人批准"
+      required: true
+      check_type: manual
+      severity: high
+
+    - name: test_strategy_defined
+      description: "测试策略已定义且覆盖所有风险"
+      required: true
+      check_type: manual
+      severity: high
+
+    - name: test_environment_ready
+      description: "测试环境已配置并验证"
+      required: true
+      check_type: manual
+      severity: critical
+
+  # 阶段 10: 测试用例编写质量门禁
+  test-case-writing:
+    - name: test_cases_complete
+      description: "测试用例覆盖所有需求"
+      required: true
+      check_type: automated
+      severity: high
+      criteria:
+        - requirement_coverage >= 1.0
+
+    - name: test_data_defined
+      description: "测试数据已准备完整"
+      required: true
+      check_type: manual
+      severity: medium
+
+    - name: automation_feasible
+      description: "可自动化的测试用例已识别"
+      required: false
+      check_type: manual
+      severity: low
+
+  # 阶段 11: 系统验收质量门禁
+  system-acceptance:
+    - name: acceptance_criteria_met
+      description: "所有验收标准已满足"
+      required: true
+      check_type: automated
+      severity: critical
+      criteria:
+        - acceptance_criteria_passed == acceptance_criteria_total
+
+    - name: stakeholder_signoff
+      description: "干系人已签署验收"
+      required: true
+      check_type: manual
+      severity: critical
+
+    - name: uat_completed
+      description: "用户验收测试已完成"
+      required: true
+      check_type: manual
+      severity: critical
+
+    - name: known_issues_documented
+      description: "已知问题已文档化"
+      required: true
+      check_type: manual
+      severity: medium
+
+  # 阶段 12: 用户手册质量门禁
+  user-manual:
+    - name: documentation_reviewed
+      description: "文档已审查并批准"
+      required: true
+      check_type: manual
+      severity: high
+
+    - name: user_guide_complete
+      description: "用户指南覆盖所有功能"
+      required: true
+      check_type: manual
+      severity: high
+
+    - name: quick_start_available
+      description: "快速开始指南已提供"
+      required: true
+      check_type: manual
+      severity: medium
+
+    - name: screenshots_included
+      description: "必要的截图和示例已包含"
+      required: true
+      check_type: manual
+      severity: medium
+
+  # 阶段 13: 运维手册质量门禁
+  operations-manual:
+    - name: runbook_complete
+      description: "运维手册覆盖所有操作场景"
+      required: true
+      check_type: manual
+      severity: high
+
+    - name: monitoring_configured
+      description: "监控和告警已配置"
+      required: true
+      check_type: manual
+      severity: high
+
+    - name: backup_procedure_defined
+      description: "备份和恢复程序已定义"
+      required: true
+      check_type: manual
+      severity: critical
+
+    - name: troubleshooting_guide_exists
+      description: "故障排查指南已提供"
+      required: true
+      check_type: manual
+      severity: medium
+
+  # 阶段 14: 部署说明质量门禁
+  deployment-instructions:
+    - name: deployment_plan_approved
+      description: "部署计划已由 DevOps 批准"
+      required: true
+      check_type: manual
+      severity: high
+
+    - name: rollback_plan_tested
+      description: "回滚计划已测试"
+      required: true
+      check_type: manual
+      severity: critical
+
+    - name: pre_deployment_checks_passed
+      description: "部署前检查已通过"
+      required: true
+      check_type: automated
+      severity: critical
+      criteria:
+        - pre_deployment_checklist_passed == true
+
+    - name: environment_config_validated
+      description: "环境配置已验证"
+      required: true
+      check_type: manual
+      severity: high
+
+  # 阶段 15: 增量升级质量门禁
+  incremental-upgrade:
+    - name: upgrade_path_tested
+      description: "升级路径已测试成功"
+      required: true
+      check_type: manual
+      severity: critical
+
+    - name: backward_compatibility_checked
+      description: "向后兼容性已验证"
+      required: true
+      check_type: manual
+      severity: high
+
+    - name: data_migration_tested
+      description: "数据迁移脚本已测试"
+      required: true
+      check_type: manual
+      severity: critical
+
+    - name: upgrade_guide_complete
+      description: "升级指南完整且可执行"
+      required: true
+      check_type: manual
+      severity: high
+
+# 全局质量标准
+global_standards:
+  # 代码质量
+  code_quality:
+    max_complexity: 10
+    max_file_lines: 500
+    max_function_lines: 50
+    comment_ratio: 0.15
+
+  # 测试质量
+  test_quality:
+    min_coverage: 0.8
+    min_branch_coverage: 0.7
+    max_test_duration_ms: 5000
+
+  # 文档质量
+  documentation_quality:
+    min_api_doc_coverage: 1.0
+    min_code_comment_ratio: 0.1
+
+  # 性能标准
+  performance:
+    max_api_response_time_ms: 2000
+    max_database_query_time_ms: 1000
+    max_memory_usage_mb: 512
+
+  # 安全标准
+  security:
+    no_hardcoded_secrets: true
+    no_sql_injection: true
+    no_xss_vulnerabilities: true
+    encryption_required: true

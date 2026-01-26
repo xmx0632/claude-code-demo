@@ -1,0 +1,295 @@
+# Skill Mapping Configuration
+# 技能映射配置 - 定义 SDLC 各阶段与 Skills 的对应关系
+
+skills:
+  # ===== 现有 Skills (在 Skills-Collection 中) =====
+
+  ruoyi-crud:
+    name: "Ruoyi CRUD 代码生成"
+    stages:
+      - code-development
+    type: code-generation
+    agent: backend-developer
+    description: "为 Ruoyi 项目生成完整的 CRUD 代码"
+    path: "../Skills-Collection/ruoyi-crud"
+    existing: true
+
+  code-review:
+    name: "代码审查"
+    stages:
+      - code-development
+      - unit-testing
+      - integration-testing
+    type: quality-assurance
+    agent: qa-engineer
+    description: "审查代码质量、性能和安全问题"
+    path: "../Skills-Collection/code-review"
+    existing: true
+
+  test-gen:
+    name: "单元测试生成"
+    stages:
+      - unit-testing
+    type: test-generation
+    agent: backend-developer
+    description: "为 Service 层生成单元测试"
+    path: "../Skills-Collection/test-gen"
+    existing: true
+
+  api-doc:
+    name: "API 文档生成"
+    stages:
+      - detailed-design
+      - user-manual
+    type: documentation
+    agent: technical-writer
+    description: "解析 Controller 并生成 API 文档"
+    path: "../Skills-Collection/api-doc"
+    existing: true
+
+  sql-optimizer:
+    name: "SQL 优化"
+    stages:
+      - database-migration
+    type: optimization
+    agent: db-admin
+    description: "分析和优化 MyBatis SQL 查询"
+    path: "../Skills-Collection/sql-optimizer"
+    existing: true
+
+  flyway-migration:
+    name: "Flyway 数据库迁移"
+    stages:
+      - database-migration
+    type: database
+    agent: db-admin
+    description: "管理 Flyway 数据库迁移脚本"
+    path: "../Skills-Collection/flyway-migration"
+    existing: true
+
+  # ===== 新增 Skills (在 SDLC-Framework 中定义) =====
+
+  requirements-analysis:
+    name: "需求分析"
+    stages:
+      - requirements-analysis
+    type: analysis
+    agent: product-manager
+    description: "分析业务需求并创建需求文档"
+    path: "./01-requirements-analysis"
+    existing: false
+    new: true
+
+  product-design:
+    name: "产品设计"
+    stages:
+      - product-design
+    type: design
+    agent: product-manager
+    description: "创建产品线框图和原型规格"
+    path: "./02-product-design"
+    existing: false
+    new: true
+
+  architecture-design:
+    name: "系统架构设计"
+    stages:
+      - architecture-design
+    type: design
+    agent: architect
+    description: "设计系统架构和技术选型"
+    path: "./03-architecture-design"
+    existing: false
+    new: true
+
+  detailed-design:
+    name: "系统详细设计"
+    stages:
+      - detailed-design
+    type: design
+    agent: architect
+    description: "创建 API 规范、数据模型和类图"
+    path: "./04-detailed-design"
+    existing: false
+    new: true
+
+  integration-test:
+    name: "集成测试生成"
+    stages:
+      - integration-testing
+    type: test-generation
+    agent: qa-engineer
+    description: "生成集成测试用例"
+    path: "./08-integration-testing"
+    existing: false
+    new: true
+
+  test-planning:
+    name: "测试计划"
+    stages:
+      - system-testing
+    type: planning
+    agent: qa-engineer
+    description: "创建系统测试计划和策略"
+    path: "./09-system-testing"
+    existing: false
+    new: true
+
+  test-case-writing:
+    name: "测试用例编写"
+    stages:
+      - test-case-writing
+    type: documentation
+    agent: qa-engineer
+    description: "编写手动和自动化测试用例"
+    path: "./10-test-case-writing"
+    existing: false
+    new: true
+
+  acceptance-testing:
+    name: "系统验收测试"
+    stages:
+      - system-acceptance
+    type: testing
+    agent: qa-engineer
+    description: "执行验收测试并生成验收报告"
+    path: "./11-system-acceptance"
+    existing: false
+    new: true
+
+  user-manual-gen:
+    name: "用户手册生成"
+    stages:
+      - user-manual
+    type: documentation
+    agent: technical-writer
+    description: "生成用户手册和快速开始指南"
+    path: "./12-user-manual"
+    existing: false
+    new: true
+
+  ops-manual-gen:
+    name: "运维手册生成"
+    stages:
+      - operations-manual
+    type: documentation
+    agent: technical-writer
+    description: "生成运维手册和监控指南"
+    path: "./13-operations-manual"
+    existing: false
+    new: true
+
+  deployment-guide:
+    name: "部署指南生成"
+    stages:
+      - deployment-instructions
+    type: documentation
+    agent: devops-engineer
+    description: "生成部署指南和回滚计划"
+    path: "./14-deployment-instructions"
+    existing: false
+    new: true
+
+  upgrade-guide:
+    name: "升级指南生成"
+    stages:
+      - incremental-upgrade
+    type: documentation
+    agent: technical-writer
+    description: "生成增量升级指南和兼容性矩阵"
+    path: "./15-incremental-upgrade"
+    existing: false
+    new: true
+
+# Subagent 映射
+subagents:
+  product-manager:
+    name: "产品经理"
+    skills:
+      - requirements-analysis
+      - product-design
+      - acceptance-testing
+    responsibilities:
+      - 需求收集和分析
+      - 用户故事定义
+      - 验收标准制定
+      - 产品决策
+
+  architect:
+    name: "系统架构师"
+    skills:
+      - architecture-design
+      - detailed-design
+    responsibilities:
+      - 系统架构设计
+      - 技术选型
+      - 架构决策记录
+      - API 规范设计
+
+  backend-developer:
+    name: "后端开发工程师"
+    skills:
+      - ruoyi-crud
+      - test-gen
+    responsibilities:
+      - 后端代码实现
+      - API 开发
+      - 单元测试编写
+      - 代码优化
+
+  frontend-developer:
+    name: "前端开发工程师"
+    skills:
+      - product-design
+    responsibilities:
+      - UI 组件实现
+      - 前端集成
+      - 用户体验优化
+
+  qa-engineer:
+    name: "QA 工程师"
+    skills:
+      - code-review
+      - integration-test
+      - test-planning
+      - test-case-writing
+      - acceptance-testing
+    responsibilities:
+      - 测试策略制定
+      - 测试用例设计
+      - 质量保证
+      - 验收测试执行
+
+  devops-engineer:
+    name: "DevOps 工程师"
+    skills:
+      - deployment-guide
+    responsibilities:
+      - CI/CD 配置
+      - 部署自动化
+      - 基础设施管理
+      - 监控和告警
+
+  db-admin:
+    name: "数据库管理员"
+    skills:
+      - flyway-migration
+      - sql-optimizer
+    responsibilities:
+      - 数据库设计
+      - 迁移脚本编写
+      - SQL 优化
+      - 数据备份恢复
+
+  technical-writer:
+    name: "技术文档工程师"
+    skills:
+      - api-doc
+      - user-manual-gen
+      - ops-manual-gen
+      - upgrade-guide
+    responsibilities:
+      - 技术文档编写
+      - 用户手册编写
+      - API 文档维护
+      - 运维文档编写
