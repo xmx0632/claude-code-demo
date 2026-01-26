@@ -55,11 +55,24 @@ cd claude-code-demo/ruoyi-example
 
 ### 2. 数据库初始化
 
+本项目使用 **Flyway** 进行数据库版本控制，启动时会自动执行迁移脚本。
+
+**方式一：使用 Flyway 自动迁移（推荐）**
+
 ```bash
-# 创建数据库
+# 创建空数据库
 mysql -u root -p -e "CREATE DATABASE ruoyi_example DEFAULT CHARSET utf8mb4"
 
-# 导入 SQL
+# 修改 application.yml 中的数据库连接信息
+# 启动项目，Flyway 会自动执行所有迁移脚本
+mvn spring-boot:run
+```
+
+**方式二：手动导入 SQL**
+
+```bash
+# 创建数据库并导入初始结构
+mysql -u root -p -e "CREATE DATABASE ruoyi_example DEFAULT CHARSET utf8mb4"
 mysql -u root -p ruoyi_example < docs/database-schema.sql
 ```
 
@@ -484,6 +497,118 @@ pandoc docs/api.md -o docs/api.pdf
 # 或部署到 GitLab Pages
 mv docs/api.md docs/public/api.md
 git push
+```
+
+---
+
+### 场景 4: 数据库版本控制
+
+**需求**: 为用户表添加一个"最后登录时间"字段，需要使用 Flyway 进行增量迁移。
+
+#### 步骤 1: 使用 /flyway-migration 创建迁移脚本
+
+```bash
+/flyway-migration create --table=sys_user --type=add_column --column=last_login_time
+```
+
+**Claude Code 自动生成迁移脚本** (`V8__add_last_login_time_to_user.sql`):
+
+```sql
+-- ========================================
+-- V8: 为用户表添加最后登录时间字段
+-- ========================================
+USE ruoyi_example;
+
+-- 添加最后登录时间字段
+ALTER TABLE sys_user
+ADD COLUMN last_login_time DATETIME DEFAULT NULL COMMENT '最后登录时间';
+
+-- 添加索引优化查询
+CREATE INDEX idx_last_login_time ON sys_user(last_login_time);
+```
+
+#### 步骤 2: 验证迁移脚本
+
+```bash
+/flyway-migration validate V8__add_last_login_time_to_user.sql
+```
+
+**验证结果**：
+- ✅ SQL 语法正确
+- ✅ 使用增量变更（ALTER TABLE）
+- ✅ 版本号正确递增
+- ✅ 包含必要的注释
+- ✅ 添加了性能优化索引
+
+#### 步骤 3: 生成回滚脚本
+
+```bash
+/flyway-migration rollback V8__add_last_login_time_to_user.sql
+```
+
+**生成的回滚脚本**:
+
+```sql
+-- 回滚 V8 迁移
+DROP INDEX idx_last_login_time ON sys_user;
+ALTER TABLE sys_user DROP COLUMN last_login_time;
+```
+
+#### 步骤 4: 执行迁移
+
+启动项目，Flyway 自动执行迁移：
+
+```bash
+mvn spring-boot:run
+```
+
+**控制台输出**：
+```
+Flyway Community Edition 9.22.3 by Redgate
+Database: jdbc:mysql://localhost:3306/ruoyi_example (MySQL 8.0)
+Successfully validated 8 migrations
+Creating Schema History table `ruoyi_example`.`flyway_schema_history` ...
+Current version of schema `ruoyi_example`: << Empty Schema >>
+Migrating schema `ruoyi_example` to version "1 - init schema"
+Migrating schema `ruoyi_example` to version "2 - insert init data"
+...
+Migrating schema `ruoyi_example` to version "8 - add last login time to user"
+Successfully applied 8 migrations to schema `ruoyi_example`
+```
+
+#### 步骤 5: 验证结果
+
+```sql
+-- 检查表结构
+DESC sys_user;
+
+-- 查看 Flyway 迁移历史
+SELECT * FROM flyway_schema_history ORDER BY installed_rank;
+```
+
+**迁移历史示例**：
+
+| installed_rank | version | description | type | script | execution_time | success |
+|----------------|---------|-------------|------|--------|----------------|---------|
+| 1 | 1 | init schema | SQL | V1__init_schema.sql | 543 | true |
+| 2 | 2 | insert init data | SQL | V2__insert_init_data.sql | 123 | true |
+| ... | ... | ... | ... | ... | ... | ... |
+| 8 | 8 | add last login time to user | SQL | V8__add_last_login_time_to_user.sql | 45 | true |
+
+**开发流程总结**：
+
+```
+1. 使用 /flyway-migration 生成迁移脚本
+   ↓
+2. 在测试环境验证迁移脚本
+   ↓
+3. 执行迁移并验证结果
+   ↓
+4. 提交迁移脚本到版本控制
+   ↓
+5. 代码审查后合并到主分支
+   ↓
+6. 生产环境自动执行迁移
 ```
 
 ---

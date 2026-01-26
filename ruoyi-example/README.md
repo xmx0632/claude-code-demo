@@ -6,6 +6,7 @@
 
 - **简化架构**: 只包含核心功能，易于理解
 - **MyBatis-Plus**: 使用增强版 MyBatis，简化 CRUD 操作
+- **Flyway**: 数据库版本控制和增量迁移
 - **RESTful API**: 标准的 REST 接口设计
 - **Swagger**: 集成 Knife4j 接口文档
 - **最佳实践**: 展示企业级代码规范
@@ -14,6 +15,7 @@
 
 - Spring Boot 3.2.0
 - MyBatis-Plus 3.5.5
+- Flyway 9.22.3
 - MySQL 8.0
 - Druid 1.2.20
 - Lombok
@@ -30,11 +32,22 @@
 
 ### 2. 数据库初始化
 
+**方式一：使用 Flyway 自动迁移（推荐）**
+
 ```bash
-# 创建数据库
+# 创建空数据库
 mysql -u root -p -e "CREATE DATABASE ruoyi_example DEFAULT CHARSET utf8mb4"
 
-# 导入 SQL
+# 修改 application.yml 中的数据库连接信息
+# 启动项目，Flyway 会自动执行所有迁移脚本
+mvn spring-boot:run
+```
+
+**方式二：手动导入 SQL**
+
+```bash
+# 创建数据库并导入初始结构
+mysql -u root -p -e "CREATE DATABASE ruoyi_example DEFAULT CHARSET utf8mb4"
 mysql -u root -p ruoyi_example < docs/database-schema.sql
 ```
 
@@ -83,6 +96,10 @@ ruoyi-example/
 │       └── User.java
 ├── src/main/resources/
 │   ├── application.yml              # 应用配置
+│   ├── db/migration/                # Flyway 迁移脚本
+│   │   ├── V1__init_schema.sql
+│   │   ├── V2__insert_init_data.sql
+│   │   └── ...
 │   └── mapper/
 │       └── UserMapper.xml           # MyBatis XML
 └── docs/
@@ -92,7 +109,7 @@ ruoyi-example/
 
 ## Skills 演示场景
 
-本项目配套 5 个实用 Skills，展示 Claude Code 在实际开发中的应用：
+本项目配套 6 个实用 Skills，展示 Claude Code 在实际开发中的应用：
 
 ### 1. /ruoyi-crud - 快速生成 CRUD 代码
 
@@ -138,6 +155,21 @@ ruoyi-example/
 ```
 
 分析：索引问题、N+1 查询、全表扫描
+
+### 6. /flyway-migration - 数据库迁移管理
+
+```bash
+# 创建新的迁移脚本
+/flyway-migration create --table=sys_user --type=add_column
+
+# 验证迁移脚本
+/flyway-migration validate V8__add_column.sql
+
+# 生成回滚脚本
+/flyway-migration rollback V8__add_column.sql
+```
+
+功能：自动生成迁移脚本、验证 SQL 语法、生成回滚脚本
 
 ## 核心代码说明
 

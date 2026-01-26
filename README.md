@@ -20,7 +20,8 @@ claude-code-demo/
 │   ├── code-review/            # 代码审查助手
 │   ├── api-doc/                # API 文档生成器
 │   ├── test-gen/               # 单元测试生成器
-│   └── sql-optimizer/          # SQL 优化建议
+│   ├── sql-optimizer/          # SQL 优化建议
+│   └── flyway-migration/       # Flyway 数据库迁移管理
 ├── ruoyi-example/              # Ruoyi 示例项目
 └── docs/                       # 详细文档
     ├── quick-start.md          # 快速入门

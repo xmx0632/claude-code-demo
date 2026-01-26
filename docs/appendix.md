@@ -40,6 +40,20 @@ A: 使用 `claude --debug` 查看详细日志。
 **Q: 支持多文件 Skill 吗？**
 A: 支持，将相关文件放在同一目录即可。
 
+### Flyway 数据库迁移
+
+**Q: Flyway 迁移失败怎么办？**
+A: 检查 SQL 语法，修复后使用 `flyway repair` 重新同步。
+
+**Q: 如何跳过某个迁移？**
+A: 不建议跳过。如必须，手动修改 `flyway_schema_history` 表。
+
+**Q: 已有数据库如何接入 Flyway？**
+A: 启用 `baseline-on-migrate: true`，设置 `baseline-version: 0`。
+
+**Q: 迁移脚本命名规则？**
+A: `V<版本>__<描述>.sql`，如 `V1__init_schema.sql`。
+
 ## B. 参考资源
 
 ### 官方文档
@@ -54,6 +68,7 @@ A: 支持，将相关文件放在同一目录即可。
 - [Node.js](https://nodejs.org/)
 - [Spring Boot](https://spring.io/projects/spring-boot)
 - [MyBatis-Plus](https://baomidou.com/)
+- [Flyway](https://flywaydb.org/documentation/)
 - [IntelliJ IDEA](https://www.jetbrains.com/idea/)
 
 ### 社区资源
@@ -88,6 +103,27 @@ A: 支持，将相关文件放在同一目录即可。
 | `ANTHROPIC_AUTH_TOKEN` | API Key |
 | `ANTHROPIC_BASE_URL` | API 基础 URL |
 | `API_TIMEOUT_MS` | 超时时间（毫秒） |
+
+### Skills 速查
+
+| Skill | 用途 | 示例 |
+|-------|------|------|
+| `/ruoyi-crud` | 生成 CRUD 代码 | `/ruoyi-crud sys_user` |
+| `/code-review` | 代码审查 | `/code-review UserController.java` |
+| `/api-doc` | 生成 API 文档 | `/api-doc --output=api.md` |
+| `/test-gen` | 生成单元测试 | `/test-gen UserService` |
+| `/sql-optimizer` | SQL 优化 | `/sql-optimizer UserMapper.xml` |
+| `/flyway-migration` | 数据库迁移管理 | `/flyway-migration create --table=sys_user` |
+
+### Flyway 迁移命令
+
+| 命令 | 说明 |
+|------|------|
+| `/flyway-migration create` | 创建新迁移脚本 |
+| `/flyway-migration validate <file>` | 验证迁移脚本 |
+| `/flyway-migration rollback <file>` | 生成回滚脚本 |
+| `/flyway-migration history` | 查看迁移历史 |
+| `flyway repair` | 修复迁移状态 |
 
 ### 快捷键（手机端）
 

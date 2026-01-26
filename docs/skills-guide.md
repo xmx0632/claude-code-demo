@@ -231,6 +231,52 @@ allowed-tools: ["Read", "Grep", "Glob"]
 分析所有 Mapper
 ```
 
+### 示例 6：flyway-migration - 数据库迁移管理
+
+**SKILL.md**：
+```yaml
+---
+name: flyway-migration
+description: 管理 Flyway 数据库迁移脚本。数据库版本控制时使用。
+allowed-tools: ["Read", "Write", "Edit", "Glob", "Bash"]
+---
+
+# Flyway 数据库迁移助手
+
+自动化管理 Flyway 数据库迁移脚本的生成、验证和执行。
+
+## 使用方法
+
+### 创建新迁移
+
+/flyway-migration create --table=sys_user --type=add_column
+
+### 验证迁移脚本
+
+/flyway-migration validate V2__add_user_status.sql
+
+### 生成回滚脚本
+
+/flyway-migration rollback V2__add_user_status.sql
+
+## 迁移命名规范
+
+Flyway 迁移文件命名格式：
+
+V<版本号>__<描述>.sql
+
+示例：
+- V1__init_schema.sql - 初始化数据库结构
+- V2__add_user_status.sql - 添加用户状态字段
+```
+
+**关键功能**：
+- 自动生成迁移脚本
+- 验证 SQL 语法正确性
+- 检查迁移命名规范
+- 生成回滚脚本
+- 迁移历史查询
+
 ## 高级技巧
 
 ### 动态上下文注入
