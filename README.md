@@ -35,7 +35,9 @@ claude-code-demo/
 1. [环境搭建](./docs/quick-start.md) - 安装和配置 Claude Code + glm4.7
 2. [Happy 远程开发](./docs/happy-remote.md) - 手机端配置和使用
 3. [Skills 开发](./docs/skills-guide.md) - 创建自定义 Skills
-4. [最佳实践](./docs/best-practices.md) - 开发规范和技巧
+4. [完整示例项目](./docs/ruoyi-example.md) - Ruoyi 项目实战演示
+5. [最佳实践](./docs/best-practices.md) - 开发规范和技巧
+6. [FAQ](./docs/appendix.md) - 常见问题和参考资料
 
 ## 参考资源
 
