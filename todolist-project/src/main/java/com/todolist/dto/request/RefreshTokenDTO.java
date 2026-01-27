@@ -1,7 +1,6 @@
 package com.todolist.dto.request;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,10 +16,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Refresh Token Request")
 public class RefreshTokenDTO {
 
-    @Schema(description = "Refresh Token", required = true)
     @NotBlank(message = "Refresh token cannot be empty")
     private String refreshToken;
 }

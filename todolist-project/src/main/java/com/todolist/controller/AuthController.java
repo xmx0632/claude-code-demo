@@ -7,9 +7,7 @@ import com.todolist.dto.request.UserRegisterDTO;
 import com.todolist.dto.response.AuthResponseVO;
 import com.todolist.service.IUserService;
 import com.todolist.service.JwtService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,35 +20,30 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@Tag(name = "Authentication Management", description = "User registration, login, logout endpoints")
 public class AuthController {
 
     private final IUserService userService;
     private final JwtService jwtService;
 
     @PostMapping("/register")
-    @Operation(summary = "User Registration")
     public R<AuthResponseVO> register(@Valid @RequestBody UserRegisterDTO dto) {
         AuthResponseVO response = userService.register(dto);
         return R.created("Registration successful", response);
     }
 
     @PostMapping("/login")
-    @Operation(summary = "User Login")
     public R<AuthResponseVO> login(@Valid @RequestBody UserLoginDTO dto) {
         AuthResponseVO response = userService.login(dto);
         return R.ok("Login successful", response);
     }
 
     @PostMapping("/logout")
-    @Operation(summary = "User Logout")
     public R<Void> logout() {
         // Token is stateless, client-side token removal is sufficient
         return R.ok("Logout successful");
     }
 
     @PostMapping("/refresh")
-    @Operation(summary = "Refresh Token")
     public R<AuthResponseVO> refreshToken(@Valid @RequestBody RefreshTokenDTO dto) {
         // Validate refresh token
         if (!jwtService.validateToken(dto.getRefreshToken())) {

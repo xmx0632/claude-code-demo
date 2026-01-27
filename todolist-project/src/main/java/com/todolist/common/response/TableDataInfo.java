@@ -1,7 +1,6 @@
 package com.todolist.common.response;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +20,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Pagination Response")
 public class TableDataInfo<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,31 +27,26 @@ public class TableDataInfo<T> implements Serializable {
     /**
      * Current page records
      */
-    @Schema(description = "Current page records")
     private List<T> records;
 
     /**
      * Total records
      */
-    @Schema(description = "Total records")
     private Long total;
 
     /**
      * Current page number
      */
-    @Schema(description = "Current page number")
     private Long page;
 
     /**
      * Page size
      */
-    @Schema(description = "Page size")
     private Long size;
 
     /**
      * Total pages
      */
-    @Schema(description = "Total pages")
     private Long pages;
 
     /**

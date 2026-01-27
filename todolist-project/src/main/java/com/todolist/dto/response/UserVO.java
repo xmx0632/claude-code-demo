@@ -1,6 +1,5 @@
 package com.todolist.dto.response;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,18 +18,13 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "User Response")
 public class UserVO {
 
-    @Schema(description = "User ID")
     private Long userId;
 
-    @Schema(description = "Username")
     private String username;
 
-    @Schema(description = "Registration Time")
     private LocalDateTime createdAt;
 
-    @Schema(description = "Todo Statistics")
     private UserStatisticsVO statistics;
 }

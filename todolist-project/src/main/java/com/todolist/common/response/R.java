@@ -1,7 +1,6 @@
 package com.todolist.common.response;
 
 import com.todolist.common.constant.HttpStatus;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +20,6 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Universal Response")
 public class R<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,25 +27,21 @@ public class R<T> implements Serializable {
     /**
      * Status code
      */
-    @Schema(description = "Status code")
     private Integer code;
 
     /**
      * Response message
      */
-    @Schema(description = "Response message")
     private String message;
 
     /**
      * Response data
      */
-    @Schema(description = "Response data")
     private T data;
 
     /**
      * Timestamp
      */
-    @Schema(description = "Timestamp")
     private LocalDateTime timestamp;
 
     /**

@@ -1,7 +1,7 @@
 package com.todolist.common.exception;
 
 import com.todolist.common.response.R;
-import jakarta.validation.FieldError;
+import javax.validation.FieldError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
