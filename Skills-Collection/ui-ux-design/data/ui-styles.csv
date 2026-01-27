@@ -1,0 +1,68 @@
+style_id,style_name,style_category,description,best_for,performance,accessibility,keywords
+minimalism,Minimalism,General,简洁设计，去除多余元素，企业应用、仪表板、文档,Enterprise apps, dashboards, documentation,Excellent,WCAG AA,clean, simple, professional
+neumorphism,Neumorphism,General,软UI设计，柔和阴影，健康应用、冥想平台,Health/wellness apps, meditation platforms,Good,WCAG AA,soft shadows, subtle depth, calming
+glassmorphism,Glassmorphism,General,玻璃拟态，透明模糊效果，现代SaaS、金融仪表板,Modern SaaS, financial dashboards,Good,WCAG AA,transparent, blur, modern
+brutalism,Brutalism,General,粗野主义，大胆原始，设计作品集、艺术项目,Design portfolios, artistic projects,Excellent,WCAG AA,bold, raw, unconventional
+3d_hyperrealism,3D & Hyperrealism,General,3D超写实，游戏、产品展示、沉浸式体验,Gaming, product showcase, immersive,Fair,WCAG AA,3d, realistic, immersive
+vibrant_block,Vibrant & Block-based,General,鲜艳块状设计，创业公司、创意机构、游戏,Startups, creative agencies, gaming,Excellent,WCAG AA,colorful, bold, energetic
+dark_mode,Dark Mode (OLED),General,深色模式，夜间应用、编码平台,Night-mode apps, coding platforms,Excellent,WCAG AA,dark, oled, contrast
+accessible_ethical,Accessible & Ethical,General,无障碍设计，政府、医疗、教育,Government, healthcare, education,Excellent,WCAG AAA,inclusive, readable, ethical
+claymorphism,Claymorphism,General,粘土拟态，圆润3D，教育应用、儿童应用、SaaS,Educational apps, children's apps, SaaS,Good,WCAG AA,playful, 3d, rounded
+aurora_ui,Aurora UI,General,极光渐变，现代SaaS、创意机构,Modern SaaS, creative agencies,Fair,WCAG AA,gradient, colorful, modern
+retro_futurism,Retro-Futurism,General,复古未来主义，游戏、娱乐、音乐平台,Gaming, entertainment, music platforms,Excellent,WCAG AA,retro, futuristic, nostalgic
+flat_design,Flat Design,General,扁平设计，Web应用、移动应用、创业MVP,Web apps, mobile apps, startup MVPs,Excellent,WCAG AA,flat, simple, clean
+skeuomorphism,Skeuomorphism,General,拟物设计，遗留应用、游戏、高端产品,Legacy apps, gaming, premium products,Fair,WCAG AA,realistic, textured, familiar
+liquid_glass,Liquid Glass,General,液体玻璃，高端SaaS、高端电商,Premium SaaS, high-end e-commerce,Fair,WCAG AA,fluid, glass, premium
+motion_driven,Motion-Driven,General,动效驱动，作品集网站、故事讲述平台,Portfolio sites, storytelling platforms,Fair,WCAG AA,animated, interactive, dynamic
+micro_interactions,Micro-interactions,General,微交互，移动应用、触摸屏UI,Mobile apps, touchscreen UIs,Excellent,WCAG AA,subtle, interactive, responsive
+inclusive_design,Inclusive Design,General,包容性设计，公共服务、教育、医疗,Public services, education, healthcare,Excellent,WCAG AAA,accessible, inclusive, universal
+zero_interface,Zero Interface,General,零界面，语音助手、AI平台,Voice assistants, AI platforms,Excellent,WCAG AA,voice-first, minimal, ai
+soft_ui_evolution,Soft UI Evolution,General,软UI演进，现代企业应用、SaaS,Modern enterprise apps, SaaS,Excellent,WCAG AA,soft, modern, professional
+neubrutalism,Neubrutalism,General,新粗野主义，Z世代品牌、创业公司、Figma风格,Gen Z brands, startups, Figma-style,Excellent,WCAG AA,bold, playful, modern
+bento_box,Bento Box Grid,General,便当盒网格，仪表板、产品页面、作品集,Dashboards, product pages, portfolios,Excellent,WCAG AA,grid, organized, structured
+y2k_aesthetic,Y2K Aesthetic,General,Y2K美学，时尚品牌、音乐、Z世代,Fashion brands, music, Gen Z,Excellent,WCAG AA,retro, y2k, colorful
+cyberpunk_ui,Cyberpunk UI,General,赛博朋克UI，游戏、科技产品、加密货币应用,Gaming, tech products, crypto apps,Fair,WCAG AA,futuristic, neon, dark
+organic_biophilic,Organic Biophilic,General,有机生物设计，健康应用、可持续品牌,Wellness apps, sustainability brands,Excellent,WCAG AA,natural, organic, sustainable
+ai_native_ui,AI-Native UI,General,AI原生UI，AI产品、聊天机器人、副驾驶,AI products, chatbots, copilots,Excellent,WCAG AA,ai, chat, intelligent
+memphis_design,Memphis Design,General,孟菲斯设计，创意机构、音乐、青年品牌,Creative agencies, music, youth brands,Excellent,WCAG AA,colorful, geometric, playful
+vaporwave,Vaporwave,General,蒸汽波，音乐平台、游戏、作品集,Music platforms, gaming, portfolios,Excellent,WCAG AA,retro, aesthetic, surreal
+dimensional_layering,Dimensional Layering,General,维度分层，仪表板、卡片布局、模态框,Dashboards, card layouts, modals,Excellent,WCAG AA,layered, depth, structured
+exaggerated_minimalism,Exaggerated Minimalism,General,夸张极简主义，时尚、建筑、作品集,Fashion, architecture, portfolios,Excellent,WCAG AA,minimal, bold, artistic
+kinetic_typography,Kinetic Typography,General,动态字体，Hero区域、营销网站,Hero sections, marketing sites,Fair,WCAG AA,animated, typography, dynamic
+parallax_storytelling,Parallax Storytelling,General,视差故事讲述，品牌故事、产品发布,Brand storytelling, product launches,Fair,WCAG AA,parallax, storytelling, immersive
+swiss_modernism,Swiss Modernism 2.0,General,瑞士现代主义2.0，企业网站、建筑、编辑,Corporate sites, architecture, editorial,Excellent,WCAG AA,clean, grid, professional
+hud_scifi,HUD / Sci-Fi FUI,General,HUD科幻FUI，科幻游戏、太空科技、网络安全,Sci-fi games, space tech, cybersecurity,Excellent,WCAG AA,sci-fi, hud, futuristic
+pixel_art,Pixel Art,General,像素艺术，独立游戏、复古工具、创意,Indie games, retro tools, creative,Excellent,WCAG AA,pixel, retro, nostalgic
+bento_grids,Bento Grids,General,便当网格，产品特性、仪表板、个人,Product features, dashboards, personal,Excellent,WCAG AA,grid, structured, organized
+spatial_ui,Spatial UI (VisionOS),General,空间UI，空间计算应用、VR/AR,Spatial computing apps, VR/AR,Excellent,WCAG AA,spatial, 3d, immersive
+e_ink,E-Ink / Paper,General,电子墨水纸质感，阅读应用、数字报纸,Reading apps, digital newspapers,Excellent,WCAG AAA,paper, readable, minimal
+gen_z_chaos,Gen Z Chaos / Maximalism,General,Z世代混乱/极繁主义，Z世代生活方式、音乐艺术家,Gen Z lifestyle, music artists,Excellent,WCAG AA,maximalist, chaotic, bold
+biomimetic_organic,Biomimetic / Organic 2.0,General,生物模仿/有机2.0，可持续科技、生物技术、健康,Sustainability tech, biotech, health,Excellent,WCAG AA,organic, natural, biomimetic
+anti_polish,Anti-Polish / Raw Aesthetic,General,反抛光/原始美学，创意作品集、艺术家网站,Creative portfolios, artist sites,Excellent,WCAG AA,raw, unpolished, authentic
+tactile_digital,Tactile Digital / Deformable UI,General,触觉数字/可变形UI，现代移动应用、有趣品牌,Modern mobile apps, playful brands,Excellent,WCAG AA,tactile, interactive, playful
+nature_distilled,Nature Distilled,General,自然提炼，健康品牌、可持续产品,Wellness brands, sustainable products,Excellent,WCAG AA,natural, calm, organic
+interactive_cursor,Interactive Cursor Design,General,交互光标设计，创意作品集、交互,Creative portfolios, interactive,Fair,WCAG AA,interactive, cursor, creative
+voice_first_multimodal,Voice-First Multimodal,General,语音优先多模态，语音助手、无障碍应用,Voice assistants, accessibility apps,Excellent,WCAG AA,voice, multimodal, accessible
+3d_product_preview,3D Product Preview,General,3D产品预览，电商、家具、时尚,E-commerce, furniture, fashion,Fair,WCAG AA,3d, product, interactive
+gradient_mesh,Gradient Mesh / Aurora Evolved,General,渐变网格/极光演进，Hero区域、背景、创意,Hero sections, backgrounds, creative,Fair,WCAG AA,gradient, mesh, colorful
+editorial_grid,Editorial Grid / Magazine,General,编辑网格/杂志，新闻网站、博客、杂志,News sites, blogs, magazines,Excellent,WCAG AA,grid, editorial, structured
+chromatic_aberration,Chromatic Aberration / RGB Split,General,色差/RGB分离，音乐平台、游戏、科技,Music platforms, gaming, tech,Fair,WCAG AA,rgb, split, glitch
+vintage_analog,Vintage Analog / Retro Film,General,复古模拟/复古胶片，摄影、音乐/黑胶品牌,Photography, music/vinyl brands,Excellent,WCAG AA,vintage, analog, nostalgic
+hero_centric,Hero-Centric Design,Landing,以Hero为中心，强视觉识别产品,Products with strong visual identity,Excellent,WCAG AA,hero, visual, impact
+conversion_optimized,Conversion-Optimized,Landing,转化优化，潜在客户生成、销售页面,Lead generation, sales pages,Excellent,WCAG AA,conversion, cta, optimized
+feature_rich,Feature-Rich Showcase,Landing,功能丰富展示，SaaS、复杂产品,SaaS, complex products,Excellent,WCAG AA,features, showcase, detailed
+minimal_direct,Minimal & Direct,Landing,极简直接，简单产品、应用,Simple products, apps,Excellent,WCAG AA,minimal, direct, simple
+social_proof,Social Proof-Focused,Landing,社会证明聚焦，服务、B2C产品,Services, B2C products,Excellent,WCAG AA,testimonials, reviews, trust
+interactive_demo,Interactive Product Demo,Landing,交互产品演示，软件、工具,Software, tools,Good,WCAG AA,demo, interactive, product
+trust_authority,Trust & Authority,Landing,信任与权威，B2B、企业、咨询,B2B, enterprise, consulting,Excellent,WCAG AA,trust, authority, professional
+storytelling_driven,Storytelling-Driven,Landing,故事驱动，品牌、机构、非营利,Brands, agencies, nonprofits,Excellent,WCAG AA,storytelling, narrative, emotional
+data_dense,Data-Dense Dashboard,BI,数据密集仪表板，复杂数据分析,Complex data analysis,Excellent,WCAG AA,data, dense, analytics
+heatmap,Heat Map & Heatmap Style,BI,热图样式，地理/行为数据,Geographic/behavior data,Good,WCAG AA,heatmap, data, visualization
+executive_dashboard,Executive Dashboard,BI,高管仪表板，C级摘要,C-suite summaries,Excellent,WCAG AA,executive, summary, kpi
+realtime_monitoring,Real-Time Monitoring,BI,实时监控，运营、DevOps,Operations, DevOps,Excellent,WCAG AA,realtime, monitoring, alerts
+drill_down_analytics,Drill-Down Analytics,BI,下钻分析，详细探索,Detailed exploration,Excellent,WCAG AA,drill-down, detailed, exploration
+comparative_dashboard,Comparative Analysis Dashboard,BI,对比分析仪表板，并排比较,Side-by-side comparisons,Excellent,WCAG AA,comparative, analysis, comparison
+predictive_analytics,Predictive Analytics,BI,预测分析，预测、机器学习洞察,Forecasting, ML insights,Excellent,WCAG AA,predictive, forecasting, ml
+user_behavior_analytics,User Behavior Analytics,BI,用户行为分析，UX研究、产品分析,UX research, product analytics,Excellent,WCAG AA,user behavior, analytics, ux
+financial_dashboard,Financial Dashboard,BI,金融仪表板，金融、会计,Finance, accounting,Excellent,WCAG AA,financial, data, professional
+sales_intelligence_dashboard,Sales Intelligence Dashboard,BI,销售智能仪表板，销售团队、CRM,Sales teams, CRM,Excellent,WCAG AA,sales, intelligence, crm

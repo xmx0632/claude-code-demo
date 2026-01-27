@@ -1,0 +1,71 @@
+palette_id,palette_name,product_type,primary,secondary,cta,background,text,border,description,mood
+saas_professional,SaaS Professional,SaaS,#1890ff,#52c41a,#1890ff,#F0F2F5,#262626,#D9D9D9,专业SaaS配色，蓝色主调，绿色辅助，professional,trustworthy
+saas_modern,SaaS Modern,SaaS,#5B21B6,#10B981,#5B21B6,#FAFAFA,#1F2937,#E5E7EB,现代SaaS配色，紫色主调，绿色成功,modern,innovative
+saas_dark,SaaS Dark,SaaS,#3B82F6,#10B981,#3B82F6,#111827,#F9FAFB,#374151,深色SaaS配色，高对比度，dark,professional
+ecommerce_fashion,E-commerce Fashion,E-commerce,#1A1A1A,#FF6B6B,#FF6B6B,#FFFFFF,#333333,#E0E0E0,时尚电商配色，黑色主调，红色CTA,fashion,bold
+ecommerce_tech,E-commerce Tech,E-commerce,#0066CC,#FF9500,#0066CC,#F5F5F5,#333333,#DDDDDD,科技电商配色，蓝色主调，橙色CTA,tech,energetic
+ecommerce_luxury,E-commerce Luxury,E-commerce,#1C1C1C,#D4AF37,#D4AF37,#FAFAFA,#2C2C2C,#E8E8E8,奢侈品电商配色，黑金搭配,luxury,premium
+healthcare_calm,Healthcare Calm,Healthcare,#4ADE80,#60A5FA,#4ADE80,#F0FDF4,#1E293B,#E2E8F0,平静医疗配色，绿色主调，蓝色辅助,calm,healing
+healthcare_professional,Healthcare Professional,Healthcare,#0891B2,#84CC16,#0891B2,#FEFEFE,#0F172A,#CBD5E1,专业医疗配色，青色主调，绿色辅助,professional,trustworthy
+healthcare_warm,Healthcare Warm,Healthcare,#FB923C,#F472B6,#FB923C,#FFF7ED,#431407,#FED7AA,温暖医疗配色，橙色主调，粉色辅助,warm,caring
+fintech_trust,Fintech Trust,Fintech,#1E40AF,#059669,#1E40AF,#F8FAFC,#0F172A,#E2E8F0,可信金融配色，深蓝主调，绿色辅助,trust,secure
+fintech_modern,Fintech Modern,Fintech,#7C3AED,#06B6D4,#7C3AED,#FAFAFA,#18181B,#27272A,现代金融配色，紫色主调，青色辅助,modern,innovative
+fintech_growth,Fintech Growth,Fintech,#16A34A,#0EA5E9,#16A34A,#F0FDF4,#14532D,#BBF7D0,成长金融配色，绿色主调，蓝色辅助,growth,positive
+education_friendly,Education Friendly,Education,#3B82F6,#F59E0B,#3B82F6,#FEF3C7,#1F2937,#E5E7EB,友好教育配色，蓝色主调，橙色辅助,friendly,engaging
+education_professional,Education Professional,Education,#1D4ED8,#7C3AED,#1D4ED8,#F8FAFC,#0F172A,#E2E8F0,专业教育配色，深蓝主调，紫色辅助,professional,academic
+education_playful,Education Playful,Education,#EC4899,#8B5CF6,#EC4899,#FDF2F8,#831843,#FBCFE8,有趣教育配色，粉色主调，紫色辅助,playful,fun
+gaming_vibrant,Gaming Vibrant,Gaming,#FF006E,#8338EC,#FF006E,#1A1A2E,#FFFFFF,#2D2D44,鲜艳游戏配色，粉红主调，紫色辅助,vibrant,energetic
+gaming_dark,Gaming Dark,Gaming,#00FFA3,#FF006E,#00FFA3,#0D0D0D,#FFFFFF,#1A1A1A,深色游戏配色，绿色主调，粉色辅助,dark,intense
+gaming_neon,Gaming Neon,Gaming,#39FF14,#FF073A,#39FF14,#0A0A0A,#F0F0F0,#1A1A1A,霓虹游戏配色，亮绿主调，红色辅助,neon,cyber
+wellness_spa,Wellness Spa,Wellness,#E8B4B8,#A8D5BA,#D4AF37,#FFF5F5,#2D3436,#F5D5D5,水疗健康配色，粉色主调，绿色辅助,calm,serene
+wellness_yoga,Wellness Yoga,Wellness,#A8D5BA,#FDE68A,#A8D5BA,#ECFDF5,#064E3B,#D1FAE5,瑜伽健康配色，绿色主调，黄色辅助,peaceful,grounding
+wellness_fitness,Wellness Fitness,Wellness,#FB923C,#3B82F6,#FB923C,#FFF7ED,#7C2D12,#FED7AA,健身健康配色，橙色主调，蓝色辅助,energetic,motivating
+food_appetizing,Food Appetizing,Food & Beverage,#DC2626,#F59E0B,#DC2626,#FEF2F2,#7F1D1D,#FECACA,开胃食物配色，红色主调，橙色辅助,appetizing,warm
+food_healthy,Food Healthy,Food & Beverage,#65A30D,#84CC16,#65A30D,#F7FEE7,#365314,#BEF264,健康食物配色，绿色主调，浅绿辅助,healthy,fresh
+food_luxury,Food Luxury,Food & Beverage,#7C2D12,#D4AF37,#D4AF37,#FFFBEB,#78350F,#FDE68A,奢华食物配色，深棕主调，金色辅助,luxury,premium
+travel_adventure,Travel Adventure,Travel,#0EA5E9,#F97316,#0EA5E9,#F0F9FF,#0C4A6E,#BAE6FD,冒险旅行配色，蓝色主调，橙色辅助,adventurous,exciting
+travel_relaxing,Travel Relaxing,Travel,#14B8A6,#FCD34D,#14B8A6,#F0FDFA,#134E4A,#99F6E4,放松旅行配色，青色主调，黄色辅助,relaxing,peaceful
+travel_luxury,Travel Luxury,Travel,#1C1917,#D4AF37,#D4AF37,#FAFAF9,#44403C,#E7E5E4,奢华旅行配色，深灰主调，金色辅助,luxury,sophisticated
+realestate_trust,Real Estate Trust,Real Estate,#1E3A8A,#059669,#1E3A8A,#EFF6FF,#1E3A8A,#DBEAFE,可信房地产配色，深蓝主调，绿色辅助,trust,reliable
+realestate_modern,Real Estate Modern,Real Estate,#6366F1,#10B981,#6366F1,#EEF2FF,#312E81,#C7D2FE,现代房地产配色，靛蓝主调，绿色辅助,modern,contemporary
+realestate_luxury,Real Estate Luxury,Real Estate,#292524,#D4AF37,#D4AF37,#FAFAF9,#57534E,#E7E5E4,奢华房地产配色，深灰主调，金色辅助,luxury,exclusive
+media_entertainment,Media Entertainment,Media & Entertainment,#FF006E,#8338EC,#FF006E,#1A1A2E,#FFFFFF,#2D2D44,娱乐媒体配色，粉红主调，紫色辅助,entertaining,engaging
+media_news,Media News,Media & Entertainment,#DC2626,#1F2937,#DC2626,#FEF2F2,#7F1D1D,#FECACA,新闻媒体配色，红色主调，深灰辅助,bold,urgent
+media_streaming,Media Streaming,Media & Entertainment,#7C3AED,#3B82F6,#7C3AED,#FAFAFA,#18181B,#27272A,流媒体配色，紫色主调，蓝色辅助,modern,streaming
+nonprofit_warm,Nonprofit Warm,Nonprofit,#F97316,#10B981,#F97316,#FFFBEB,#7C2D12,#FED7AA,温暖非营利配色，橙色主调，绿色辅助,warm,compassionate
+nonprofit_trust,Nonprofit Trust,Nonprofit,#0369A1,#059669,#0369A1,#F0F9FF,#0C4A6E,#BAE6FD,可信非营利配色，蓝色主调，绿色辅助,trust,reliable
+nonprofit_hopeful,Nonprofit Hopeful,Nonprofit,#0891B2,#FBBF24,#0891B2,#ECFEFF,#164E63,#A5F3FC,希望非营利配色，青色主调，黄色辅助,hopeful,optimistic
+legal_professional,Legal Professional,Legal,#1E3A8A,#DC2626,#1E3A8A,#EFF6FF,#1E3A8A,#DBEAFE,专业法律配色，深蓝主调，红色辅助,professional,authoritative
+legal_traditional,Legal Traditional,Legal,#292524,#78716C,#292524,#FAFAF9,#44403C,#E7E5E4,传统法律配色，深灰主调，浅灰辅助,traditional,conservative
+legal_modern,Legal Modern,Legal,#4338CA,#059669,#4338CA,#EEF2FF,#312E81,#C7D2FE,现代法律配色，靛蓝主调，绿色辅助,modern,approachable
+consulting_expert,Consulting Expert,Consulting,#1F2937,#3B82F6,#3B82F6,#F9FAFB,#111827,#E5E7EB,专家咨询配色，深灰主调，蓝色辅助,expert,professional
+consulting_innovative,Consulting Innovative,Consulting,#7C3AED,#06B6D4,#7C3AED,#FAFAFA,#18181B,#27272A,创新咨询配色，紫色主调，青色辅助,innovative,forward-thinking
+consulting_reliable,Consulting Reliable,Consulting,#047857,#0D9488,#047857,#ECFDF5,#064E3B,#D1FAE5,可靠咨询配色，绿色主调，青色辅助,reliable,trustworthy
+tech_startup,Tech Startup,Technology,#7C3AED,#10B981,#7C3AED,#FAFAFA,#18181B,#27272A,科技创业配色，紫色主调，绿色辅助,innovative,disruptive
+tech_enterprise,Tech Enterprise,Technology,#0369A1,#0EA5E9,#0369A1,#F0F9FF,#0C4A6E,#BAE6FD,企业科技配色，蓝色主调，浅蓝辅助,enterprise,scalable
+tech_ai,Tech AI,Technology,#8B5CF6,#EC4899,#8B5CF6,#FAFAFA,#18181B,#27272A,AI科技配色，紫色主调，粉色辅助,ai,futuristic
+banking_secure,Banking Secure,Banking,#1E40AF,#059669,#1E40AF,#F8FAFC,#0F172A,#E2E8F0,安全银行配色，深蓝主调，绿色辅助,secure,trustworthy
+banking_friendly,Banking Friendly,Banking,#3B82F6,#10B981,#3B82F6,#EFF6FF,#1E3A8A,#DBEAFE,友好银行配色，蓝色主调，绿色辅助,friendly,accessible
+insurance_trust,Insurance Trust,Insurance,#1E3A8A,#DC2626,#1E3A8A,#EFF6FF,#1E3A8A,#DBEAFE,可信保险配色，深蓝主调，红色辅助,trust,reliable
+insurance_calm,Insurance Calm,Insurance,#0D9488,#84CC16,#0D9488,#F0FDFA,#134E4A,#CCFBF1,平静保险配色，青色主调，绿色辅助,calm,assuring
+crypto_modern,Crypto Modern,Crypto,#8B5CF6,#06B6D4,#8B5CF6,#FAFAFA,#18181B,#27272A,现代加密���币配色，紫色主调，青色辅助,modern,cutting-edge
+crypto_dark,Crypto Dark,Crypto,#10B981,#8B5CF6,#10B981,#0A0A0A,#F0F0F0,#1A1A1A,深色加密货币配色，绿色主调，紫色辅助,dark,decentralized
+logistics_efficient,Logistics Efficient,Logistics,#2563EB,#F59E0B,#2563EB,#EFF6FF,#1E3A8A,#DBEAFE,高效物流配色，蓝色主调，橙色辅助,efficient,reliable
+logistics_speed,Logistics Speed,Logistics,#DC2626,#F59E0B,#DC2626,#FEF2F2,#7F1D1D,#FECACA,快速物流配色，红色主调，橙色辅助,fast,urgent
+automotive_power,Automotive Power,Automotive,#1F2937,#DC2626,#DC2626,#F9FAFB,#111827,#E5E7EB,动力汽车配色，深灰主调，红色辅助,powerful,strong
+automotive_modern,Automotive Modern,Automotive,#6366F1,#10B981,#6366F1,#EEF2FF,#312E81,#C7D2FE,现代汽车配色，靛蓝主调，绿色辅助,modern,electric
+sports_energetic,Sports Energetic,Sports,#DC2626,#F59E0B,#DC2626,#FEF2F2,#7F1D1D,#FECACA,活力运动配色，红色主调，橙色辅助,energetic,passionate
+sports_performance,Sports Performance,Sports,#0F172A,#3B82F6,#3B82F6,#F8FAFC,#0F172A,#E2E8F0,表现运动配色，深灰主调，蓝色辅助,performance,elite
+beauty_elegant,Beauty Elegant,Beauty & Cosmetics,#E8B4B8,#A8D5BA,#D4AF37,#FFF5F5,#2D3436,#F5D5D5,优雅美妆配色，粉色主调，绿色辅助,elegant,sophisticated
+beauty_bold,Beauty Bold,Beauty & Cosmetics,#1A1A1A,#FF006E,#FF006E,#FFFFFF,#333333,#E0E0E0,大胆美妆配色，黑色主调，粉色辅助,bold,dramatic
+fashion_trendy,Fashion Trendy,Fashion,#1A1A1A,#FF006E,#FF006E,#FFFFFF,#333333,#E0E0E0,时尚潮流配色，黑色主调，粉色辅助,trendy,statement
+fashion_minimal,Fashion Minimal,Fashion,#FAFAFA,#1A1A1A,#1A1A1A,#FFFFFF,#333333,#E5E5E5,极简时尚配色，白色主调，黑色辅助,minimal,clean
+music_vibrant,Music Vibrant,Music & Audio,#FF006E,#8338EC,#FF006E,#1A1A2E,#FFFFFF,#2D2D44,鲜艳音乐配色，粉红主调，紫色辅助,vibrant,expressive
+music_classic,Music Classic,Music & Audio,#292524,#D4AF37,#D4AF37,#FAFAF9,#44403C,#E7E5E4,经典音乐配色，深灰主调，金色辅助,classic,timeless
+podcast_modern,Podcast Modern,Music & Audio,#7C3AED,#06B6D4,#7C3AED,#FAFAFA,#18181B,#27272A,现代播客配色，紫色主调，青色辅助,modern,engaging
+art_creative,Art Creative,Art & Design,#FF006E,#8338EC,#FF006E,#1A1A2E,#FFFFFF,#2D2D44,创意艺术配色，粉红主调，紫色辅助,creative,expressive
+art_minimal,Art Minimal,Art & Design,#FAFAFA,#1A1A1A,#1A1A1A,#FFFFFF,#333333,#E5E5E5,极简艺术配色，白色主调，黑色辅助,minimal,clean
+photography_professional,Photography Professional,Photography,#1F2937,#FFFFFF,#FFFFFF,#000000,#FFFFFF,#333333,专业摄影配色，深灰主调，白色辅助,professional,neutral
+pet_friendly,Pet Friendly,Pet Services,#FB923C,#84CC16,#FB923C,#FFF7ED,#7C2D12,#FED7AA,友好宠物配色，橙色主调，绿色辅助,friendly,playful
+home_cozy,Home Cozy,Home & Garden,#A8D5BA,#FDE68A,#A8D5BA,#ECFDF5,#064E3B,#D1FAE5,温馨家居配色，绿色主调，黄色辅助,cozy,comfortable
+garden_natural,Garden Natural,Home & Garden,#65A30D,#84CC16,#65A30D,#F7FEE7,#365314,#BEF264,自然园艺配色，绿色主调，浅绿辅助,natural,organic
