@@ -39,19 +39,19 @@ public class TodoController {
     @PostMapping
     public R<Void> add(@Valid @RequestBody TodoDTO dto) {
         todoService.insert(dto);
-        return R.ok("Todo created successfully");
+        return R.<Void>ok("Todo created successfully", null);
     }
 
     @PutMapping
     public R<Void> edit(@Valid @RequestBody TodoDTO dto) {
         todoService.update(dto);
-        return R.ok("Todo updated successfully");
+        return R.<Void>ok("Todo updated successfully", null);
     }
 
     @DeleteMapping("/{ids}")
     public R<Void> remove(@PathVariable Long[] ids) {
         todoService.deleteByIds(ids);
-        return R.ok("Todos deleted successfully");
+        return R.<Void>ok("Todos deleted successfully", null);
     }
 
     @PatchMapping("/{id}/toggle")

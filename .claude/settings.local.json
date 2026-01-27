@@ -9,7 +9,11 @@
       "Bash(ls:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(docker-compose:*)",
+      "Bash(docker exec:*)",
+      "Bash(mvn spring-boot:run:*)",
+      "Bash(mvn clean:*)"
     ]
   }
 }

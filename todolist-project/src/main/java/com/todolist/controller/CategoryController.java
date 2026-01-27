@@ -38,18 +38,18 @@ public class CategoryController {
     @PostMapping
     public R<Void> add(@Valid @RequestBody CategoryDTO dto) {
         categoryService.insert(dto);
-        return R.ok("Category created successfully");
+        return R.<Void>ok("Category created successfully", null);
     }
 
     @PutMapping
     public R<Void> edit(@Valid @RequestBody CategoryDTO dto) {
         categoryService.update(dto);
-        return R.ok("Category updated successfully");
+        return R.<Void>ok("Category updated successfully", null);
     }
 
     @DeleteMapping("/{ids}")
     public R<Void> remove(@PathVariable Long[] ids) {
         categoryService.deleteByIds(ids);
-        return R.ok("Categories deleted successfully");
+        return R.<Void>ok("Categories deleted successfully", null);
     }
 }

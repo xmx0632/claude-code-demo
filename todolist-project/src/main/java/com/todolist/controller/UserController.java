@@ -30,6 +30,6 @@ public class UserController {
     @PutMapping("/password")
     public R<Void> updatePassword(@Valid @RequestBody UpdatePasswordDTO dto) {
         userService.updatePassword(dto);
-        return R.ok("Password updated successfully, please login again");
+        return R.<Void>ok("Password updated successfully, please login again", null);
     }
 }

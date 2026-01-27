@@ -40,14 +40,14 @@ public class AuthController {
     @PostMapping("/logout")
     public R<Void> logout() {
         // Token is stateless, client-side token removal is sufficient
-        return R.ok("Logout successful");
+        return R.<Void>ok("Logout successful", null);
     }
 
     @PostMapping("/refresh")
     public R<AuthResponseVO> refreshToken(@Valid @RequestBody RefreshTokenDTO dto) {
         // Validate refresh token
         if (!jwtService.validateToken(dto.getRefreshToken())) {
-            return R.fail(401, "Invalid or expired refresh token");
+            return R.<AuthResponseVO>fail(401, "Invalid or expired refresh token");
         }
 
         Long userId = jwtService.getUserIdFromToken(dto.getRefreshToken());

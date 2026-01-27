@@ -38,10 +38,10 @@ public class JwtService {
         Date expiryDate = new Date(now.getTime() + expiration * 1000);
 
         return Jwts.builder()
-                .subject(username)
+                .setSubject(username)
                 .claim("user_id", userId)
-                .issuedAt(now)
-                .expiration(expiryDate)
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -59,8 +59,8 @@ public class JwtService {
         return Jwts.builder()
                 .claim("user_id", userId)
                 .claim("type", "refresh")
-                .issuedAt(now)
-                .expiration(expiryDate)
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -73,10 +73,10 @@ public class JwtService {
      */
     public boolean validateToken(String token) {
         try {
-            Jwts.parser()
-                    .verifyWith(getSigningKey())
+            Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
                     .build()
-                    .parseSignedClaims(token);
+                    .parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             log.error("Token validation failed: {}", e.getMessage());
@@ -91,11 +91,11 @@ public class JwtService {
      * @return Username
      */
     public String getUsernameFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getSigningKey())
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
                 .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .parseClaimsJws(token)
+                .getBody();
         return claims.getSubject();
     }
 
@@ -106,11 +106,11 @@ public class JwtService {
      * @return User ID
      */
     public Long getUserIdFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getSigningKey())
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
                 .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .parseClaimsJws(token)
+                .getBody();
         return claims.get("user_id", Long.class);
     }
 

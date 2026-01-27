@@ -67,7 +67,7 @@ public class TableDataInfo<T> implements Serializable {
      */
     public static <T> TableDataInfo<T> empty() {
         return TableDataInfo.<T>builder()
-                .records(List.of())
+                .records(new java.util.ArrayList<>())
                 .total(0L)
                 .page(1L)
                 .size(20L)
