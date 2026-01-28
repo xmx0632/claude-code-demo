@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout:*)",
+      "Bash(uipro init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
