@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.todolist.mapper.TodoCategoryMapper">
+
+    <!-- Select category IDs by todo ID -->
+    <select id="selectCategoryIdsByTodoId" resultType="java.lang.Long">
+        SELECT category_id
+        FROM sys_todo_category
+        WHERE todo_id = #{todoId}
+    </select>
+
+    <!-- Delete associations by todo ID -->
+    <delete id="deleteByTodoId">
+        DELETE FROM sys_todo_category
+        WHERE todo_id = #{todoId}
+    </delete>
+
+    <!-- Batch insert associations -->
+    <insert id="batchInsert">
+        INSERT INTO sys_todo_category (todo_id, category_id, created_at)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.todoId}, #{item.categoryId}, NOW())
+        </foreach>
+    </insert>
+
+</mapper>

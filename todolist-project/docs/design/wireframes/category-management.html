@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分类管理页面 - 线框图</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+        .wireframe { max-width: 1200px; margin: 0 auto; background: white; border: 3px dashed #1890ff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+        .wireframe-header { background: #1890ff; color: white; padding: 10px 20px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .wireframe-body { padding: 20px; }
+        .page-header { border: 2px solid #333; padding: 15px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
+        .page-title { font-size: 24px; font-weight: bold; color: #333; }
+        .navbar { border: 2px solid #666; padding: 0 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; background: #fff; min-height: 50px; }
+        .nav-brand { font-size: 18px; font-weight: bold; color: #1890ff; }
+        .nav-links { display: flex; gap: 5px; }
+        .nav-item { border: 1px solid #ddd; padding: 8px 16px; text-decoration: none; color: #333; background: #f5f5f5; border-radius: 4px; }
+        .nav-item.active { background: #1890ff; color: white; border-color: #1890ff; }
+        .toolbar { border: 2px solid #999; padding: 10px 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
+        .btn { padding: 8px 16px; border: 2px solid #333; background: #e0e0e0; cursor: pointer; border-radius: 4px; font-size: 14px; transition: all 0.3s; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #1890ff; color: white; border-color: #1890ff; }
+        .btn-danger { background: #f5222d; color: white; border-color: #f5222d; }
+        .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .category-card { border: 2px solid #666; padding: 20px; background: white; border-radius: 8px; position: relative; }
+        .category-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; }
+        .category-color { width: 50px; height: 50px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .category-actions { display: flex; gap: 5px; }
+        .category-name { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 10px; }
+        .category-stats { display: flex; gap: 15px; font-size: 13px; color: #666; }
+        .category-stat { display: flex; align-items: center; gap: 4px; }
+        .category-todos { margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; }
+        .category-todos-title { font-size: 13px; color: #999; margin-bottom: 10px; }
+        .todo-chip { display: inline-block; padding: 4px 10px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; margin: 3px; }
+        .empty-state { border: 2px dashed #ccc; padding: 60px 20px; text-align: center; color: #999; }
+        .back-nav { text-align: center; margin-top: 20px; }
+        .back-link { color: #666; text-decoration: none; font-size: 14px; }
+        .back-link:hover { color: #1890ff; }
+        @media (max-width: 768px) { .category-grid { grid-template-columns: 1fr; } .toolbar { flex-direction: column; gap: 10px; } }
+    </style>
+</head>
+<body>
+    <div class="wireframe">
+        <div class="wireframe-header">
+            <span>分类管理页面</span>
+            <span>版本: 1.0 | P1</span>
+        </div>
+        <div class="wireframe-body">
+            <header class="page-header">
+                <h1 class="page-title">🏷️ 分类管理</h1>
+            </header>
+            <nav class="navbar">
+                <div class="nav-brand">📋 TodoList</div>
+                <div class="nav-links">
+                    <a href="todo-list.html" class="nav-item">待办事项</a>
+                    <a href="#" class="nav-item active">分类管理</a>
+                    <a href="user-profile.html" class="nav-item">个人中心</a>
+                </div>
+            </nav>
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <button class="btn btn-primary" onclick="showMessage('创建分类')">➕ 新建分类</button>
+                </div>
+                <div class="toolbar-right">
+                    <span style="color: #666; font-size: 14px;">共 4 个分类</span>
+                </div>
+            </div>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-color" style="background: #1890ff; color: white;">💼</div>
+                        <div class="category-actions">
+                            <button class="btn" onclick="showMessage('编辑分类')">✏️</button>
+                            <button class="btn btn-danger" onclick="showMessage('删除分类')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="category-name">工作</div>
+                    <div class="category-stats">
+                        <div class="category-stat">📊 8 个待办</div>
+                        <div class="category-stat">✅ 5 个完成</div>
+                    </div>
+                    <div class="category-todos">
+                        <div class="category-todos-title">最近待办:</div>
+                        <span class="todo-chip">完成项目文档</span>
+                        <span class="todo-chip">准备周报</span>
+                        <span class="todo-chip">团队会议</span>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-color" style="background: #52c41a; color: white;">👤</div>
+                        <div class="category-actions">
+                            <button class="btn" onclick="showMessage('编辑分类')">✏️</button>
+                            <button class="btn btn-danger" onclick="showMessage('删除分类')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="category-name">个人</div>
+                    <div class="category-stats">
+                        <div class="category-stat">📊 3 个待办</div>
+                        <div class="category-stat">✅ 2 个完成</div>
+                    </div>
+                    <div class="category-todos">
+                        <div class="category-todos-title">最近待办:</div>
+                        <span class="todo-chip">健身</span>
+                        <span class="todo-chip">阅读</span>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-color" style="background: #faad14; color: white;">📚</div>
+                        <div class="category-actions">
+                            <button class="btn" onclick="showMessage('编辑分类')">✏️</button>
+                            <button class="btn btn-danger" onclick="showMessage('删除分类')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="category-name">学习</div>
+                    <div class="category-stats">
+                        <div class="category-stat">📊 1 个待办</div>
+                        <div class="category-stat">✅ 0 个完成</div>
+                    </div>
+                    <div class="category-todos">
+                        <div class="category-todos-title">最近待办:</div>
+                        <span class="todo-chip">学习Spring Boot</span>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-color" style="background: #eb2f96; color: white;">👥</div>
+                        <div class="category-actions">
+                            <button class="btn" onclick="showMessage('编辑分类')">✏️</button>
+                            <button class="btn btn-danger" onclick="showMessage('删除分类')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="category-name">会议</div>
+                    <div class="category-stats">
+                        <div class="category-stat">📊 0 个待办</div>
+                        <div class="category-stat">✅ 0 个完成</div>
+                    </div>
+                    <div class="category-todos">
+                        <div class="category-todos-title">暂无待办事项</div>
+                    </div>
+                </div>
+            </div>
+            <div class="back-nav">
+                <a href="index.html" class="back-link">← 返回线框图导航</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showMessage(msg) { alert('这是一个线框图演示\n' + msg); }
+    </script>
+</body>
+</html>
