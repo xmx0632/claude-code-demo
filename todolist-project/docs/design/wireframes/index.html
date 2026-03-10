@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TodoList 线框图导航</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .wireframe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .wireframe-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .wireframe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .wireframe-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .wireframe-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .wireframe-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .wireframe-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            color: #999;
+        }
+
+        .wireframe-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .priority {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .priority.p0 {
+            background: #ff4d4f;
+            color: white;
+        }
+
+        .priority.p1 {
+            background: #faad14;
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .wireframe-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 TodoList 待办事项管理系统</h1>
+            <p>产品线框图导航 | Product Design Wireframes</p>
+            <p style="margin-top: 10px; font-size: 14px;">版本: 1.0 | 日期: 2026-01-26</p>
+        </div>
+
+        <div class="wireframe-grid">
+            <!-- 登录注册页面 -->
+            <a href="login-register.html" class="wireframe-card">
+                <div class="wireframe-icon">🔐</div>
+                <span class="priority p0">P0</span>
+                <div class="wireframe-title">登录/注册页面</div>
+                <div class="wireframe-description">
+                    用户认证入口，支持用户名密码登录和新用户注册。包含表单验证、错误提示和密码可见性切换。
+                </div>
+                <div class="wireframe-meta">
+                    <span>📱 响应式</span>
+                    <span>🎨 简洁设计</span>
+                </div>
+            </a>
+
+            <!-- Todo列表页面 -->
+            <a href="todo-list.html" class="wireframe-card">
+                <div class="wireframe-icon">📝</div>
+                <span class="priority p0">P0</span>
+                <div class="wireframe-title">Todo列表页面</div>
+                <div class="wireframe-description">
+                    主功能页面，展示所有待办事项。支持搜索、过滤、排序、分页、状态切换和批量操作。
+                </div>
+                <div class="wireframe-meta">
+                    <span>🔍 搜索过滤</span>
+                    <span>📊 状态统计</span>
+                </div>
+            </a>
+
+            <!-- 创建Todo页面 -->
+            <a href="create-todo.html" class="wireframe-card">
+                <div class="wireframe-icon">➕</div>
+                <span class="priority p0">P0</span>
+                <div class="wireframe-title">创建Todo页面</div>
+                <div class="wireframe-description">
+                    创建新待办事项的表单页面。包含标题、描述、优先级、截止日期和分类选择。
+                </div>
+                <div class="wireframe-meta">
+                    <span>✅ 表单验证</span>
+                    <span>🏷️ 分类标签</span>
+                </div>
+            </a>
+
+            <!-- 编辑Todo页面 -->
+            <a href="edit-todo.html" class="wireframe-card">
+                <div class="wireframe-icon">✏️</div>
+                <span class="priority p0">P0</span>
+                <div class="wireframe-title">编辑Todo页面</div>
+                <div class="wireframe-description">
+                    编辑现有待办事项。预填充当前数据，支持修改所有字段，包含保存和取消操作。
+                </div>
+                <div class="wireframe-meta">
+                    <span>💾 自动保存</span>
+                    <span>🔄 实时更新</span>
+                </div>
+            </a>
+
+            <!-- 分类管理页面 -->
+            <a href="category-management.html" class="wireframe-card">
+                <div class="wireframe-icon">🏷️</div>
+                <span class="priority p1">P1</span>
+                <div class="wireframe-title">分类管理页面</div>
+                <div class="wireframe-description">
+                    管理待办事项的分类/标签。支持创建、编辑、删除分类，设置颜色标识。
+                </div>
+                <div class="wireframe-meta">
+                    <span>🎨 颜色选择</span>
+                    <span>📈 使用统计</span>
+                </div>
+            </a>
+
+            <!-- 个人中心页面 -->
+            <a href="user-profile.html" class="wireframe-card">
+                <div class="wireframe-icon">👤</div>
+                <span class="priority p1">P1</span>
+                <div class="wireframe-title">个人中心页面</div>
+                <div class="wireframe-description">
+                    用户个人信息管理和统计。查看账户信息、修改密码、查看待办事项统计数据。
+                </div>
+                <div class="wireframe-meta">
+                    <span>📊 数据统计</span>
+                    <span>🔒 安全设置</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>TodoList 项目 - SDLC 框架演示项目</p>
+            <p style="margin-top: 10px;">
+                <a href="../user-flow.md">用户流程图</a> |
+                <a href="../prototype-spec.md">原型规格</a> |
+                <a href="../design-system.md">设计系统</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

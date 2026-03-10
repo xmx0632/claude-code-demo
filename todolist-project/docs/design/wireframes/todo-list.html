@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo列表页面 - 线框图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .wireframe {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border: 3px dashed #1890ff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .wireframe-header {
+            background: #1890ff;
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wireframe-body {
+            padding: 20px;
+        }
+
+        /* 页面头部 */
+        .page-header {
+            border: 2px solid #333;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafafa;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            border: 2px solid #666;
+            padding: 0 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            min-height: 50px;
+        }
+
+        .nav-brand {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1890ff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 5px;
+        }
+
+        .nav-item {
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #333;
+            background: #f5f5f5;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: #e6f7ff;
+            border-color: #1890ff;
+        }
+
+        .nav-item.active {
+            background: #1890ff;
+            color: white;
+            border-color: #1890ff;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            border: 2px solid #333;
+            padding: 8px 16px;
+            display: inline-block;
+            background: #e0e0e0;
+            cursor: pointer;
+            text-decoration: none;
+            color: #333;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-primary {
+            background: #1890ff;
+            color: white;
+            border-color: #1890ff;
+        }
+
+        .btn-primary:hover {
+            background: #40a9ff;
+        }
+
+        .btn-success {
+            background: #52c41a;
+            color: white;
+            border-color: #52c41a;
+        }
+
+        .btn-danger {
+            background: #f5222d;
+            color: white;
+            border-color: #f5222d;
+        }
+
+        /* 统计卡片 */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            border: 2px solid #666;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1890ff;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* 工具栏 */
+        .toolbar {
+            border: 2px solid #999;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafafa;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .toolbar-left,
+        .toolbar-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 5px;
+        }
+
+        .input {
+            border: 2px solid #666;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        select.input {
+            cursor: pointer;
+            min-width: 120px;
+        }
+
+        /* 过滤器 */
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* 待办事项列表 */
+        .todo-list {
+            border: 2px solid #666;
+            background: white;
+        }
+
+        .todo-item {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: background 0.2s;
+        }
+
+        .todo-item:hover {
+            background: #f9f9f9;
+        }
+
+        .todo-item:last-child {
+            border-bottom: none;
+        }
+
+        .todo-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .todo-content {
+            flex: 1;
+        }
+
+        .todo-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .todo-item.completed .todo-title {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .todo-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            color: #999;
+            flex-wrap: wrap;
+        }
+
+        .todo-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* 标签样式 */
+        .tag {
+            border: 1px solid #666;
+            padding: 2px 8px;
+            font-size: 12px;
+            background: #f0f0f0;
+            border-radius: 2px;
+            display: inline-block;
+        }
+
+        .tag-blue {
+            background: #e6f7ff;
+            border-color: #91d5ff;
+            color: #1890ff;
+        }
+
+        .tag-green {
+            background: #f6ffed;
+            border-color: #b7eb8f;
+            color: #52c41a;
+        }
+
+        .tag-red {
+            background: #fff1f0;
+            border-color: #ffa39e;
+            color: #f5222d;
+        }
+
+        .tag-orange {
+            background: #fff7e6;
+            border-color: #ffd591;
+            color: #fa8c16;
+        }
+
+        .tag-gray {
+            background: #fafafa;
+            border-color: #d9d9d9;
+            color: #8c8c8c;
+        }
+
+        .todo-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .todo-actions .btn {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        /* 分页 */
+        .pagination {
+            border: 2px solid #666;
+            padding: 10px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            background: #fafafa;
+        }
+
+        .page-item {
+            border: 1px solid #ddd;
+            padding: 5px 12px;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .page-item.active {
+            background: #1890ff;
+            color: white;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            border: 2px dashed #ccc;
+            padding: 60px 20px;
+            text-align: center;
+            color: #999;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+
+        /* 返回导航 */
+        .back-nav {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-link:hover {
+            color: #1890ff;
+        }
+
+        @media (max-width: 768px) {
+            .toolbar {
+                flex-direction: column;
+            }
+
+            .toolbar-left,
+            .toolbar-right {
+                width: 100%;
+            }
+
+            .todo-item {
+                flex-wrap: wrap;
+            }
+
+            .todo-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wireframe">
+        <div class="wireframe-header">
+            <span>Todo列表页面</span>
+            <span>版本: 1.0 | P0</span>
+        </div>
+
+        <div class="wireframe-body">
+            <!-- 页面头部 -->
+            <header class="page-header">
+                <h1 class="page-title">📋 我的待办事项</h1>
+                <div class="page-actions">
+                    <button class="btn">📊 统计</button>
+                    <button class="btn">⚙️ 设置</button>
+                </div>
+            </header>
+
+            <!-- 导航栏 -->
+            <nav class="navbar">
+                <div class="nav-brand">📋 TodoList</div>
+                <div class="nav-links">
+                    <a href="#" class="nav-item active">待办事项</a>
+                    <a href="#" class="nav-item">分类管理</a>
+                    <a href="#" class="nav-item">个人中心</a>
+                    <a href="#" class="nav-item">退出登录</a>
+                </div>
+            </nav>
+
+            <!-- 统计卡片 -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">全部待办</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: #faad14;">5</div>
+                    <div class="stat-label">待处理</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: #52c41a;">7</div>
+                    <div class="stat-label">已完成</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: #f5222d;">3</div>
+                    <div class="stat-label">已过期</div>
+                </div>
+            </div>
+
+            <!-- 工具栏 -->
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <button class="btn btn-primary" onclick="showMessage('创建待办事项')">➕ 新建待办</button>
+                    <button class="btn" onclick="showMessage('批量删除')">🗑️ 批量删除</button>
+                    <button class="btn" onclick="showMessage('导出功能')">📥 导出</button>
+                </div>
+                <div class="toolbar-right">
+                    <div class="search-box">
+                        <input type="text" class="input" placeholder="搜索待办事项..." style="min-width: 200px;">
+                        <button class="btn">🔍</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 过滤器 -->
+            <div class="filters">
+                <div class="filter-group">
+                    <span class="filter-label">状态:</span>
+                    <select class="input">
+                        <option>全部</option>
+                        <option>待处理</option>
+                        <option>已完成</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">优先级:</span>
+                    <select class="input">
+                        <option>全部</option>
+                        <option>高</option>
+                        <option>中</option>
+                        <option>低</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">截止日期:</span>
+                    <select class="input">
+                        <option>全部</option>
+                        <option>今天</option>
+                        <option>本周</option>
+                        <option>本月</option>
+                        <option>已过期</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">分类:</span>
+                    <select class="input">
+                        <option>全部分类</option>
+                        <option>工作</option>
+                        <option>个人</option>
+                        <option>学习</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">排序:</span>
+                    <select class="input">
+                        <option>创建时间</option>
+                        <option>截止日期</option>
+                        <option>优先级</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 待办事项列表 -->
+            <div class="todo-list">
+                <!-- 待办项 1 -->
+                <div class="todo-item">
+                    <input type="checkbox" class="todo-checkbox">
+                    <div class="todo-content">
+                        <div class="todo-title">完成项目文档编写</div>
+                        <div class="todo-meta">
+                            <div class="todo-meta-item">
+                                <span>📅</span>
+                                <span>2026-01-30</span>
+                            </div>
+                            <div class="todo-meta-item">
+                                <span>⏰</span>
+                                <span>3天前创建</span>
+                            </div>
+                            <span class="tag tag-red">高优先级</span>
+                            <span class="tag tag-blue">工作</span>
+                        </div>
+                    </div>
+                    <div class="todo-actions">
+                        <button class="btn btn-success" onclick="toggleComplete(this)">✓</button>
+                        <button class="btn" onclick="showMessage('编辑待办')">✏️</button>
+                        <button class="btn btn-danger" onclick="showMessage('删除待办')">🗑️</button>
+                    </div>
+                </div>
+
+                <!-- 待办项 2 -->
+                <div class="todo-item completed">
+                    <input type="checkbox" class="todo-checkbox" checked>
+                    <div class="todo-content">
+                        <div class="todo-title">团队周会</div>
+                        <div class="todo-meta">
+                            <div class="todo-meta-item">
+                                <span>📅</span>
+                                <span>2026-01-27</span>
+                            </div>
+                            <div class="todo-meta-item">
+                                <span>✅</span>
+                                <span>已于昨天完成</span>
+                            </div>
+                            <span class="tag tag-orange">中优先级</span>
+                            <span class="tag tag-green">会议</span>
+                        </div>
+                    </div>
+                    <div class="todo-actions">
+                        <button class="btn" onclick="toggleComplete(this)">↩️</button>
+                        <button class="btn" onclick="showMessage('编辑待办')">✏️</button>
+                        <button class="btn btn-danger" onclick="showMessage('删除待办')">🗑️</button>
+                    </div>
+                </div>
+
+                <!-- 待办项 3 -->
+                <div class="todo-item">
+                    <input type="checkbox" class="todo-checkbox">
+                    <div class="todo-content">
+                        <div class="todo-title">学习 Spring Boot 3.2 新特性</div>
+                        <div class="todo-meta">
+                            <div class="todo-meta-item">
+                                <span>📅</span>
+                                <span>2026-02-15</span>
+                            </div>
+                            <div class="todo-meta-item">
+                                <span>⏰</span>
+                                <span>1天前创建</span>
+                            </div>
+                            <span class="tag tag-gray">低优先级</span>
+                            <span class="tag tag-blue">学习</span>
+                        </div>
+                    </div>
+                    <div class="todo-actions">
+                        <button class="btn btn-success" onclick="toggleComplete(this)">✓</button>
+                        <button class="btn" onclick="showMessage('编辑待办')">✏️</button>
+                        <button class="btn btn-danger" onclick="showMessage('删除待办')">🗑️</button>
+                    </div>
+                </div>
+
+                <!-- 待办项 4 -->
+                <div class="todo-item">
+                    <input type="checkbox" class="todo-checkbox">
+                    <div class="todo-content">
+                        <div class="todo-title">准备季度报告</div>
+                        <div class="todo-meta">
+                            <div class="todo-meta-item">
+                                <span>📅</span>
+                                <span>2026-01-25</span>
+                            </div>
+                            <div class="todo-meta-item">
+                                <span>⚠️</span>
+                                <span>已过期</span>
+                            </div>
+                            <span class="tag tag-red">高优先级</span>
+                            <span class="tag tag-blue">工作</span>
+                        </div>
+                    </div>
+                    <div class="todo-actions">
+                        <button class="btn btn-success" onclick="toggleComplete(this)">✓</button>
+                        <button class="btn" onclick="showMessage('编辑待办')">✏️</button>
+                        <button class="btn btn-danger" onclick="showMessage('删除待办')">🗑️</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分页 -->
+            <div class="pagination">
+                <span class="page-item">上一页</span>
+                <span class="page-item active">1</span>
+                <span class="page-item">2</span>
+                <span class="page-item">3</span>
+                <span class="page-item">下一页</span>
+            </div>
+
+            <div class="back-nav">
+                <a href="index.html" class="back-link">← 返回线框图导航</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showMessage(msg) {
+            alert('这是一个线框图演示\n' + msg);
+        }
+
+        function toggleComplete(btn) {
+            const item = btn.closest('.todo-item');
+            const isCompleted = item.classList.contains('completed');
+            const checkbox = item.querySelector('.todo-checkbox');
+
+            if (isCompleted) {
+                item.classList.remove('completed');
+                checkbox.checked = false;
+                btn.textContent = '✓';
+                btn.className = 'btn btn-success';
+            } else {
+                item.classList.add('completed');
+                checkbox.checked = true;
+                btn.textContent = '↩️';
+                btn.className = 'btn';
+            }
+        }
+
+        // 复选框点击事件
+        document.querySelectorAll('.todo-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const item = this.closest('.todo-item');
+                const btn = item.querySelector('.todo-actions .btn');
+
+                if (this.checked) {
+                    item.classList.add('completed');
+                    btn.textContent = '↩️';
+                    btn.className = 'btn';
+                } else {
+                    item.classList.remove('completed');
+                    btn.textContent = '✓';
+                    btn.className = 'btn btn-success';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
