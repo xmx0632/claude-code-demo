@@ -1,0 +1,283 @@
+# Agent Review Cycle Configuration
+# Agent 审查循环配置 - 定义 Agent 之间的协作流程
+
+version: "1.0.0"
+
+# ========== 全局配置 ==========
+agent_review_cycle:
+  enabled: true
+  strict_mode: false          # 严格模式：任何警告都阻止通过
+  auto_fix: true              # 尝试自动修复可修复的问题
+
+  # 最大重试次数
+  max_retries: 3
+
+  # 超时配置（秒）
+  timeout:
+    linter: 30                # Linter 执行超时
+    audit: 60                 # 审计超时
+    total: 300                # 总流程超时
+
+# ========== 参与的 Agent ==========
+agents:
+  # 代码生成 Agent
+  - name: code_developer
+    display_name: "Code Developer Agent"
+    agent_file: "subagents/backend-developer-agent.md"
+    phase: generate
+    enabled: true
+
+  # 架构审计 Agent
+  - name: architecture_auditor
+    display_name: "Architecture Auditor Agent"
+    agent_file: "subagents/architecture-auditor-agent.md"
+    phase: audit
+    enabled: true
+
+  # 质量门禁 Agent
+  - name: quality_gate
+    display_name: "Quality Gate Agent"
+    agent_file: "subagents/qa-engineer-agent.md"
+    phase: validate
+    enabled: true
+
+# ========== Linter 配置 ==========
+linter:
+  script: "SDLC-Framework/scripts/agent-linter.sh"
+  output_format: "json"
+  output_file: ".audit/linter-result.json"
+
+  # 执行模式
+  mode: standard              # fast | standard | strict
+
+  # 失败条件
+  fail_on:
+    - severity: critical
+      action: block
+    - severity: error
+      action: block
+    - severity: warning
+      action: log
+      count: 5                # 最多 5 个警告
+
+  # 包含/排除的文件
+  include:
+    - "src/main/java/**/*.java"
+
+  exclude:
+    - "*/target/**"
+    - "*/node_modules/**"
+    - "*/generated/**"
+
+# ========== 质量门禁 ==========
+quality_gates:
+  config_file: "SDLC-Framework/config/quality-gates.yaml"
+
+  # 门禁标准
+  standards:
+    architecture_violations:
+      critical: 0             # 不允许严重违规
+      error: 0                # 不允许错误
+      warning: 5              # 最多 5 个警告
+
+    security_issues:
+      critical: 0
+      high: 0
+      medium: 2
+
+    complexity:
+      exceeded_files: 0       # 不允许文件超过复杂度限制
+      exceeded_methods: 5     # 最多 5 个方法超限
+
+    code_quality:
+      test_coverage: 0.8      # 最低 80% 覆盖率
+      lint_errors: 0
+
+  # 通过条件
+  pass_condition: |
+    critical_issues == 0 AND
+    error_issues == 0 AND
+    warning_issues <= 5
+
+# ========== 反馈配置 ==========
+feedback:
+  # 反馈格式
+  format: structured          # structured | human | json
+
+  # 反馈内容
+  include:
+    - violation_summary       # 违规摘要
+    - fix_suggestions        # 修复建议
+    - code_examples          # 代码示例
+    - references             # 参考文档
+
+  # 严重性级别
+  severity_levels:
+    critical:
+      icon: "🚫"
+      color: "red"
+      action: "block"
+
+    error:
+      icon: "❌"
+      color: "red"
+      action: "fix_required"
+
+    warning:
+      icon: "⚠️"
+      color: "yellow"
+      action: "review"
+
+    info:
+      icon: "ℹ️"
+      color: "blue"
+      action: "log"
+
+# ========== 失败处理 ==========
+on_failure:
+  # 达到最大重试次数
+  max_retries_reached:
+    - notify: "developer"
+    - create_issue: true
+    - block_merge: true
+    - save_log: ".audit/failed-review.log"
+
+  # 超时
+  timeout:
+    - notify: "developer"
+    - save_partial_results: true
+    - continue: false
+
+  # 严重违规
+  critical_violations:
+    - immediate_stop: true
+    - notify: "developer"
+    - create_issue: true
+
+# ========== 通知配置 ==========
+notifications:
+  enabled: true
+
+  channels:
+    - type: console
+      enabled: true
+      format: "colored"
+
+    - type: file
+      enabled: true
+      file: ".audit/review-result.md"
+
+    - type: webhook
+      enabled: false
+      url: "${WEBHOOK_URL}"
+
+  # 通知级别
+  notify_on:
+    - review_passed
+    - review_failed
+    - retry_attempted
+    - timeout
+
+# ========== 报告配置 ==========
+reporting:
+  # 报告目录
+  output_dir: ".audit"
+
+  # 报告格式
+  formats:
+    - markdown               # 人类可读
+    - json                  # 机器可读
+    - html                  # 可视化报告
+
+  # 报告内容
+  sections:
+    - summary               # 摘要
+    - violations            # 违规列表
+    - metrics               # 指标
+    - recommendations       # 建议
+    - history               # 历史对比
+
+  # 历史记录
+  history:
+    enabled: true
+    max_entries: 100
+    file: ".audit/history.json"
+
+# ========== 工作流集成 ==========
+workflow_integration:
+  # SDLC 阶段
+  sdlc_stages:
+    - code-development
+    - unit-testing
+    - integration-testing
+
+  # Git Hook 集成
+  git_hooks:
+    pre-commit:
+      enabled: true
+      run: "quick"           # 快速检查
+
+    pre-push:
+      enabled: true
+      run: "full"            # 完整检查
+
+  # CI/CD 集成
+  cicd:
+    github_actions:
+      enabled: false
+      workflow_file: ".github/workflows/architecture-check.yml"
+
+    jenkins:
+      enabled: false
+      jenkinsfile: "Jenkinsfile"
+
+# ========== 性能优化 ==========
+performance:
+  # 并行检查
+  parallel_checks: true
+  max_parallel_jobs: 4
+
+  # 缓存
+  cache:
+    enabled: true
+    cache_dir: ".audit/cache"
+    ttl: 3600                # 缓存有效期（秒）
+
+  # 增量检查
+  incremental:
+    enabled: true
+    base_branch: "origin/main"
+
+# ========== 调试配置 ==========
+debug:
+  enabled: false
+  log_level: info            # debug | info | warn | error
+  log_file: ".audit/debug.log"
+
+  verbose_output: false
+  save_intermediate: true
+
+# ========== 自定义规则 ==========
+custom_rules:
+  # 项目特定规则
+  project_specific:
+    enabled: true
+
+    rules:
+      - name: "ruoyi_base_controller"
+        check: "extends BaseController"
+        severity: "warning"
+        message: "Controller 应继承 BaseController"
+
+      - name: "service_interface_naming"
+        check: "interface I.*Service"
+        severity: "error"
+        message: "Service 接口应以 I 开头"
+
+# ========== 参考文档 ==========
+documentation:
+  architecture_rules: "SDLC-Framework/config/architecture-rules.yaml"
+  quality_gates: "SDLC-Framework/config/quality-gates.yaml"
+  linter_script: "SDLC-Framework/scripts/agent-linter.sh"
+  workflow_doc: "SDLC-Framework/workflows/agent-review-cycle.md"
+  auditor_agent: "SDLC-Framework/subagents/architecture-auditor-agent.md"

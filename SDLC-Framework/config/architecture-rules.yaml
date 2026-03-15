@@ -1,0 +1,294 @@
+# Architecture Rules
+# 架构规则定义 - 定义系统架构约束和依赖规则
+#
+# 这些规则被 Agent-Linter 和架构审计 Agent 使用
+# 用于确保代码符合架构规范
+
+version: "1.0.0"
+
+# ========== 分层架构规则 ==========
+layer_architecture:
+  enabled: true
+
+  # 层定义（从上到下）
+  layers:
+    - name: presentation
+      aliases: [controller, view, api]
+      description: "表示层 - 处理 HTTP 请求/响应"
+      allowed_packages: [".*\\.controller\\..*", ".*\\.api\\..*", ".*\\.view\\..*"]
+
+    - name: service
+      aliases: [business, serviceimpl]
+      description: "服务层 - 业务逻辑处理"
+      allowed_packages: [".*\\.service\\..*", ".*\\.business\\..*"]
+
+    - name: repository
+      aliases: [mapper, dao, persistence]
+      description: "数据访问层 - 数据库操作"
+      allowed_packages: [".*\\.mapper\\..*", ".*\\.dao\\..*", ".*\\.repository\\..*"]
+
+    - name: domain
+      aliases: [entity, dto, vo, model, domain]
+      description: "领域层 - 数据模型"
+      allowed_packages: [".*\\.domain\\..*", ".*\\.entity\\..*", ".*\\.dto\\..*", ".*\\.vo\\..*"]
+
+  # 依赖流向规则（只能从上到下）
+  dependency_flow:
+    - from: presentation
+      to: [service, domain]
+      description: "Controller 可以调用 Service 和使用 Domain"
+
+    - from: service
+      to: [service, repository, domain]
+      description: "Service 可以调用其他 Service、Repository 和使用 Domain"
+
+    - from: repository
+      to: [domain]
+      description: "Repository 只能使用 Domain"
+
+    - from: domain
+      to: []
+      description: "Domain 层不依赖任何业务层"
+
+  # 禁止的依赖（违规）
+  forbidden_dependencies:
+    - from: presentation
+      to: [repository, mapper, dao]
+      reason: "Controller 不能直接访问数据访问层"
+
+    - from: service
+      to: [presentation, controller, view, api]
+      reason: "Service 不能依赖表示层"
+
+    - from: repository
+      to: [service, presentation, controller]
+      reason: "Repository 不能依赖上层业务逻辑"
+
+# ========== 模块化规则 ==========
+modularity:
+  enabled: true
+
+  # 模块定义
+  modules:
+    - name: user
+      packages: [".*\\.user\\..*", ".*\\.User.*"]
+      public_api: [".*\\.user\\.api\\..*"]
+
+    - name: order
+      packages: [".*\\.order\\..*", ".*\\.Order.*"]
+      public_api: [".*\\.order\\.api\\..*"]
+
+    - name: product
+      packages: [".*\\.product\\..*", ".*\\.Product.*"]
+      public_api: [".*\\.product\\.api\\..*"]
+
+  # 模块间依赖规则
+  module_dependencies:
+    - from: user
+      can_depend_on: []
+      description: "用户模块是基础模块，不依赖其他业务模块"
+
+    - from: order
+      can_depend_on: [user, product]
+      description: "订单模块可以依赖用户和产品模块"
+
+    - from: product
+      can_depend_on: [user]
+      description: "产品模块可以依赖用户模块"
+
+# ========== 循环依赖检测 ==========
+circular_dependency:
+  enabled: true
+
+  # 检测策略
+  detection_strategy:
+    - import_analysis      # 分析 import 语句
+    - annotation_analysis  # 分析 Spring 注解（@Autowired, @Inject）
+    - method_call_analysis # 分析方法调用
+
+  # 允许的循环依赖场景（极少）
+  allowed_cycles: []
+
+# ========== 包结构规则 ==========
+package_structure:
+  enabled: true
+
+  # 标准包结构
+  standard_structure:
+    - pattern: "(.*\\.controller\\..*)"
+      required_parent: "controller"
+      max_depth: 3
+
+    - pattern: "(.*\\.service\\..*)"
+      required_parent: "service"
+      max_depth: 3
+
+    - pattern: "(.*\\.mapper\\..*)"
+      required_parent: "mapper"
+      max_depth: 2
+
+    - pattern: "(.*\\.domain\\..*)"
+      required_parent: "domain"
+      max_depth: 3
+
+  # 包命名规范
+  naming_conventions:
+    - pattern: "controller"
+      suffix: "Controller"
+      example: "UserController"
+
+    - pattern: "service"
+      suffix: ["Service", "ServiceImpl"]
+      example: ["UserService", "UserServiceImpl"]
+
+    - pattern: "mapper"
+      suffix: "Mapper"
+      example: "UserMapper"
+
+    - pattern: "entity"
+      suffix: ""
+      example: "User"
+
+    - pattern: "dto"
+      suffix: "DTO"
+      example: "UserDTO"
+
+    - pattern: "vo"
+      suffix: "VO"
+      example: "UserVO"
+
+# ========== 安全规则 ==========
+security_rules:
+  enabled: true
+
+  # 禁止的模式
+  forbidden_patterns:
+    - pattern: '(password|secret|key)\s*=\s*"[^"]+"'
+      type: "hardcoded_secret"
+      severity: "critical"
+      description: "硬编码密钥"
+
+    - pattern: '\$\{.*\}.*SQL|SQL.*\$\{.*\}'
+      type: "sql_injection"
+      severity: "critical"
+      description: "SQL 注入风险"
+
+    - pattern: 'Runtime\.getRuntime\(\)\.exec'
+      type: "command_injection"
+      severity: "critical"
+      description: "命令注入风险"
+
+  # 敏感数据必须脱敏
+  sensitive_data:
+    - field: "password"
+      actions: ["hash", "no_log"]
+
+    - field: "idCard"
+      actions: ["encrypt", "mask"]
+
+    - field: "phone"
+      actions: ["mask"]
+
+    - field: "email"
+      actions: ["mask"]
+
+# ========== 代码复杂度规则 ==========
+complexity:
+  enabled: true
+
+  # 文件大小限制
+  file_size:
+    max_lines: 500
+    warning_lines: 400
+
+  # 方法复杂度
+  method_complexity:
+    max_cyclomatic_complexity: 10
+    max_parameters: 5
+    max_lines: 50
+
+  # 类复杂度
+  class_complexity:
+    max_methods: 30
+    max_fields: 20
+    max_nesting_depth: 3
+
+# ========== 质量门禁 ==========
+quality_gates:
+  # 架构违规
+  architecture_violations:
+    critical: 0      # 不允许任何严重违规
+    error: 0         # 不允许任何错误
+    warning: 5       # 最多 5 个警告
+
+  # 安全问题
+  security_issues:
+    critical: 0
+    high: 0
+
+  # 复杂度
+  complexity:
+    exceeded_thresholds: 10
+
+# ========== 自定义规则（项目特定） ==========
+custom_rules:
+  # Ruoyi 框架特定规则
+  ruoyi_framework:
+    enabled: true
+
+    rules:
+      - description: "Controller 必须继承 BaseController"
+        check: "extends BaseController"
+        severity: "warning"
+
+      - description: "Service 接口必须以 I 开头"
+        check: "interface I.*Service"
+        severity: "error"
+
+      - description: "Entity 必须使用 JPA/MyBatis 注解"
+        check: "@Table|@Entity"
+        severity: "error"
+
+      - description: "DTO 必须有 @Valid 注解"
+        check: "@Valid"
+        applies_to: ["controller", "service"]
+        severity: "warning"
+
+# ========== 规则优先级 ==========
+priority:
+  # 高优先级规则（必须通过）
+  high:
+    - layer_architecture
+    - circular_dependency
+    - security_rules
+
+  # 中优先级规则（应该通过）
+  medium:
+    - package_structure
+    - modularity
+
+  # 低优先级规则（建议通过）
+  low:
+    - complexity
+    - custom_rules
+
+# ========== 规则执行配置 ==========
+execution:
+  # 检查模式
+  modes:
+    - fast: "只检查高优先级规则"
+    - standard: "检查高、中优先级规则"
+    - strict: "检查所有规则"
+
+  # 默认模式
+  default_mode: "standard"
+
+  # 失败时是否继续
+  continue_on_failure: false
+
+# ========== 参考文档 ==========
+documentation:
+  architecture: "docs/architecture/architecture.md"
+  design: "docs/design/design.md"
+  security: "docs/security/security.md"
+  quality: "docs/quality/quality.md"
