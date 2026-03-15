@@ -199,10 +199,12 @@ SDLC-Framework/
 - [x] 创建使用文档
 - [x] ~~开发 Jira MCP Server~~ (改为本地 Markdown 方案)
 
-### Phase 3: 智能体增强（1 周）
-- [ ] 创建角色约束智能体配置
-- [ ] 实现自动注入机制
-- [ ] 添加到质量门禁
+### Phase 3: 智能体增强（1 周）✅ 已完成
+- [x] 创建 Security Agent (安全约束)
+- [x] 创建 Performance Agent (性能约束)
+- [x] 创建 Infra Agent (基础设施约束)
+- [x] 创建智能体注入工作流
+- [x] 定义按阶段/关键词触发规则
 
 ### Phase 4: 文档完善（3 天）
 - [ ] 更新 README
