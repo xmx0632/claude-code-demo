@@ -38,12 +38,22 @@ claude-code-demo/
 │   ├── sql-optimizer/           # SQL 优化建议
 │   └── flyway-migration/        # Flyway 数据库迁移管理
 ├── ruoyi-example/               # Ruoyi 示例项目
-└── docs/                        # 详细文档
+├── AGENTS.md                    # Agent 指南（入口）
+├── AGENTS.override.template.md  # 子目录规则覆盖模板
+└── docs/                        # 详细文档（渐进式结构）
     ├── quick-start.md           # 快速入门
     ├── happy-remote.md          # Happy 远程开发
     ├── skills-guide.md          # Skills 开发指南
     ├── best-practices.md        # 最佳实践
-    └── appendix.md              # 附录
+    ├── appendix.md              # 附录
+    ├── architecture/            # 架构规范
+    ├── design/                  # 设计规范
+    ├── quality/                 # 质量标准
+    ├── api/                     # API 规范
+    ├── testing/                 # 测试指南
+    ├── security/                # 安全指南
+    ├── deployment/              # 部署指南
+    └── sdlc/                    # SDLC 框架文档
 ```
 
 ## 快速开始
@@ -82,9 +92,21 @@ claude-code-demo/
 
 ### 详细文档
 
+#### 框架文档
+- [AGENTS.md](./AGENTS.md) - Agent 指南（必读）
 - [SDLC Framework README](./SDLC-Framework/README.md) - 框架概览
 - [快速开始指南](./SDLC-Framework/guides/getting-started.md) - 如何使用框架
 - [完整工作流文档](./SDLC-Framework/workflows/full-sdlc-workflow.md) - 15 个阶段详解
+
+#### 渐进式文档（按需加载）
+- [架构规范](./docs/architecture/architecture.md) - 分层架构、依赖规则
+- [设计规范](./docs/design/design.md) - API 设计、命名约定
+- [质量标准](./docs/quality/quality.md) - 代码质量、测试覆盖
+- [API 规范](./docs/api/api-specs.md) - RESTful 原则、响应格式
+- [测试指南](./docs/testing/testing.md) - 单元测试、集成测试
+- [安全指南](./docs/security/security.md) - 认证授权、数据安全
+- [部署指南](./docs/deployment/deployment.md) - Docker 部署、监控告警
+- [SDLC 框架](./docs/sdlc/sdlc-framework.md) - 15 阶段、8 角色
 
 ## 项目组件
 

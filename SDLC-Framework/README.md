@@ -171,7 +171,8 @@ SDLC-Framework/
 └── config/                        # 配置文件
     ├── stage-dependencies.yaml    # 阶段依赖关系
     ├── skill-mapping.yaml         # 技能映射
-    └── quality-gates.yaml         # 质量门禁
+    ├── quality-gates.yaml         # 质量门禁
+    └── context-discovery.yaml     # 上下文发现配置（新增）
 ```
 
 ---
@@ -321,11 +322,23 @@ custom_templates:
 
 ## 文档
 
+### 框架文档
 - [快速开始指南](./guides/getting-started.md) - 如何快速上手
 - [Subagent 指南](./guides/subagent-guide.md) - 如何使用 Subagents
 - [技能集成指南](./guides/skill-integration-guide.md) - 如何集成自定义 Skills
 - [最佳实践](./guides/best-practices.md) - 框架使用的最佳实践
 - [完整 SDLC 工作流](./workflows/full-sdlc-workflow.md) - 15 个阶段详解
+
+### 渐进式文档（按需加载）
+- [AGENTS.md](../AGENTS.md) - Agent 指南（入口）
+- [架构规范](../docs/architecture/architecture.md) - 分层架构、依赖规则
+- [设计规范](../docs/design/design.md) - API 设计、命名约定
+- [质量标准](../docs/quality/quality.md) - 代码质量、测试覆盖
+- [API 规范](../docs/api/api-specs.md) - RESTful 原则、响应格式
+- [测试指南](../docs/testing/testing.md) - 单元测试、集成测试
+- [安全指南](../docs/security/security.md) - 认证授权、数据安全
+- [部署指南](../docs/deployment/deployment.md) - Docker 部署、监控告警
+- [SDLC 框架](../docs/sdlc/sdlc-framework.md) - 15 阶段、8 角色
 
 ---
 

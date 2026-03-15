@@ -1,0 +1,183 @@
+# Context Discovery Configuration
+# 上下文发现配置 - 定义 Agent 在不同阶段需要的文档
+
+# 配置说明:
+# 1. 每个 SDLC 阶段定义需要的文档列表
+# 2. 文档按优先级排序，Agent 会按顺序读取
+# 3. max_docs 定义单次加载的最大文档数量 (避免上下文溢出)
+
+context_rules:
+  # ========== 阶段 1: 需求分析 ==========
+  requirements-analysis:
+    priority_docs:
+      - docs/sdlc/sdlc-framework.md
+      - docs/design/design.md
+    max_docs: 2
+    context_size: "small"
+
+  # ========== 阶段 2: 产品设计 ==========
+  product-design:
+    priority_docs:
+      - docs/design/design.md
+      - docs/sdlc/sdlc-framework.md
+    max_docs: 2
+    context_size: "small"
+
+  # ========== 阶段 3: 系统架构设计 ==========
+  architecture-design:
+    priority_docs:
+      - docs/architecture/architecture.md
+      - docs/sdlc/sdlc-framework.md
+      - docs/design/design.md
+    max_docs: 3
+    context_size: "medium"
+
+  # ========== 阶段 4: 系统详细设计 ==========
+  detailed-design:
+    priority_docs:
+      - docs/architecture/architecture.md
+      - docs/api/api-specs.md
+      - docs/design/design.md
+    max_docs: 3
+    context_size: "medium"
+
+  # ========== 阶段 5: 数据库迁移 ==========
+  database-migration:
+    priority_docs:
+      - docs/architecture/architecture.md
+      - docs/quality/quality.md
+    max_docs: 2
+    context_size: "small"
+
+  # ========== 阶段 6: 代码开发 ==========
+  code-development:
+    priority_docs:
+      - docs/architecture/architecture.md
+      - docs/api/api-specs.md
+      - docs/design/design.md
+      - docs/quality/quality.md
+      - docs/security/security.md
+    max_docs: 5
+    context_size: "large"
+
+  # ========== 阶段 7: 单元测试 ==========
+  unit-testing:
+    priority_docs:
+      - docs/testing/testing.md
+      - docs/quality/quality.md
+    max_docs: 2
+    context_size: "small"
+
+  # ========== 阶段 8: 集成测试 ==========
+  integration-testing:
+    priority_docs:
+      - docs/testing/testing.md
+      - docs/api/api-specs.md
+      - docs/quality/quality.md
+    max_docs: 3
+    context_size: "medium"
+
+  # ========== 阶段 9-11: 系统测试与验收 ==========
+  system-testing:
+    priority_docs:
+      - docs/testing/testing.md
+      - docs/quality/quality.md
+    max_docs: 2
+    context_size: "small"
+
+  test-case-writing:
+    priority_docs:
+      - docs/testing/testing.md
+      - docs/api/api-specs.md
+    max_docs: 2
+    context_size: "small"
+
+  system-acceptance:
+    priority_docs:
+      - docs/quality/quality.md
+      - docs/api/api-specs.md
+    max_docs: 2
+    context_size: "small"
+
+  # ========== 阶段 12-13: 文档编写 ==========
+  user-manual:
+    priority_docs:
+      - docs/design/design.md
+      - docs/api/api-specs.md
+    max_docs: 2
+    context_size: "small"
+
+  operations-manual:
+    priority_docs:
+      - docs/deployment/deployment.md
+      - docs/architecture/architecture.md
+    max_docs: 2
+    context_size: "small"
+
+  # ========== 阶段 14-15: 部署与升级 ==========
+  deployment-instructions:
+    priority_docs:
+      - docs/deployment/deployment.md
+      - docs/security/security.md
+      - docs/quality/quality.md
+    max_docs: 3
+    context_size: "medium"
+
+  incremental-upgrade:
+    priority_docs:
+      - docs/deployment/deployment.md
+      - docs/architecture/architecture.md
+    max_docs: 2
+    context_size: "small"
+
+# ========== 通用配置 ==========
+general_rules:
+  # Agent 启动时总是加载的基础文档
+  base_context:
+    - AGENTS.md
+
+  # 文档大小限制 (字符数)
+  max_doc_size:
+    small: 5000      # ~5KB
+    medium: 15000    # ~15KB
+    large: 30000     # ~30KB
+
+  # 上下文窗口保留比例 (为 Agent 响应预留空间)
+  context_window_ratio: 0.7
+
+# ========== 文档优先级规则 ==========
+priority_rules:
+  # 架构相关
+  architecture:
+    - docs/architecture/architecture.md
+
+  # API 相关
+  api:
+    - docs/api/api-specs.md
+    - docs/design/design.md
+
+  # 安全相关
+  security:
+    - docs/security/security.md
+
+  # 测试相关
+  testing:
+    - docs/testing/testing.md
+    - docs/quality/quality.md
+
+  # 部署相关
+  deployment:
+    - docs/deployment/deployment.md
+
+# ========== 子项目覆盖 ==========
+overrides:
+  # 子项目可以有自己特定的文档规则
+  ruoyi-example:
+    base_context:
+      - AGENTS.md
+      - ruoyi-example/README.md
+
+  todolist-project:
+    base_context:
+      - AGENTS.md
+      - todolist-project/docs/architecture/architecture.md
