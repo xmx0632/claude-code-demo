@@ -31,7 +31,7 @@
 
 **文件**:
 ```
-SDLC-Framework/agents/
+SDLC-Framework/guards/
 ├── security-agent.md
 ├── performance-agent.md
 └── infra-agent.md
@@ -193,7 +193,7 @@ git checkout feature/sdd-improvements
 
 2. 查看新增目录
 ```bash
-ls SDLC-Framework/agents/
+ls SDLC-Framework/guards/
 ls SDLC-Framework/requirements/
 ls SDLC-Framework/guidance/
 ```

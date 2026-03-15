@@ -209,7 +209,7 @@ SDLC-Framework/
 ├── 14-deployment-instructions/    # 阶段 14: 部署说明
 ├── 15-incremental-upgrade/        # 阶段 15: 增量升级
 │
-├── subagents/                     # Subagent 角色定义
+├── roles/                     # Subagent 角色定义
 │   ├── product-manager-agent.md
 │   ├── architect-agent.md
 │   ├── backend-developer-agent.md
@@ -219,7 +219,7 @@ SDLC-Framework/
 │   ├── db-admin-agent.md
 │   └── technical-writer-agent.md
 │
-├── agents/                        # 约束智能体（SDD 增强）
+├── guards/                        # 约束智能体（SDD 增强）
 │   ├── security-agent.md          # 安全约束
 │   ├── performance-agent.md       # 性能约束
 │   └── infra-agent.md             # 基础设施约束

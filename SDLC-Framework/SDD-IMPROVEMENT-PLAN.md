@@ -64,14 +64,14 @@
 | `cost-agent` | 成本估算、资源优化建议 |
 
 **实现方式**:
-1. 创建 `agents/` 目录存放各角色智能体配置
+1. 创建 `guards/` 目录存放各角色智能体配置
 2. 在阶段执行时自动调用相关智能体
 3. 将约束作为质量门禁的一部分
 
 **文件结构**:
 ```
 SDLC-Framework/
-├── agents/
+├── guards/
 │   ├── infra-agent.md
 │   ├── security-agent.md
 │   ├── performance-agent.md
