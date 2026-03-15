@@ -152,6 +152,40 @@ cd docker && docker-compose up -d
 | API 规范 | `docs/api/` | 接口开发 |
 | 测试指南 | `docs/testing/` | 测试编写 |
 | 部署指南 | `docs/deployment/` | 系统部署 |
+| SDLC 框架 | `docs/sdlc/` | 流程开发 |
+
+---
+
+## 系统维护
+
+### 熵管理
+
+系统熵（混乱度）会随时间自然增加，需要定期维护：
+
+```bash
+# 检查系统熵
+cd SDLC-Framework/scripts
+./entropy-check.sh --mode=full
+
+# 清理系统熵
+./entropy-cleanup.sh --dry-run   # 预览
+./entropy-cleanup.sh --execute   # 执行
+```
+
+**熵指数阈值**:
+- 优秀: < 3 (绿色)
+- 良好: < 5 (绿色)
+- 警告: < 7 (黄色) - 建议清理
+- 严重: >= 7 (红色) - 立即清理
+
+### 可观测性
+
+Agent 可以访问运行时数据：
+- 日志查询: 通过 LogQL
+- 指标查询: 通过 PromQL
+- 追踪查询: 通过 Jaeger/Zipkin
+
+配置文件: `SDLC-Framework/config/observability.yaml`
 
 ---
 

@@ -1,0 +1,345 @@
+# Entropy Management Rules
+# 熵管理规则 - 防止系统随时间腐化
+#
+# 定义文档新鲜度、规则有效性和清理策略。
+# 熵 = 文档过时 + 规则冲突 + 代码腐烂 + 技术债务积累
+
+version: 1.0.0
+
+# ========== 文档新鲜度规则 ==========
+documentation:
+  # 文档生命周期管理
+  lifecycle:
+    # 文档最大有效天数（超过此期限标记为过时）
+    max_age_days:
+      api_docs: 30              # API 文档 30 天
+      architecture_docs: 90     # 架构文档 90 天
+      design_docs: 60           # 设计文档 60 天
+      user_docs: 180            # 用户文档 180 天
+      code_examples: 30         # 代码示例 30 天
+
+    # 代码与文档同步容忍度（天）
+    sync_tolerance: 7
+
+    # 文档审查间隔
+    review_interval_days: 60
+
+  # 文档漂移检测
+  drift_detection:
+    enabled: true
+
+    # 检查项
+    checks:
+      - name: api_doc_sync
+        description: "API 变化是否更新文档"
+        severity: critical
+        auto_fix: false
+
+      - name: architecture_consistency
+        description: "架构变化是否反映在文档中"
+        severity: high
+        auto_fix: false
+
+      - name: config_doc_accuracy
+        description: "配置变化是否记录"
+        severity: medium
+        auto_fix: false
+
+      - name: example_validity
+        description: "示例代码是否可运行"
+        severity: medium
+        auto_fix: true
+
+    # 检测方法
+    methods:
+      - timestamp_comparison     # 比较文件修改时间
+      - reference_analysis      # 分析文档引用
+      - code_scanning           # 扫描代码变化
+
+  # 文档质量标准
+  quality_standards:
+    # 最小文档覆盖率
+    min_coverage:
+      public_api: 100           # 公共 API 100% 文档化
+      internal_api: 80          # 内部 API 80% 文档化
+      complex_functions: 90     # 复杂函数（圈复杂度 > 10）90% 文档化
+
+    # 文档完整性检查
+    completeness_checks:
+      - has_description
+      - has_parameters
+      - has_return_value
+      - has_examples
+      - has_see_also
+
+# ========== 规则有效性管理 ==========
+rules:
+  # 规则生命周期
+  lifecycle:
+    # 规则审查间隔
+    review_interval_days: 30
+
+    # 规则有效期
+    validity_period_days: 365
+
+    # 废弃规则处理
+    deprecated_handling:
+      action: archive            # archive | delete | keep
+      grace_period_days: 30
+
+  # 冲突解决策略
+  conflict_resolution:
+    # 当检测到冲突时的行为
+    on_conflict: fail_fast      # fail_fast | warn | ignore
+
+    # 优先级规则
+    priority:
+      - security_rules          # 安全规则优先级最高
+      - architecture_rules      # 架构规则次之
+      - quality_rules           # 质量规则
+      - style_rules             # 风格规则
+
+    # 自动合并策略
+    auto_merge:
+      enabled: false            # 需要人工审查
+
+  # 规则一致性检查
+  consistency_checks:
+    - name: no_circular_dependencies
+      description: "不允许循环依赖"
+      severity: error
+
+    - name: no_duplicate_rules
+      description: "不允许重复规则"
+      severity: warning
+
+    - name: threshold_consistency
+      description: "阈值规则应该一致"
+      severity: error
+
+    - name: naming_convention
+      description: "规则命名应该遵循约定"
+      severity: warning
+
+# ========== 清理策略 ==========
+cleanup:
+  # 自动清理配置
+  auto_cleanup:
+    enabled: true
+    schedule: "0 4 1 * *"      # 每月 1 号凌晨 4 点
+
+  # 清理操作
+  operations:
+    # 归档旧文档
+    - name: archive_old_docs
+      enabled: true
+      condition:
+        type: last_accessed
+        threshold_days: 90
+      action: move_to_archive
+      backup: true
+
+    # 删除临时文件
+    - name: remove_temp_files
+      enabled: true
+      patterns:
+        - "*.tmp"
+        - "*~"
+        - ".DS_Store"
+        - "*.swp"
+      action: delete
+
+    # 归档废弃规则
+    - name: archive_deprecated_rules
+      enabled: true
+      condition:
+        type: marked_deprecated
+      action: move_to_archive
+
+    # 清理审计日志
+    - name: cleanup_audit_logs
+      enabled: true
+      retention_days: 30
+      action: compress_and_archive
+
+  # 保留策略
+  retention:
+    # 不同类型文件的保留期
+    documents:
+      active: 90                # 活跃文档保留 90 天
+      archive: 365              # 归档文档保留 1 年
+
+    logs:
+      debug: 7                  # Debug 日志保留 7 天
+      info: 30                  # Info 日志保留 30 天
+      error: 365                # Error 日志保留 1 年
+
+    audits:
+      reports: 90               # 审计报告保留 90 天
+      traces: 30                # 追踪数据保留 30 天
+
+# ========== 熵阈值 ==========
+entropy_thresholds:
+  # 熵指数阈值
+  levels:
+    excellent:
+      max_score: 3
+      color: green
+      action: none
+
+    good:
+      max_score: 5
+      color: green
+      action: none
+
+    warning:
+      max_score: 7
+      color: yellow
+      action: notify
+      message: "系统熵增加，建议清理"
+
+    critical:
+      max_score: 10
+      color: red
+      action: immediate_cleanup
+      message: "系统熵过高，立即清理"
+
+  # 各维度权重
+  weights:
+    documentation_drift: 0.5
+    rule_conflicts: 2.0
+    obsolete_content: 0.3
+    code_smell: 0.2
+    technical_debt: 0.1
+
+# ========== 预防措施 ==========
+prevention:
+  # 防止熵增加的措施
+  measures:
+
+    # 代码变更时同步更新文档
+    - name: doc_update_on_code_change
+      enabled: true
+      enforcement: soft         # soft | hard
+      check:
+        - api_changes_require_doc_update
+        - config_changes_require_doc_update
+
+    # 规则变更时检查冲突
+    - name: rule_conflict_prevention
+      enabled: true
+      enforcement: hard
+      check:
+        - no_circular_dependencies
+        - no_duplicate_rules
+        - threshold_consistency
+
+    # 定期审查机制
+    - name: periodic_review
+      enabled: true
+      schedule:
+        weekly:
+          - check_rule_conflicts
+          - check_doc_drift
+        monthly:
+          - full_entropy_check
+          - cleanup_obsolete_content
+
+# ========== 通知配置 ==========
+notifications:
+  # 何时发送通知
+  triggers:
+    - entropy_level_warning
+    - entropy_level_critical
+    - cleanup_completed
+    - conflicts_detected
+
+  # 通知渠道
+  channels:
+    - type: log
+      enabled: true
+
+    - type: email
+      enabled: false
+      recipients: []
+
+    - type: slack
+      enabled: false
+      webhook: ""
+
+# ========== 报告配置 ==========
+reporting:
+  # 报告生成
+  enabled: true
+
+  # 报告格式
+  formats:
+    - json
+    - markdown
+    - html
+
+  # 报告内容
+  sections:
+    - entropy_index
+    - issues_found
+    - cleanup_actions
+    - recommendations
+
+  # 报告保留
+  retention_days: 90
+
+# ========== Agent 协作 ==========
+agent_collaboration:
+  # 与其他 Agent 的协作
+  input_sources:
+    - agent: code_developer
+      events:
+        - code_changed
+        - refactoring_completed
+
+    - agent: architecture_auditor
+      events:
+        - architecture_changed
+        - violation_detected
+
+    - agent: documentation
+      events:
+        - documentation_updated
+        - doc_review_completed
+
+  # 输出目标
+  output_targets:
+    - agent: all
+      data: system_health_report
+    - target: human
+      data: entropy_summary
+      format: readable
+
+# ========== 自定义规则 ==========
+custom_rules:
+  # 项目特定的熵管理规则
+  # 可以根据项目需求添加
+
+  # 示例：检查是否有 TODO 过期
+  - name: expired_todos
+    enabled: false
+    description: "检查 TODO 是否过期"
+    check: |
+      find . -name "*.md" -exec grep -l "TODO" {} \; |
+      while read file; do
+        todo_date=$(grep -o "TODO:.*[0-9]{4}-[0-9]{2}-[0-9]{2}" "$file")
+        # 检查日期是否过期
+      done
+
+# ========== 调试配置 ==========
+debug:
+  # 调试模式
+  enabled: false
+
+  # 详细日志
+  verbose: false
+
+  # 跟踪模式
+  trace:
+    enabled: false
+    output_file: .audit/entropy-trace.log

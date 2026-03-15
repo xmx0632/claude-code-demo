@@ -1,0 +1,300 @@
+# Observability Configuration
+# 可观测性配置 - 让 Agent 能够访问运行时数据
+#
+# 基于 OpenAI 实践：将可观测性数据直接暴露给 Agent，
+# 使其能够查询日志、指标和追踪信息，验证代码运行结果。
+
+version: 1.0.0
+
+# ========== 日志配置 ==========
+logging:
+  enabled: true
+
+  # 日志级别
+  level:
+    default: INFO
+    development: DEBUG
+    testing: WARN
+
+  # 日志格式 (agent 需要结构化格式)
+  format:
+    type: json          # json | text
+    include_timestamp: true
+    include_level: true
+    include_logger: true
+    include_thread: false
+    include_mdc: true
+
+  # 日志存储
+  storage:
+    type: file          # file | elasticsearch | loki
+    path: .audit/logs
+    max_size_mb: 100
+    max_files: 30
+    compress: true
+
+  # Agent 访问权限
+  agent_access:
+    enabled: true
+    query_language: logql    # LogQL 用于查询日志
+    max_results: 1000
+    timeout_seconds: 30
+
+  # 关键日志类别
+  categories:
+    - name: application
+      pattern: "com.*"
+      retention_days: 30
+
+    - name: api
+      pattern: "controller.*"
+      retention_days: 90
+
+    - name: security
+      pattern: "security.*"
+      retention_days: 365
+
+    - name: agent
+      pattern: "agent.*"
+      retention_days: 7
+
+# ========== 指标配置 ==========
+metrics:
+  enabled: true
+
+  # 指标类型
+  types:
+    - counter      # 计数器 (请求总数、错误总数)
+    - gauge        # 仪表盘 (当前连接数、内存使用)
+    - histogram    # 直方图 (请求延迟分布)
+    - summary      # 摘要 (类似 histogram 但可配置分位数)
+
+  # 存储后端
+  storage:
+    type: prometheus    # prometheus | influxdb | graphite
+    scrape_interval: 15s
+    retention_days: 15
+
+  # Agent 访问权限
+  agent_access:
+    enabled: true
+    query_language: promql    # PromQL 用于查询指标
+    max_series: 100
+    timeout_seconds: 30
+
+  # 关键指标定义
+  key_metrics:
+    # 应用性能指标
+    - name: http_requests_total
+      type: counter
+      description: "HTTP 请求总数"
+      labels: [method, endpoint, status]
+
+    - name: http_request_duration_seconds
+      type: histogram
+      description: "HTTP 请求延迟"
+      buckets: [0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0]
+
+    - name: jvm_memory_used_bytes
+      type: gauge
+      description: "JVM 内存使用量"
+      labels: [area, id]
+
+    # 业务指标
+    - name: business_transactions_total
+      type: counter
+      description: "业务事务总数"
+      labels: [type, status]
+
+    - name: agent_operations_total
+      type: counter
+      description: "Agent 操作总数"
+      labels: [agent_name, operation, result]
+
+# ========== 追踪配置 ==========
+tracing:
+  enabled: true
+
+  # 追踪系统
+  backend:
+    type: jaeger       # jaeger | zipkin | otel
+    endpoint: http://localhost:14250
+    sample_rate: 0.1   # 10% 采样
+
+  # Agent 访问权限
+  agent_access:
+    enabled: true
+    max_traces: 100
+    timeout_seconds: 30
+
+  # Span 配置
+  spans:
+    max_length: 32     # 最大 span 层级
+    max_attributes: 32 # 每个 span 最大属性数
+
+  # 关键追踪点
+  key_traces:
+    - name: http_request
+      entry_point: true
+      tags: [method, path, status]
+
+    - name: database_query
+      tags: [table, operation, rows]
+
+    - name: agent_operation
+      tags: [agent, task, result]
+
+# ========== 运行时查询配置 ==========
+runtime_queries:
+  # Agent 可以使用的预定义查询
+  predefined:
+
+    # 检查服务启动时间
+    - name: service_startup_time
+      type: metrics
+      query: |
+        time() - process_start_time_seconds{job=~".*"}
+
+    # 检查请求错误率
+    - name: request_error_rate
+      type: metrics
+      query: |
+        sum(rate(http_requests_total{status=~"5.."}[5m])) /
+        sum(rate(http_requests_total[5m]))
+
+    # 检查 P95 延迟
+    - name: request_p95_latency
+      type: metrics
+      query: |
+        histogram_quantile(0.95,
+          sum(rate(http_request_duration_seconds_bucket[5m])) by (le)
+        )
+
+    # 查找最近的错误
+    - name: recent_errors
+      type: logging
+      query: |
+        {level="ERROR"} |= "ERROR"
+      max_results: 50
+
+    # 检查 Agent 操作失败率
+    - name: agent_failure_rate
+      type: metrics
+      query: |
+        sum(rate(agent_operations_total{result="failure"}[5m])) /
+        sum(rate(agent_operations_total[5m]))
+
+# ========== 性能基准 ==========
+performance_baselines:
+  # 定义性能基准，Agent 可以验证代码是否符合预期
+  - name: api_response_time
+    metric: http_request_duration_seconds
+    threshold:
+      p50: 0.1      # 50% 请求 < 100ms
+      p95: 0.5      # 95% 请求 < 500ms
+      p99: 1.0      # 99% 请求 < 1s
+
+  - name: error_rate
+    metric: request_error_rate
+    threshold:
+      max: 0.01     # 错误率 < 1%
+
+  - name: memory_usage
+    metric: jvm_memory_used_bytes
+    threshold:
+      max_mb: 512   # 内存使用 < 512MB
+
+# ========== 告警规则 ==========
+alerts:
+  # Agent 可以检查的告警规则
+  - name: high_error_rate
+    condition: |
+      request_error_rate > 0.05
+    severity: critical
+    message: "错误率超过 5%"
+
+  - name: high_latency
+    condition: |
+      request_p95_latency > 1.0
+    severity: warning
+    message: "P95 延迟超过 1 秒"
+
+  - name: agent_operation_failure
+    condition: |
+      agent_failure_rate > 0.1
+    severity: warning
+    message: "Agent 操作失败率超过 10%"
+
+# ========== 验证配置 ==========
+verification:
+  # Agent 完成代码变更后应该验证的内容
+  post_change_checks:
+    - type: metrics
+      name: verify_no_errors
+      query: |
+        sum(increase(http_requests_total{status=~"5.."}[5m])) == 0
+      description: "验证没有新的 5xx 错误"
+
+    - type: metrics
+      name: verify_performance
+      query: |
+        request_p95_latency < 1.0
+      description: "验证 P95 延迟低于 1 秒"
+
+    - type: logging
+      name: verify_no_exceptions
+      query: |
+        {level="ERROR"} !~ "Exception"
+      description: "验证没有新的异常"
+
+# ========== 测试可观测性 ==========
+testing:
+  # 在测试环境中可用的可观测性
+  enabled: true
+
+  # 测试特定的指标
+  test_metrics:
+    - name: test_execution_time
+      description: "测试执行时间"
+
+    - name: test_assertions_total
+      description: "测试断言总数"
+
+    - name: test_failures_total
+      description: "测试失败总数"
+
+# ========== 浏览器 DevTools 集成 ==========
+browser_devtools:
+  # 允许 Agent 通过 Chrome DevTools Protocol 操作浏览器
+  enabled: false    # 需要额外配置
+
+  configuration:
+    remote_debugging_port: 9222
+    headless: true
+
+  capabilities:
+    - screenshot
+    - console_log
+    - network_monitor
+    - performance_trace
+
+# ========== 数据导出 ==========
+export:
+  # 支持导出数据供 Agent 分析
+  formats:
+    - json
+    - csv
+    - prometheus
+
+  endpoints:
+    - name: metrics_query
+      path: /api/observability/metrics
+      method: POST
+
+    - name: logs_query
+      path: /api/observability/logs
+      method: POST
+
+    - name: traces_query
+      path: /api/observability/traces
+      method: POST
