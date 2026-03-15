@@ -192,10 +192,12 @@ SDLC-Framework/
 - [ ] 实现框架反馈循环
 - [ ] 更新 `/bug-fix` 流程
 
-### Phase 2: 工具集成（1 周）
-- [ ] 开发 Jira MCP Server
-- [ ] 集成到 `/sdlc-stages` 命令
-- [ ] 测试需求同步
+### Phase 2: 工具集成（1 周）✅ 已完成
+- [x] 创建本地需求管理目录结构
+- [x] 创建需求模板 (TEMPLATE.md)
+- [x] 创建需求同步工作流
+- [x] 创建使用文档
+- [x] ~~开发 Jira MCP Server~~ (改为本地 Markdown 方案)
 
 ### Phase 3: 智能体增强（1 周）
 - [ ] 创建角色约束智能体配置
