@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录/注册页面 - 线框图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .wireframe {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            border: 3px dashed #1890ff;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .wireframe-header {
+            background: #1890ff;
+            color: white;
+            padding: 12px 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .wireframe-body {
+            padding: 40px 30px;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .app-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .app-tagline {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #1890ff;
+            border-bottom-color: #1890ff;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: #1890ff;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: #999;
+        }
+
+        .error-message {
+            color: #f5222d;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .input.error {
+            border-color: #f5222d;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .forgot-link {
+            color: #1890ff;
+            text-decoration: none;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #333;
+            background: #e0e0e0;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #1890ff;
+            color: white;
+            border-color: #1890ff;
+        }
+
+        .btn-primary:hover {
+            background: #40a9ff;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .divider-text {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: #999;
+            font-size: 13px;
+        }
+
+        .help-text {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        .help-text a {
+            color: #1890ff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .validation-hints {
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+
+        .validation-hints h4 {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .validation-hints ul {
+            list-style: none;
+            color: #666;
+        }
+
+        .validation-hints li {
+            padding: 3px 0;
+        }
+
+        .validation-hints li::before {
+            content: '• ';
+            color: #999;
+        }
+
+        .back-nav {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-link:hover {
+            color: #1890ff;
+        }
+
+        @media (max-width: 480px) {
+            .wireframe-body {
+                padding: 30px 20px;
+            }
+
+            .logo {
+                font-size: 36px;
+            }
+
+            .app-name {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wireframe">
+        <div class="wireframe-header">
+            <span>登录/注册页面</span>
+            <span>版本: 1.0 | P0</span>
+        </div>
+
+        <div class="wireframe-body">
+            <!-- Logo区域 -->
+            <div class="logo-section">
+                <div class="logo">📋</div>
+                <div class="app-name">TodoList</div>
+                <div class="app-tagline">待办事项管理系统</div>
+            </div>
+
+            <!-- 标签切换 -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('login')">登录</div>
+                <div class="tab" onclick="switchTab('register')">注册</div>
+            </div>
+
+            <!-- 登录表单 -->
+            <div id="login-form" class="form-section active">
+                <form onsubmit="return false;">
+                    <div class="form-group">
+                        <label class="form-label">用户名</label>
+                        <div class="input-wrapper">
+                            <input type="text" class="input" placeholder="请输入用户名">
+                        </div>
+                        <div class="error-message">用户名不能为空</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">密码</label>
+                        <div class="input-wrapper">
+                            <input type="password" class="input" placeholder="请输入密码">
+                            <span class="input-icon">👁️</span>
+                        </div>
+                        <div class="error-message">密码不能为空</div>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox">
+                            <span>记住我</span>
+                        </label>
+                        <a href="#" class="forgot-link">忘记密码?</a>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="showMessage('登录功能待实现')">登录</button>
+                </form>
+
+                <div class="help-text">
+                    还没有账号? <a href="#" onclick="switchTab('register')">立即注册</a>
+                </div>
+            </div>
+
+            <!-- 注册表单 -->
+            <div id="register-form" class="form-section">
+                <form onsubmit="return false;">
+                    <div class="form-group">
+                        <label class="form-label">用户名</label>
+                        <div class="input-wrapper">
+                            <input type="text" class="input" placeholder="请输入用户名（字母、数字、下划线）">
+                        </div>
+                        <div class="error-message">用户名格式不正确</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">密码</label>
+                        <div class="input-wrapper">
+                            <input type="password" class="input" placeholder="至少8位，包含字母和数字">
+                            <span class="input-icon">👁️</span>
+                        </div>
+                        <div class="error-message">密码格式不符合要求</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">确认密码</label>
+                        <div class="input-wrapper">
+                            <input type="password" class="input" placeholder="请再次输入密码">
+                        </div>
+                        <div class="error-message">两次密码不一致</div>
+                    </div>
+
+                    <div class="validation-hints">
+                        <h4>密码要求:</h4>
+                        <ul>
+                            <li>至少8个字符</li>
+                            <li>包含字母和数字</li>
+                            <li>建议使用大小写字母和特殊字符</li>
+                        </ul>
+                    </div>
+
+                    <button class="btn btn-primary" style="margin-top: 20px;" onclick="showMessage('注册功能待实现')">注册</button>
+                </form>
+
+                <div class="help-text">
+                    已有账号? <a href="#" onclick="switchTab('login')">立即登录</a>
+                </div>
+            </div>
+
+            <div class="back-nav">
+                <a href="index.html" class="back-link">← 返回线框图导航</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.tab');
+            const forms = document.querySelectorAll('.form-section');
+
+            tabs.forEach(t => t.classList.remove('active'));
+            forms.forEach(f => f.classList.remove('active'));
+
+            if (tab === 'login') {
+                tabs[0].classList.add('active');
+                document.getElementById('login-form').classList.add('active');
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('register-form').classList.add('active');
+            }
+        }
+
+        function showMessage(msg) {
+            alert('这是一个线框图演示\n' + msg);
+        }
+
+        // 密码可见性切换
+        document.querySelectorAll('.input-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    this.textContent = '🙈';
+                } else {
+                    input.type = 'password';
+                    this.textContent = '👁️';
+                }
+            });
+        });
+
+        // 简单的表单验证演示
+        document.querySelectorAll('.input').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    this.classList.add('error');
+                    this.nextElementSibling?.nextElementSibling?.classList.add('show');
+                } else {
+                    this.classList.remove('error');
+                    this.nextElementSibling?.nextElementSibling?.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

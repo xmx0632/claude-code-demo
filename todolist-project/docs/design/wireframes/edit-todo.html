@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑Todo页面 - 线框图</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+        .wireframe { max-width: 900px; margin: 0 auto; background: white; border: 3px dashed #1890ff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+        .wireframe-header { background: #1890ff; color: white; padding: 10px 20px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .wireframe-body { padding: 30px; }
+        .page-title { font-size: 24px; font-weight: bold; color: #333; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #e0e0e0; }
+        .todo-info { background: #f0f0f0; padding: 15px; border-radius: 4px; margin-bottom: 20px; font-size: 13px; }
+        .todo-info span { color: #666; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: 500; color: #333; font-size: 14px; }
+        .form-label .required { color: #f5222d; margin-left: 4px; }
+        .input { width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 4px; font-size: 14px; transition: border-color 0.3s; }
+        .input:focus { outline: none; border-color: #1890ff; }
+        textarea.input { min-height: 100px; resize: vertical; }
+        .input-hint { font-size: 12px; color: #999; margin-top: 5px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
+        .checkbox-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; }
+        .checkbox-item:hover { background: #f5f5f5; }
+        .form-actions { display: flex; gap: 10px; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0; }
+        .btn { padding: 10px 20px; border: 2px solid #333; background: #e0e0e0; cursor: pointer; border-radius: 4px; font-size: 14px; transition: all 0.3s; text-decoration: none; display: inline-block; }
+        .btn:hover { background: #d0d0d0; }
+        .btn-primary { background: #1890ff; color: white; border-color: #1890ff; }
+        .btn-primary:hover { background: #40a9ff; }
+        .btn-danger { background: #f5222d; color: white; border-color: #f5222d; }
+        .btn-danger:hover { background: #ff4d4f; }
+        .back-nav { text-align: center; margin-top: 20px; }
+        .back-link { color: #666; text-decoration: none; font-size: 14px; }
+        .back-link:hover { color: #1890ff; }
+        @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } .form-actions { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="wireframe">
+        <div class="wireframe-header">
+            <span>编辑Todo页面</span>
+            <span>版本: 1.0 | P0</span>
+        </div>
+        <div class="wireframe-body">
+            <h1 class="page-title">✏️ 编辑待办事项</h1>
+            <div class="todo-info">
+                待办ID: <strong>#123</strong> |
+                创建时间: <span>2026-01-23 10:30</span> |
+                最后更新: <span>2026-01-25 15:45</span>
+            </div>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="form-label">标题<span class="required">*</span></label>
+                    <input type="text" class="input" value="完成项目文档编写" placeholder="请输入待办事项标题（1-200字符）" maxlength="200">
+                    <div class="input-hint">16/200</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">描述</label>
+                    <textarea class="input" placeholder="请输入待办事项的详细描述（可选，最多1000字符）" maxlength="1000">需要完成需求分析、设计文档和API文档的编写工作。</textarea>
+                    <div class="input-hint">40/1000</div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">优先级</label>
+                        <select class="input">
+                            <option value="HIGH" selected>高优先级</option>
+                            <option value="MEDIUM">中优先级</option>
+                            <option value="LOW">低优先级</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">截止日期</label>
+                        <input type="date" class="input" value="2026-01-30">
+                        <div class="input-hint">距离截止还有4天</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">分类/标签</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="category" value="1" checked> 工作
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="category" value="2"> 个人
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="category" value="3"> 学习
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="category" value="4"> 会议
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">状态</label>
+                    <select class="input">
+                        <option value="PENDING" selected>待处理</option>
+                        <option value="COMPLETED">已完成</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-danger" onclick="showMessage('删除功能待实现')">删除待办</button>
+                    <div style="display: flex; gap: 10px;">
+                        <a href="todo-list.html" class="btn">取消</a>
+                        <button type="submit" class="btn btn-primary" onclick="showMessage('保存功能待实现')">保存修改</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="back-nav">
+                <a href="index.html" class="back-link">← 返回线框图导航</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showMessage(msg) { alert('这是一个线框图演示\n' + msg); }
+        if(confirm('此待办事项已被修改，是否保存更改？')) { showMessage('自动保存功能'); }
+    </script>
+</body>
+</html>

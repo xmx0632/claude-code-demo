@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.todolist.mapper.TodoMapper">
+
+    <!-- Select todo list with pagination -->
+    <select id="selectListPage" resultType="com.todolist.domain.entity.Todo">
+        SELECT *
+        FROM sys_todo
+        <where>
+            deleted = 0
+            <if test="query.userId != null">
+                AND user_id = #{query.userId}
+            </if>
+            <if test="query.status != null and query.status != ''">
+                AND status = #{query.status}
+            </if>
+            <if test="query.priority != null and query.priority != ''">
+                AND priority = #{query.priority}
+            </if>
+            <if test="query.keyword != null and query.keyword != ''">
+                AND (title LIKE CONCAT('%', #{query.keyword}, '%')
+                OR description LIKE CONCAT('%', #{query.keyword}, '%'))
+            </if>
+            <if test="query.dueDateFilter == 'today'">
+                AND DATE(due_date) = CURDATE()
+            </if>
+            <if test="query.dueDateFilter == 'week'">
+                AND YEARWEEK(due_date, 1) = YEARWEEK(CURDATE(), 1)
+            </if>
+            <if test="query.dueDateFilter == 'month'">
+                AND DATE_FORMAT(due_date, '%Y-%m') = DATE_FORMAT(CURDATE(), '%Y-%m')
+            </if>
+            <if test="query.dueDateFilter == 'overdue'">
+                AND due_date &lt; NOW()
+            </if>
+        </where>
+        <choose>
+            <when test="query.sortBy == 'dueDate'">
+                ORDER BY due_date ${query.sortOrder}
+            </when>
+            <when test="query.sortBy == 'priority'">
+                ORDER BY FIELD(priority, 'HIGH', 'MEDIUM', 'LOW') ${query.sortOrder}
+            </when>
+            <otherwise>
+                ORDER BY created_at DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>
