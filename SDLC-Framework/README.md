@@ -77,7 +77,32 @@ SDLC Framework 是一个生产级的软件开发生命周期框架，旨在帮�
 
 - **Full SDLC**: 完整的 15 阶段工作流
 - **Agile Sprint**: 敏捷 Sprint 工作流
-- **Bug Fix**: Bug 修复工作流
+- **Bug Fix**: Bug 修复工作流（含框架反馈循环）
+
+### 📋 顶层指导文档（SDD 增强）
+
+借鉴 SDD 方法论，新增两层指导文档：
+
+- **Constitution（项目宪法）**: 定义项目的基本原则和约束
+- **Steering Docs（方向指导）**: 针对特定领域的详细规范
+- **框架反馈循环**: 从每个 Bug 中学习，持续改进框架
+
+详见 [指导文档索引](./guidance/index.md)
+
+### 🔄 框架反馈循环（SDD 增强）
+
+基于 SDD 方法论，每个 Bug 修复后进行框架反思：
+
+```
+Bug 报告 → 复现定位 → 框架反思 → 修复实现 → 验证关闭 → 框架更新
+```
+
+**缺口分类**:
+- **A: 规范→实现** - 规范清楚但实现跑偏
+- **B: 意图→规范** - 需求遗漏导致规范缺失
+- **C: 角色协作** - 角色交接时信息丢失
+
+详见 [Bug 修复工作流](./workflows/bug-fix-workflow.md)
 
 ---
 
@@ -167,6 +192,14 @@ SDLC-Framework/
 │   ├── subagent-guide.md          # Subagent 指南
 │   ├── skill-integration-guide.md # 技能集成指南
 │   └── best-practices.md          # 最佳实践
+│
+├── guidance/                      # 顶层指导文档（SDD 增强）
+│   ├── CONSTITUTION.md            # 项目宪法
+│   ├── STEERING-DOCS.md           # 方向指导索引
+│   ├── templates/                 # 规范模板
+│   └── feedback/                  # 框架反馈记录
+│       ├── FRAMEWORK-FEEDBACK.md  # 反馈总览
+│       └── templates/             # 反思模板
 │
 └── config/                        # 配置文件
     ├── stage-dependencies.yaml    # 阶段依赖关系
