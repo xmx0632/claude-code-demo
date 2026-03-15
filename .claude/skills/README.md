@@ -6,13 +6,24 @@
 
 ```
 .claude/skills/
-├── ruoyi-crud/           # Ruoyi CRUD 代码生成器
-├── code-review/          # Java 代码审查助手
-├── test-gen/             # 单元测试生成器
-├── api-doc/              # API 文档生成器
-├── flyway-migration/     # Flyway 数据库迁移助手
-├── sql-optimizer/        # SQL 优化助手
-└── mermaid-diagram/      # Mermaid 图表生成器
+├── SDLC 阶段 Skills
+│   ├── requirements-analysis/   # 阶段 1: 需求分析
+│   ├── architecture-design/     # 阶段 3: 架构设计
+│   ├── detailed-design/         # 阶段 4: 详细设计
+│   ├── code-development/        # 阶段 6: 代码开发
+│   ├── testing/                 # 阶段 7-11: 测试验证
+│   ├── documentation/           # 阶段 12-13: 文档编写
+│   └── deployment/              # 阶段 14-15: 部署升级
+│
+├── 开发工具 Skills
+│   ├── ruoyi-crud/              # Ruoyi CRUD 代码生成器
+│   ├── code-review/             # Java 代码审查助手
+│   ├── test-gen/                # 单元测试生成器
+│   ├── api-doc/                 # API 文档生成器
+│   ├── flyway-migration/        # Flyway 数据库迁移助手
+│   ├── sql-optimizer/           # SQL 优化助手
+│   ├── mermaid-diagram/         # Mermaid 图表生成器
+│   └── ui-ux-pro-max/           # UI/UX 设计助手
 ```
 
 ## 🎯 Claude Code 官方规范
