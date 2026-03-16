@@ -3,3 +3,6 @@ todolist-project/target
 logs
 __pycache__
 target/
+
+# AutoDoc 工作目录
+.auto-doc-workspace/
