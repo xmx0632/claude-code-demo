@@ -59,70 +59,143 @@ allowed-tools: ["Read", "Write", "Edit"]
 
 ## 🚀 可用 Skills
 
-### 1. ruoyi-crud
+> **注意**: 所有 Skills 命令都带有 `sdlc-` 前缀
+
+### 1. sdlc-ruoyi-crud
 
 **用途**: 为 Ruoyi 项目生成完整的 CRUD 代码
 
 **使用**:
 ```bash
-/ruoyi-crud sys_user
+/sdlc-ruoyi-crud sys_user
 ```
 
-### 2. code-review
+### 2. sdlc-code-review
 
 **用途**: 审查 Java 代码，检查规范、潜在问题和优化建议
 
 **使用**:
 ```bash
-/code-review
-/code-review src/main/java/com/example/UserController.java
+/sdlc-code-review
+/sdlc-code-review src/main/java/com/example/UserController.java
 ```
 
-### 3. test-gen
+### 3. sdlc-test-gen
 
 **用途**: 为 Service 层方法生成单元测试
 
 **使用**:
 ```bash
-/test-gen UserService
+/sdlc-test-gen UserService
 ```
 
-### 4. api-doc
+### 4. sdlc-api-doc
 
 **用途**: 解析 Spring Boot Controller 并生成 API 文档
 
 **使用**:
 ```bash
-/api-doc
-/api-doc UserController
+/sdlc-api-doc
+/sdlc-api-doc UserController
 ```
 
-### 5. flyway-migration
+### 5. sdlc-flyway-migration
 
 **用途**: 管理 Flyway 数据库迁移脚本
 
 **使用**:
 ```bash
-/flyway-migration create --table=sys_user --type=add_column
+/sdlc-flyway-migration create --table=sys_user --type=add_column
 ```
 
-### 6. sql-optimizer
+### 6. sdlc-sql-optimizer
 
 **用途**: 分析 MyBatis SQL 并提供优化建议
 
 **使用**:
 ```bash
-/sql-optimizer
-/sql-optimizer UserMapper.xml
+/sdlc-sql-optimizer
+/sdlc-sql-optimizer UserMapper.xml
 ```
 
-### 7. mermaid-diagram
+### 7. sdlc-mermaid-diagram
 
 **用途**: 生成各种类型的 Mermaid 图表
 
 **使用**:
 ```bash
-/mermaid-diagram --type=architecture --title="系统架构"
+/sdlc-mermaid-diagram --type=architecture --title="系统架构"
+```
+
+---
+
+## 🏢 多项目 / 微服务项目使用指南
+
+当 `projects/` 目录下有多个项目或微服务时，**推荐使用切换工作目录的方式**来指定 Skill 作用的项目。
+
+### 推荐方式：切换工作目录
+
+```bash
+# 切换到目标项目目录
+cd projects/microservices/user-service
+
+# 现在 AI 知道你在 user-service 中工作
+# 以下命令都会作用于 user-service 项目
+/sdlc-code-review
+/sdlc-test-gen UserService
+/sdlc-api-doc
+```
+
+### 微服务项目示例
+
+```
+projects/
+└── microservices/
+    ├── user-service/        # 用户服务
+    │   ├── src/main/java/
+    │   └── pom.xml
+    ├── order-service/       # 订单服务
+    │   ├── src/main/java/
+    │   └── pom.xml
+    └── product-service/     # 商品服务
+        ├── src/main/java/
+        └── pom.xml
+```
+
+### 典型工作流
+
+```bash
+# 1. 切换到 user-service
+cd projects/microservices/user-service
+
+# 2. 进行代码审查
+/sdlc-code-review
+
+# 3. 生成单元测试
+/sdlc-test-gen UserService
+
+# 4. 生成 API 文档
+/sdlc-api-doc
+
+# 5. 切换到 order-service
+cd ../order-service
+
+# 6. 在 order-service 中继续工作
+/sdlc-sql-optimizer OrderMapper.xml
+```
+
+### 其他指定方式
+
+如果不想切换目录，也可以在对话中明确指定：
+
+```
+请审查 projects/microservices/user-service/src/main/java/UserController.java 的代码
+```
+
+或者在命令中传入路径：
+
+```bash
+/sdlc-code-review projects/microservices/user-service/src/main/java
 ```
 
 ## 📝 与旧结构的对比
