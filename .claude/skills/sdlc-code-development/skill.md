@@ -1,5 +1,5 @@
 ---
-name: code-development
+name: sdlc-code-development
 description: 代码开发阶段，实现业务逻辑和 API 接口。编码实现时使用。
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash"]
 user-invocable: true

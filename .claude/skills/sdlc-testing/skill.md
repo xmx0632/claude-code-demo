@@ -1,5 +1,5 @@
 ---
-name: testing
+name: sdlc-testing
 description: 测试阶段，执行单元测试、集成测试和系统测试。测试验证时使用。
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash"]
 user-invocable: true

@@ -1,5 +1,5 @@
 ---
-name: api-doc
+name: sdlc-api-doc
 description: 解析 Spring Boot Controller 并生成 API 文档。需要文档化接口时使用。
 allowed-tools: ["Read", "Grep", "Glob", "Bash"]
 user-invocable: true

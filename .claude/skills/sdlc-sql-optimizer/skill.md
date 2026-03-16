@@ -1,5 +1,5 @@
 ---
-name: sql-optimizer
+name: sdlc-sql-optimizer
 description: 分析 MyBatis SQL 并提供优化建议。优化数据库查询时使用。
 allowed-tools: ["Read", "Grep", "Glob", "Bash"]
 user-invocable: true

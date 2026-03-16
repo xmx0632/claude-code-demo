@@ -1,5 +1,5 @@
 ---
-name: documentation
+name: sdlc-documentation
 description: 文档编写阶段，生成用户手册、运维手册和 API 文档。文档编写时使用。
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash"]
 user-invocable: true

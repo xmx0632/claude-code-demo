@@ -1,5 +1,5 @@
 ---
-name: test-gen
+name: sdlc-test-gen
 description: 为 Service 层方法生成单元测试。补充测试用例时使用。
 allowed-tools: ["Read", "Write", "Edit", "Grep"]
 user-invocable: true

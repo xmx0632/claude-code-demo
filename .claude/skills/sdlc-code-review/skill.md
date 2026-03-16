@@ -1,5 +1,5 @@
 ---
-name: code-review
+name: sdlc-code-review
 description: 审查 Java 代码，检查规范、潜在问题和优化建议。Code Review 时使用。
 allowed-tools: ["Read", "Grep", "Glob", "Bash"]
 user-invocable: true

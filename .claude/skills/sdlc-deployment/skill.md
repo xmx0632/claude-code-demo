@@ -1,5 +1,5 @@
 ---
-name: deployment
+name: sdlc-deployment
 description: 部署阶段，生成部署指南、配置文件和升级说明。部署上线时使用。
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash"]
 user-invocable: true

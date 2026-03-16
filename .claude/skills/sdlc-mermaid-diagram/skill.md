@@ -1,5 +1,5 @@
 ---
-name: mermaid-diagram
+name: sdlc-mermaid-diagram
 description: 生成各种类型的 Mermaid 图表，包括系统架构图、流程图、时序图、状态图、ER 图和类图。在架构设计、流程分析、文档编写时使用。
 allowed-tools: ["Read", "Write", "Edit"]
 disable-model-invocation: false

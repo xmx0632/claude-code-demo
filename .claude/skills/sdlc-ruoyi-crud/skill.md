@@ -1,5 +1,5 @@
 ---
-name: ruoyi-crud
+name: sdlc-ruoyi-crud
 description: 为 Ruoyi 项目生成完整的 CRUD 代码。快速开发新模块时使用。
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Bash", "Grep"]
 user-invocable: true

@@ -1,5 +1,5 @@
 ---
-name: detailed-design
+name: sdlc-detailed-design
 description: 系统详细设计阶段，设计 API、数据模型、类图等。详细设计时使用。
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash"]
 user-invocable: true

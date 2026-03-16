@@ -1,5 +1,5 @@
 ---
-name: requirements-analysis
+name: sdlc-requirements-analysis
 description: 需求分析阶段，收集和分析业务需求，生成需求规格说明书。项目启动或新功能开发时使用。
 allowed-tools: ["Read", "Write", "Edit", "Bash", "WebSearch"]
 user-invocable: true

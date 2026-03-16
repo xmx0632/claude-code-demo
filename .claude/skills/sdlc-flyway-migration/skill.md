@@ -1,5 +1,5 @@
 ---
-name: flyway-migration
+name: sdlc-flyway-migration
 description: 管理 Flyway 数据库迁移脚本。数据库版本控制时使用。
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Bash", "Grep"]
 user-invocable: true

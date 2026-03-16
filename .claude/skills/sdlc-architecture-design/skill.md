@@ -1,5 +1,5 @@
 ---
-name: architecture-design
+name: sdlc-architecture-design
 description: 系统架构设计阶段，设计系统整体架构、技术选型和关键决策。架构设计时使用。
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash"]
 user-invocable: true
