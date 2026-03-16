@@ -1,0 +1,249 @@
+# 任务标签功能 - 系统架构图
+
+## 整体架构
+
+```mermaid
+graph TB
+    subgraph "前端层 Frontend"
+        A1[TagManager.vue<br/>标签管理]
+        A2[TaskTags.vue<br/>任务标签]
+        A3[TagFilter.vue<br/>标签筛选]
+    end
+
+    subgraph "API 层 API Layer"
+        B1[TagController<br/>POST /api/tags<br/>PUT /api/tags/{id}<br/>DELETE /api/tags/{id}<br/>GET /api/tags]
+        B2[TodoTagController<br/>POST /api/todos/{id}/tags<br/>DELETE /api/todos/{id}/tags/{tagId}]
+    end
+
+    subgraph "服务层 Service Layer"
+        C1[TagService<br/>validateName<br/>checkUnique]
+        C2[TodoTagService<br/>addTags<br/>removeTags<br/>queryByTags]
+    end
+
+    subgraph "数据层 Data Layer"
+        D1[TagMapper<br/>BaseMapper]
+        D2[TodoTagMapper<br/>BaseMapper]
+        D3[(MySQL<br/>t_tag<br/>t_todo_tag)]
+    end
+
+    subgraph "缓存 Cache"
+        E1[(Redis<br/>标签缓存<br/>TTL: 5min)]
+    end
+
+    A1 -->|HTTP/REST| B1
+    A2 -->|HTTP/REST| B2
+    A3 -->|HTTP/REST| B1
+
+    B1 --> C1
+    B2 --> C1
+    B2 --> C2
+
+    C1 -->|查询| D1
+    C1 -->|查询| E1
+    C2 -->|插入/删除| D2
+    C2 -->|查询| D2
+
+    D1 --> D3
+    D2 --> D3
+    E1 -.->|未命中| D1
+```
+
+## 创建标签时序
+
+```mermaid
+sequenceDiagram
+    participant U as 用户
+    participant V as TagManager.vue
+    participant C as TagController
+    participant S as TagService
+    participant M as TagMapper
+    participant DB as MySQL
+    participant R as Redis
+
+    U->>V: 输入: "工作", "#FF6B6B"
+    V->>C: POST /api/tags {name, color}
+
+    C->>S: createTag(dto, userId)
+    S->>S: 校验名称1-20字符
+    S->>S: 校验颜色HEX格式
+
+    S->>R: 查询缓存中是否存在
+    R-->>S: 返回结果
+
+    S->>M: SELECT COUNT(*) FROM t_tag<br/>WHERE user_id=? AND name=?
+    M->>DB: 执行查询
+    DB-->>M: 返回计数
+
+    M-->>S: count=0 (唯一)
+
+    S->>M: INSERT INTO t_tag<br/>(user_id, name, color)
+    M->>DB: 执行插入
+    DB-->>M: 返回自增ID
+
+    M-->>S: TagEntity{id=1}
+    S->>R: 删除用户标签缓存
+    S-->>C: TagVO{id=1, name, color}
+    C-->>V: 200 OK {data: TagVO}
+    V-->>U: 刷新标签列表
+```
+
+## 标签筛选时序
+
+```mermaid
+sequenceDiagram
+    participant U as 用户
+    participant F as TagFilter.vue
+    participant C as TodoController
+    participant S as TodoService
+    participant M as TodoMapper
+    participant TM as TodoTagMapper
+    participant DB as MySQL
+
+    U->>F: 选择标签 [1, 3]
+    F->>C: GET /api/todos?tagIds=1,3
+
+    C->>S: queryTodos(tagIds, userId)
+    S->>M: SELECT * FROM t_todo<br/>WHERE user_id=?<br/>AND EXISTS (SELECT 1 FROM<br/>t_todo_tag WHERE todo_id=t.id<br/>AND tag_id IN (1,3)<br/>HAVING COUNT(*)=2)
+
+    M->>TM: 查询标签详情
+    TM->>DB: SELECT * FROM t_tag<br/>WHERE id IN (SELECT tag_id<br/>FROM t_todo_tag<br/>WHERE todo_id IN (...))
+    DB-->>TM: 标签列表
+
+    M-->>S: TodoEntity[] with tags
+    S-->>C: TodoVO[]
+    C-->>F: 200 OK {rows, total}
+    F-->>U: 显示筛选结果
+```
+
+## 数据模型关系
+
+```mermaid
+erDiagram
+    User ||--o{ Tag : "创建"
+    User ||--o{ Todo : "创建"
+    Tag ||--o{ TodoTag : "关联"
+    Todo ||--o{ TodoTag : "关联"
+
+    User {
+        bigint id PK
+        string username
+        string password
+    }
+
+    Tag {
+        bigint id PK
+        bigint user_id FK
+        string name
+        string color
+    }
+
+    Todo {
+        bigint id PK
+        bigint user_id FK
+        string title
+        int status
+    }
+
+    TodoTag {
+        bigint id PK
+        bigint todo_id FK
+        bigint tag_id FK
+    }
+```
+
+## 部署架构
+
+```mermaid
+graph TB
+    subgraph "负载均衡"
+        LB[Nginx<br/>:80/443]
+    end
+
+    subgraph "应用服务器"
+        A1[Spring Boot App 1<br/>:8080]
+        A2[Spring Boot App 2<br/>:8080]
+    end
+
+    subgraph "数据存储"
+        R[(Redis<br/>:6379)]
+        M[(MySQL Master<br/>:3306)]
+        S[(MySQL Slave<br/>:3306)]
+    end
+
+    LB --> A1
+    LB --> A2
+
+    A1 --> R
+    A1 --> M
+    A2 --> R
+    A2 --> M
+
+    M -.-> S
+
+    style LB fill:#E1F5FE
+    style A1 fill:#E8F5E9
+    style A2 fill:#E8F5E9
+    style R fill:#FFF3E0
+    style M fill:#F3E5F5
+    style S fill:#F3E5F5
+```
+
+## 标签筛选数据流
+
+```mermaid
+flowchart LR
+    A[用户选择标签] --> B[构建请求参数<br/>tagIds=[1,2,3]]
+    B --> C[TodoController<br/>queryTodos]
+    C --> D{检查缓存}
+
+    D -->|命中| E[返回缓存数据]
+    D -->|未命中| F[TodoService<br/>查询数据库]
+
+    F --> G[MyBatis-Plus<br/>LambdaQueryWrapper]
+    G --> H[EXISTS 子查询<br/>标签关联]
+    H --> I[MySQL 执行查询]
+    I --> J[返回 Todo 列表]
+
+    J --> K[批量查询标签详情]
+    K --> L[组装 TodoVO]
+
+    L --> M[写入 Redis<br/>TTL=5min]
+    M --> N[返回 TodoVO[]]
+
+    E --> O[返回 JSON 响应]
+    N --> O
+    O --> P[前端渲染任务列表]
+```
+
+## 缓存策略
+
+```mermaid
+graph TB
+    subgraph "缓存 Key 设计"
+        A1["tags:user:{userId}<br/>用户标签列表"]
+        A2["tag:detail:{tagId}<br/>标签详情"]
+        A3["todos:filter:{userId}:{hash(tagIds)}<br/>筛选结果"]
+    end
+
+    subgraph "缓存更新策略"
+        B1["创建/更新/删除标签<br/>→ 删除用户标签缓存"]
+        B2["添加/删除任务标签<br/>→ 删除相关筛选缓存"]
+        B3["更新任务状态<br/>→ 无影响(标签未变)"]
+    end
+
+    subgraph "缓存穿透防护"
+        C1["查询缓存"]
+        C2["缓存未命中?"]
+        C3["查询数据库"]
+        C4["写入缓存<br/>TTL=5min"]
+        C5["缓存空值<br/>TTL=30s"]
+    end
+
+    A1 --> B1
+    A3 --> B2
+
+    C1 --> C2
+    C2 -->|是| C3
+    C2 -->|否| C5
+    C3 --> C4
+```
