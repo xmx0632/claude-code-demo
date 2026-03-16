@@ -55,9 +55,8 @@ class TagServiceTest {
 
     @BeforeEach
     void setUp() {
-        tagService = new TagServiceImpl();
+        tagService = new TagServiceImpl(todoTagMapper);
         ReflectionTestUtils.setField(tagService, "baseMapper", tagMapper);
-        ReflectionTestUtils.setField(tagService, "todoTagMapper", todoTagMapper);
 
         // 设置安全上下文
         SecurityContextHolder.getContext().setAuthentication(
@@ -97,7 +96,7 @@ class TagServiceTest {
 
         when(tagMapper.selectPage(any(Page.class), any(LambdaQueryWrapper.class)))
                 .thenReturn(page);
-        when(todoTagMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(5);
+        when(todoTagMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(5L);
 
         // Act
         IPage<TagVO> result = tagService.pageList(query);
@@ -125,7 +124,7 @@ class TagServiceTest {
 
         when(tagMapper.selectPage(any(Page.class), any(LambdaQueryWrapper.class)))
                 .thenReturn(page);
-        when(todoTagMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(5);
+        when(todoTagMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(5L);
 
         // Act
         IPage<TagVO> result = tagService.pageList(query);
@@ -158,7 +157,7 @@ class TagServiceTest {
         // Arrange
         when(tagMapper.selectOne(any(LambdaQueryWrapper.class), any(Boolean.class)))
                 .thenReturn(testTag);
-        when(todoTagMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(5);
+        when(todoTagMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(5L);
 
         // Act
         TagVO result = tagService.getDetail(1L);
