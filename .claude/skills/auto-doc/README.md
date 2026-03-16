@@ -11,6 +11,31 @@ AutoDoc 是一个完整的文档转换技能，支持 Markdown 与 Word 文档�
 - ✅ **Mermaid 图表支持**: 自动将 Mermaid 图表渲染为 PNG 图片并嵌入文档
 - ✅ **自定义模板**: 支持使用自定义 Word 模板
 - ✅ **独立运行**: 无需依赖外部 autoDoc 目录
+- ✅ **独立目录**: 每个转换的文档都有独立的输出目录，避免文件冲突
+
+## 设计亮点
+
+### 独立目录结构
+
+为了避免多次转换时的文件冲突，每个文档都会生成独立的时间戳目录：
+
+```
+output/
+├── design-20250316-153045/   # 文档1（带时间戳）
+│   ├── design.md
+│   ├── design.docx
+│   └── media/
+└── prd-20250316-153120/      # 文档2（带时间戳）
+    ├── prd.md
+    ├── prd.docx
+    └── media/
+```
+
+**优势：**
+- ✅ 不同文档的图片不会互相覆盖
+- ✅ 便于管理和归档
+- ✅ 可以保留转换历史
+- ✅ 清晰的组织结构
 
 ## 快速开始
 
@@ -31,35 +56,47 @@ pandoc --version
 mmdc --version
 ```
 
-### 3. 使用技能
+### 3. 使用技能（推荐方式）
 
+**自动识别文件类型（推荐）:**
+```bash
+# 自动识别并转换（最简单！）
+/auto-doc design.md          # Markdown → Word
+/auto-doc requirements.docx  # Word → Markdown
+```
+
+**手动指定转换类型:**
 ```bash
 # Markdown 转 Word
-/auto-doc m2d input_doc/example-doc.md
+/auto-doc m2d docs/architecture.md
 
 # Word 转 Markdown
-/auto-doc d2m output_doc/document.docx
+/auto-doc d2m output/requirements.docx
 
 # 使用自定义模板
-/auto-doc m2d docs/design.md --template=template/company.docx
+/auto-doc m2d docs/design.md --template=company.docx
 ```
 
-## 目录结构
+## 工作目录结构
 
 ```
-.claude/skills/auto-doc/
-├── input_doc/           # 输入文档目录
-│   └── example-doc.md   # 示例文档
-├── output_doc/          # 输出文档目录
-│   └── media/           # 提取的媒体文件
-├── template/            # Word 模板目录
-│   └── template.docx    # 默认模板（可选）
-├── temp/                # 临时文件目录
-├── m2d.sh               # Markdown 转 Word 脚本
-├── d2m.sh               # Word 转 Markdown 脚本
-├── skill.sh             # 技能主入口脚本
-├── skill.md             # 技能说明文档
-└── README.md            # 本文件
+.auto-doc-workspace/              # 固定工作目录（项目根目录下）
+├── input/                        # 可选：存放待转换的文档
+├── output/                       # 所有转换后的文档
+│   ├── design-20250316-153045/   # 每个文档独立的目录（避免冲突）
+│   │   ├── design.md             # Markdown 文件
+│   │   ├── design.docx           # Word 文件
+│   │   └── media/                # 该文档专属的图片目录
+│   │       ├── image1.png
+│   │       └── image2.png
+│   └── prd-20250316-153120/      # 另一个文档
+│       ├── prd.md
+│       ├── prd.docx
+│       └── media/
+│           └── image1.png
+├── template/                     # 可选：自定义 Word 模板
+│   └── company.docx
+└── temp/                         # 临时文件
 ```
 
 ## 使用示例

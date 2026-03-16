@@ -22,9 +22,35 @@ agent: general-purpose
 
 ## 使用方法
 
-### 1. Markdown 转 Word
+### 1. 自动识别转换（推荐）
 
-#### 基本转换
+**最简单的使用方式** - 自动根据文件扩展名判断转换方向：
+
+```bash
+/auto-doc <文件>
+```
+
+#### 示例
+
+```bash
+# Markdown 转 Word（自动识别）
+/auto-doc design.md
+/auto-doc docs/architecture.md
+
+# Word 转 Markdown（自动识别）
+/auto-doc requirements.docx
+/auto-doc output/PRD.docx
+```
+
+**支持的文件类型:**
+- Markdown: `.md`, `.markdown` → 转为 Word
+- Word: `.docx`, `.doc` → 转为 Markdown
+
+### 2. 手动指定转换类型
+
+如果需要明确指定转换类型：
+
+#### Markdown 转 Word
 
 ```bash
 /auto-doc m2d <input.md>
@@ -46,9 +72,9 @@ agent: general-purpose
 /auto-doc m2d input_doc/architecture.md --template=template/company-style.docx
 ```
 
-**输出**: 生成 `.docx` 文件到 `output_doc/` 目录
+**输出**: 生成 `.docx` 文件到 `output/文档名-时间戳/` 目录
 
-### 2. Word 转 Markdown
+### 3. Word 转 Markdown
 
 ```bash
 /auto-doc d2m <input.docx>
@@ -63,7 +89,7 @@ agent: general-purpose
 # 转换后的 Markdown 可用于 AI 分析
 ```
 
-**输出**: 生成 `.md` 文件到 `output_doc/` 目录，图片提取到 `output_doc/media/`
+**输出**: 生成 `.md` 文件到 `output/文档名-时间戳/` 目录，图片提取到同目录的 `media/`
 
 ## 目录结构
 
