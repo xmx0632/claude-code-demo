@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 任务VO
@@ -39,4 +40,9 @@ public class TodoVO {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    /**
+     * 任务标签列表
+     */
+    private List<TagVO> tags;
 }

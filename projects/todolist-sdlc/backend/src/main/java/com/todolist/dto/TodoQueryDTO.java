@@ -2,6 +2,8 @@ package com.todolist.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 任务查询DTO
  *
@@ -28,4 +30,9 @@ public class TodoQueryDTO {
 
     /** 搜索关键词 */
     private String keyword;
+
+    /**
+     * 标签ID列表（AND逻辑：任务必须同时包含所有选中标签）
+     */
+    private List<Long> tagIds;
 }

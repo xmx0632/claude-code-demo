@@ -8,11 +8,14 @@ import com.todolist.common.exception.BusinessException;
 import com.todolist.dto.TodoDTO;
 import com.todolist.dto.TodoQueryDTO;
 import com.todolist.entity.Category;
+import com.todolist.entity.Tag;
 import com.todolist.entity.Todo;
 import com.todolist.mapper.CategoryMapper;
+import com.todolist.mapper.TagMapper;
 import com.todolist.mapper.TodoMapper;
 import com.todolist.service.TodoService;
 import com.todolist.util.SecurityUtils;
+import com.todolist.vo.TagVO;
 import com.todolist.vo.TodoVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -20,6 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 任务服务实现
@@ -32,6 +38,7 @@ import java.time.LocalDateTime;
 public class TodoServiceImpl extends ServiceImpl<TodoMapper, Todo> implements TodoService {
 
     private final CategoryMapper categoryMapper;
+    private final TagMapper tagMapper;
 
     @Override
     public IPage<TodoVO> pageList(TodoQueryDTO query) {
@@ -44,6 +51,23 @@ public class TodoServiceImpl extends ServiceImpl<TodoMapper, Todo> implements To
                .eq(query.getCategoryId() != null, Todo::getCategoryId, query.getCategoryId())
                .like(query.getKeyword() != null, Todo::getTitle, query.getKeyword())
                .orderByDesc(Todo::getCreatedAt);
+
+        // 标签筛选（AND逻辑：任务必须同时包含所有选中标签）
+        if (query.getTagIds() != null && !query.getTagIds().isEmpty()) {
+            List<Long> todoIdsWithTag = tagMapper.selectTodoIdsByTagIds(query.getTagIds());
+            if (todoIdsWithTag.isEmpty()) {
+                // 如果没有符合条件的任务，返回空结果
+                Page<Todo> emptyPage = new Page<>(query.getPage(), query.getSize());
+                return emptyPage;
+            }
+            // 使用子查询进一步筛选：任务必须拥有所有选中的标签
+            wrapper.in(Todo::getId, todoIdsWithTag)
+                   .and(w -> {
+                       for (Long tagId : query.getTagIds()) {
+                           w.exists("SELECT 1 FROM t_todo_tag tt WHERE tt.todo_id = t.id AND tt.tag_id = {0}", tagId);
+                       }
+                   });
+        }
 
         Page<Todo> page = new Page<>(query.getPage(), query.getSize());
         IPage<Todo> todoPage = this.page(page, wrapper);
@@ -160,6 +184,21 @@ public class TodoServiceImpl extends ServiceImpl<TodoMapper, Todo> implements To
                 vo.setCategoryName(category.getName());
                 vo.setCategoryColor(category.getColor());
             }
+        }
+
+        // 查询标签信息
+        List<Tag> tags = tagMapper.selectByTodoId(todo.getId());
+        if (!tags.isEmpty()) {
+            List<TagVO> tagVOs = tags.stream()
+                    .map(tag -> {
+                        TagVO tagVO = new TagVO();
+                        BeanUtils.copyProperties(tag, tagVO);
+                        return tagVO;
+                    })
+                    .collect(Collectors.toList());
+            vo.setTags(tagVOs);
+        } else {
+            vo.setTags(Collections.emptyList());
         }
 
         return vo;
