@@ -13,7 +13,9 @@
       "Bash(docker-compose:*)",
       "Bash(docker exec:*)",
       "Bash(mvn spring-boot:run:*)",
-      "Bash(mvn clean:*)"
+      "Bash(mvn clean:*)",
+      "Bash(npm run dev)",
+      "Bash(git checkout main && git pull)"
     ]
   }
 }

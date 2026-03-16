@@ -14,7 +14,14 @@ export const useTodoStore = defineStore('todo', () => {
     status: null,
     priority: null,
     categoryId: null,
-    keyword: ''
+    keyword: '',
+    tagIds: []
+  })
+  const stats = ref({
+    all: 0,
+    pending: 0,
+    inProgress: 0,
+    completed: 0
   })
 
   // 获取任务列表
@@ -27,10 +34,26 @@ export const useTodoStore = defineStore('todo', () => {
       })
       todoList.value = res.data.records
       total.value = res.data.total
+      await fetchStats()
     } catch (error) {
       ElMessage.error(error.message || '获取任务列表失败')
     } finally {
       loading.value = false
+    }
+  }
+
+  // 获取统计数据
+  async function fetchStats() {
+    try {
+      const res = await todoApi.getStats()
+      stats.value = res.data || {
+        all: 0,
+        pending: 0,
+        inProgress: 0,
+        completed: 0
+      }
+    } catch (error) {
+      console.error('获取统计数据失败:', error)
     }
   }
 
@@ -113,7 +136,9 @@ export const useTodoStore = defineStore('todo', () => {
     loading,
     currentStatus,
     queryParams,
+    stats,
     fetchTodoList,
+    fetchStats,
     createTodo,
     updateTodo,
     deleteTodo,

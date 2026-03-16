@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标签筛选 - 产品设计原型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-tertiary: #94A3B8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --border-default: #E2E8F0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* Filter Panel */
+        .filter-panel {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .filter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .filter-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .clear-btn {
+            padding: 6px 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            background: transparent;
+            border: 1px solid var(--border-default);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .clear-btn:hover {
+            background: var(--bg-secondary);
+        }
+
+        .clear-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Filter Tags */
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filter-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: 2px solid transparent;
+        }
+
+        .filter-tag:hover {
+            transform: scale(1.02);
+        }
+
+        .filter-tag.selected {
+            box-shadow: 0 0 0 2px currentColor;
+        }
+
+        /* Filter Status */
+        .filter-status {
+            display: none;
+            margin-top: 16px;
+            padding: 12px;
+            background: #EEF2FF;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #4F46E5;
+        }
+
+        .filter-status.active {
+            display: block;
+        }
+
+        /* Task List */
+        .task-list {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            border-bottom: 1px solid var(--border-default);
+            transition: background 0.15s ease;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-item:hover {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+        }
+
+        .task-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border-default);
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .task-meta {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .task-tags {
+            display: flex;
+            gap: 4px;
+        }
+
+        .mini-tag {
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            color: white;
+            font-weight: 500;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-tertiary);
+        }
+
+        /* Floating Button (Mobile) */
+        .filter-toggle {
+            display: none;
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-default);
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+
+        .filter-toggle.active {
+            background: #6366F1;
+            border-color: #6366F1;
+        }
+
+        .filter-toggle.active svg {
+            stroke: white;
+        }
+
+        .toggle-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 20px;
+            height: 20px;
+            background: #EF4444;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Icons */
+        .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .filter-panel {
+                display: none;
+            }
+
+            .filter-panel.mobile-active {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 100;
+                border-radius: 0;
+                overflow-y: auto;
+            }
+
+            .filter-toggle {
+                display: flex;
+            }
+
+            .close-mobile-filter {
+                display: block;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .close-mobile-filter {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>我的任务</h1>
+
+        <!-- Filter Panel -->
+        <div class="filter-panel" id="filterPanel">
+            <div class="filter-header">
+                <div class="filter-title">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                    <span>按标签筛选</span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="clear-btn close-mobile-filter" onclick="toggleMobileFilter()">关闭</button>
+                    <button class="clear-btn" id="clearBtn" onclick="clearFilters()" disabled>清除筛选</button>
+                </div>
+            </div>
+
+            <div class="filter-tags" id="filterTags">
+                <!-- Filter tags rendered by JS -->
+            </div>
+
+            <div class="filter-status" id="filterStatus">
+                已选择 <strong id="selectedCount">0</strong> 个标签，找到 <strong id="taskCount">0</strong> 个任务
+            </div>
+        </div>
+
+        <!-- Task List -->
+        <div class="task-list">
+            <div id="taskList">
+                <!-- Tasks rendered by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Filter Toggle (Mobile) -->
+    <button class="filter-toggle" id="filterToggle" onclick="toggleMobileFilter()">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+        </svg>
+        <span class="toggle-badge" id="toggleBadge" style="display: none;">0</span>
+    </button>
+
+    <script>
+        // Available tags
+        const tags = [
+            { id: 1, name: '工作', color: '#FF6B6B', taskCount: 5 },
+            { id: 2, name: '个人', color: '#4ECDC4', taskCount: 3 },
+            { id: 3, name: '重要', color: '#45B7D1', taskCount: 4 },
+            { id: 4, name: '学习', color: '#F7DC6F', taskCount: 2 },
+            { id: 5, name: '健康', color: '#FFA07A', taskCount: 1 },
+            { id: 6, name: '购物', color: '#BB8FCE', taskCount: 2 },
+        ];
+
+        // All tasks
+        const allTasks = [
+            { id: 1, title: '完成项目需求文档并评审', date: '今天', priority: '高', tags: [1, 3] },
+            { id: 2, title: '准备周会报告', date: '明天', priority: '中', tags: [1] },
+            { id: 3, title: '学习 Vue 3 Composition API', date: '本周', priority: '低', tags: [2, 4] },
+            { id: 4, title: '购买健身卡', date: '本月', priority: '低', tags: [2, 5] },
+            { id: 5, title: '阅读《系统设计面试》', date: '本周', priority: '中', tags: [4] },
+            { id: 6, title: '制定锻炼计划', date: '今天', priority: '高', tags: [3, 5] },
+            { id: 7, title: '超市采购日用品', date: '明天', priority: '低', tags: [6] },
+        ];
+
+        let selectedTagIds = [];
+
+        // Render filter tags
+        function renderFilterTags() {
+            const container = document.getElementById('filterTags');
+            container.innerHTML = tags.map(tag => {
+                const selected = selectedTagIds.includes(tag.id);
+                return `
+                    <button
+                        class="filter-tag ${selected ? 'selected' : ''}"
+                        style="background: ${tag.color}${selected ? '' : '20'}; color: ${tag.color};"
+                        onclick="toggleTag(${tag.id})"
+                    >
+                        ${tag.name}
+                        <span style="opacity: 0.7; font-size: 11px;">(${tag.taskCount})</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Toggle tag selection
+        function toggleTag(tagId) {
+            const index = selectedTagIds.indexOf(tagId);
+            if (index > -1) {
+                selectedTagIds.splice(index, 1);
+            } else {
+                selectedTagIds.push(tagId);
+            }
+            updateFilter();
+        }
+
+        // Clear filters
+        function clearFilters() {
+            selectedTagIds = [];
+            updateFilter();
+        }
+
+        // Update filter
+        function updateFilter() {
+            renderFilterTags();
+            renderTasks();
+            updateStatus();
+            updateToggleBadge();
+        }
+
+        // Update status
+        function updateStatus() {
+            const status = document.getElementById('filterStatus');
+            const selectedCount = document.getElementById('selectedCount');
+            const taskCountEl = document.getElementById('taskCount');
+            const clearBtn = document.getElementById('clearBtn');
+
+            if (selectedTagIds.length > 0) {
+                status.classList.add('active');
+                selectedCount.textContent = selectedTagIds.length;
+                taskCountEl.textContent = getFilteredTasks().length;
+                clearBtn.disabled = false;
+            } else {
+                status.classList.remove('active');
+                clearBtn.disabled = true;
+            }
+        }
+
+        // Get filtered tasks
+        function getFilteredTasks() {
+            if (selectedTagIds.length === 0) return allTasks;
+            return allTasks.filter(task =>
+                selectedTagIds.every(tagId => task.tags.includes(tagId))
+            );
+        }
+
+        // Render tasks
+        function renderTasks() {
+            const container = document.getElementById('taskList');
+            const tasks = getFilteredTasks();
+
+            if (tasks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg style="width: 48px; height: 48px; opacity: 0.3; margin-bottom: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <p>没有找到符合条件的任务</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = tasks.map(task => {
+                const taskTags = task.tags.map(tagId => tags.find(t => t.id === tagId)).filter(Boolean);
+                return `
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div class="task-content">
+                            <div class="task-title">${task.title}</div>
+                            <div class="task-meta">${task.date} · ${task.priority}优先级</div>
+                        </div>
+                        <div class="task-tags">
+                            ${taskTags.map(tag => `<span class="mini-tag" style="background: ${tag.color};">${tag.name}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update toggle badge (mobile)
+        function updateToggleBadge() {
+            const badge = document.getElementById('toggleBadge');
+            const toggle = document.getElementById('filterToggle');
+
+            if (selectedTagIds.length > 0) {
+                badge.textContent = selectedTagIds.length;
+                badge.style.display = 'flex';
+                toggle.classList.add('active');
+            } else {
+                badge.style.display = 'none';
+                toggle.classList.remove('active');
+            }
+        }
+
+        // Toggle mobile filter
+        function toggleMobileFilter() {
+            const panel = document.getElementById('filterPanel');
+            panel.classList.toggle('mobile-active');
+        }
+
+        // Close mobile filter when clicking outside
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('filterPanel');
+            const toggle = document.getElementById('filterToggle');
+            if (window.innerWidth <= 768 &&
+                panel.classList.contains('mobile-active') &&
+                !panel.contains(e.target) &&
+                !toggle.contains(e.target)) {
+                panel.classList.remove('mobile-active');
+            }
+        });
+
+        // Initial render
+        renderFilterTags();
+        renderTasks();
+    </script>
+</body>
+</html>

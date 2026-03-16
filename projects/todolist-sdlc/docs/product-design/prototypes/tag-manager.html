@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标签管理 - 产品设计原型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Primary */
+            --primary-50: #EEF2FF;
+            --primary-100: #E0E7FF;
+            --primary-500: #6366F1;
+            --primary-600: #4F46E5;
+            --primary-700: #4338CA;
+
+            /* Neutral */
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-tertiary: #94A3B8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --border-default: #E2E8F0;
+
+            /* Tag Colors */
+            --tag-red: #FF6B6B;
+            --tag-orange: #FFA07A;
+            --tag-amber: #F7DC6F;
+            --tag-green: #4ECDC4;
+            --tag-cyan: #45B7D1;
+            --tag-blue: #5C9DED;
+            --tag-purple: #BB8FCE;
+            --tag-pink: #FF9FF3;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Button */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-500);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-600);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .btn-ghost:hover {
+            background: var(--bg-secondary);
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border-radius: 6px;
+        }
+
+        /* Tag Grid */
+        .tag-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        @media (min-width: 640px) {
+            .tag-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .tag-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Tag Card */
+        .tag-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-default);
+            border-left-width: 4px;
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.15s ease;
+        }
+
+        .tag-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .tag-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .tag-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+        }
+
+        .tag-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .tag-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .tag-actions {
+            display: flex;
+            gap: 4px;
+            padding-top: 12px;
+            border-top: 1px solid var(--bg-secondary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 24px;
+        }
+
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            opacity: 0.3;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalIn 0.2s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-secondary);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-default);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.15s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 3px var(--primary-100);
+        }
+
+        .form-hint {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+        }
+
+        .form-error {
+            color: #EF4444;
+        }
+
+        /* Color Picker */
+        .color-picker {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: var(--text-primary);
+        }
+
+        /* Preview */
+        .preview-box {
+            background: var(--bg-secondary);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-default);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Icons */
+        .icon {
+            width: 18px;
+            height: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">标签管理</h1>
+                <p class="page-subtitle">管理您的任务标签，为任务添加灵活的分类方式</p>
+            </div>
+            <button class="btn btn-primary" onclick="openModal()">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                创建标签
+            </button>
+        </div>
+
+        <!-- Tag Grid -->
+        <div class="tag-grid" id="tagGrid">
+            <!-- Tags will be rendered here -->
+        </div>
+
+        <!-- Empty State (hidden by default) -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+            </svg>
+            <div class="empty-title">还没有标签</div>
+            <div class="empty-description">创建您的第一个标签，开始更灵活地组织任务</div>
+            <button class="btn btn-primary" onclick="openModal()">创建标签</button>
+        </div>
+    </div>
+
+    <!-- Create/Edit Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">创建标签</h2>
+                <button class="modal-close" onclick="closeModal()">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="tagForm" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <label class="form-label">标签名称</label>
+                        <input
+                            type="text"
+                            class="form-input"
+                            id="tagName"
+                            placeholder="例如：工作、个人、重要..."
+                            maxlength="20"
+                            autocomplete="off"
+                            oninput="validateForm()"
+                        >
+                        <div class="form-hint">
+                            <span id="charCount">0/20</span>
+                            <span class="form-error" id="nameError"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">标签颜色</label>
+                        <div class="color-picker" id="colorPicker">
+                            <div class="color-option selected" style="background: #FF6B6B;" data-color="#FF6B6B" onclick="selectColor(this)"></div>
+                            <div class="color-option" style="background: #FFA07A;" data-color="#FFA07A" onclick="selectColor(this)"></div>
+                            <div class="color-option" style="background: #F7DC6F;" data-color="#F7DC6F" onclick="selectColor(this)"></div>
+                            <div class="color-option" style="background: #4ECDC4;" data-color="#4ECDC4" onclick="selectColor(this)"></div>
+                            <div class="color-option" style="background: #45B7D1;" data-color="#45B7D1" onclick="selectColor(this)"></div>
+                            <div class="color-option" style="background: #5C9DED;" data-color="#5C9DED" onclick="selectColor(this)"></div>
+                            <div class="color-option" style="background: #BB8FCE;" data-color="#BB8FCE" onclick="selectColor(this)"></div>
+                            <div class="color-option" style="background: #FF9FF3;" data-color="#FF9FF3" onclick="selectColor(this)"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">预览</label>
+                        <div class="preview-box">
+                            <span class="tag-badge" id="previewTag" style="background: #FF6B6B;">标签名称</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal()">取消</button>
+                <button class="btn btn-primary" id="saveBtn" onclick="handleSubmit()" disabled>创建</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample tags data
+        let tags = [
+            { id: 1, name: '工作', color: '#FF6B6B', taskCount: 12, createdAt: '2026-03-15' },
+            { id: 2, name: '个人', color: '#4ECDC4', taskCount: 8, createdAt: '2026-03-15' },
+            { id: 3, name: '重要', color: '#45B7D1', taskCount: 5, createdAt: '2026-03-16' },
+            { id: 4, name: '学习', color: '#F7DC6F', taskCount: 3, createdAt: '2026-03-16' },
+        ];
+
+        let selectedColor = '#FF6B6B';
+        let editingTagId = null;
+
+        // Render tags
+        function renderTags() {
+            const grid = document.getElementById('tagGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (tags.length === 0) {
+                grid.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            emptyState.style.display = 'none';
+
+            grid.innerHTML = tags.map(tag => `
+                <div class="tag-card" style="border-left-color: ${tag.color};">
+                    <div class="tag-header">
+                        <span class="tag-badge" style="background: ${tag.color};">${tag.name}</span>
+                    </div>
+                    <div class="tag-meta">
+                        <span>${tag.taskCount} 个任务</span>
+                        <span>${formatDate(tag.createdAt)}</span>
+                    </div>
+                    <div class="tag-actions">
+                        <button class="btn btn-ghost btn-icon" title="编辑" onclick="editTag(${tag.id})">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </button>
+                        <button class="btn btn-ghost btn-icon" style="color: #EF4444;" title="删除" onclick="deleteTag(${tag.id})">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Format date
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diff = now - date;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            if (days === 0) return '今天';
+            if (days === 1) return '昨天';
+            if (days < 7) return `${days} 天前`;
+            return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+        }
+
+        // Modal functions
+        function openModal() {
+            editingTagId = null;
+            document.getElementById('modalTitle').textContent = '创建标签';
+            document.getElementById('tagName').value = '';
+            document.getElementById('saveBtn').textContent = '创建';
+            resetColor();
+            validateForm();
+            document.getElementById('modal').classList.add('active');
+            document.getElementById('tagName').focus();
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // Color selection
+        function selectColor(element) {
+            document.querySelectorAll('.color-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedColor = element.dataset.color;
+            updatePreview();
+        }
+
+        function resetColor() {
+            document.querySelectorAll('.color-option').forEach(el => el.classList.remove('selected'));
+            document.querySelector('.color-option').classList.add('selected');
+            selectedColor = '#FF6B6B';
+            updatePreview();
+        }
+
+        // Form validation
+        function validateForm() {
+            const name = document.getElementById('tagName').value.trim();
+            const charCount = document.getElementById('charCount');
+            const nameError = document.getElementById('nameError');
+            const saveBtn = document.getElementById('saveBtn');
+
+            charCount.textContent = `${name.length}/20`;
+
+            let error = '';
+
+            if (name.length > 20) {
+                error = '标签名称不能超过20个字符';
+            } else if (name && tags.some(t => t.name === name && t.id !== editingTagId)) {
+                error = '标签名称已存在';
+            }
+
+            nameError.textContent = error;
+            saveBtn.disabled = !name || error;
+            updatePreview();
+        }
+
+        // Update preview
+        function updatePreview() {
+            const name = document.getElementById('tagName').value || '标签名称';
+            const preview = document.getElementById('previewTag');
+            preview.textContent = name;
+            preview.style.background = selectedColor;
+        }
+
+        // Handle form submit
+        function handleSubmit(event) {
+            if (event) event.preventDefault();
+
+            const name = document.getElementById('tagName').value.trim();
+            if (!name) return;
+
+            if (editingTagId) {
+                // Edit existing tag
+                const tag = tags.find(t => t.id === editingTagId);
+                if (tag) {
+                    tag.name = name;
+                    tag.color = selectedColor;
+                }
+            } else {
+                // Create new tag
+                tags.unshift({
+                    id: Date.now(),
+                    name: name,
+                    color: selectedColor,
+                    taskCount: 0,
+                    createdAt: new Date().toISOString().split('T')[0]
+                });
+            }
+
+            renderTags();
+            closeModal();
+        }
+
+        // Edit tag
+        function editTag(id) {
+            const tag = tags.find(t => t.id === id);
+            if (!tag) return;
+
+            editingTagId = id;
+            document.getElementById('modalTitle').textContent = '编辑标签';
+            document.getElementById('tagName').value = tag.name;
+            document.getElementById('saveBtn').textContent = '保存';
+
+            // Select color
+            document.querySelectorAll('.color-option').forEach(el => {
+                el.classList.toggle('selected', el.dataset.color === tag.color);
+            });
+            selectedColor = tag.color;
+
+            validateForm();
+            document.getElementById('modal').classList.add('active');
+        }
+
+        // Delete tag
+        function deleteTag(id) {
+            const tag = tags.find(t => t.id === id);
+            if (!tag) return;
+
+            const message = tag.taskCount > 0
+                ? `标签「${tag.name}」正在被 ${tag.taskCount} 个任务使用，删除后将自动移除这些任务上的标签。确定删除吗？`
+                : `确定要删除标签「${tag.name}」吗？`;
+
+            if (confirm(message)) {
+                tags = tags.filter(t => t.id !== id);
+                renderTags();
+            }
+        }
+
+        // Close modal on overlay click
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Initial render
+        renderTags();
+    </script>
+</body>
+</html>

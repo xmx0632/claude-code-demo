@@ -5,6 +5,7 @@ import com.todolist.common.response.R;
 import com.todolist.dto.TodoDTO;
 import com.todolist.dto.TodoQueryDTO;
 import com.todolist.service.TodoService;
+import com.todolist.vo.TodoStatsVO;
 import com.todolist.vo.TodoVO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,15 @@ public class TodoController {
     public R<IPage<TodoVO>> pageList(TodoQueryDTO query) {
         IPage<TodoVO> page = todoService.pageList(query);
         return R.ok(page);
+    }
+
+    /**
+     * 获取任务统计数据
+     */
+    @GetMapping("/stats")
+    public R<TodoStatsVO> getStats() {
+        TodoStatsVO stats = todoService.getStats();
+        return R.ok(stats);
     }
 
     /**

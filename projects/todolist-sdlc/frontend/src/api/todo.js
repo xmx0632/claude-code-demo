@@ -34,5 +34,10 @@ export const todoApi = {
   // 取消完成
   uncomplete(id) {
     return request.put(`/todos/${id}/uncomplete`)
+  },
+
+  // 获取统计数据
+  getStats() {
+    return request.get('/todos/stats')
   }
 }

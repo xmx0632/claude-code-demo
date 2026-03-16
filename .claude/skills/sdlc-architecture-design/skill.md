@@ -16,7 +16,7 @@ user-invocable: true
 ## 输入
 
 - 需求规格说明书（阶段 1 产出）
-- 产品原型（阶段 2 产出）
+- 产品设计文档（阶段 2 产出，ui-ux-pro-max）
 - 项目宪法（guidance/CONSTITUTION.md）
 
 ## 输出

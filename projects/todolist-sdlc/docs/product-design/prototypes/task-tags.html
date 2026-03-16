@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务标签 - 产品设计原型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-500: #6366F1;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-tertiary: #94A3B8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --border-default: #E2E8F0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        /* Task Card */
+        .task-card {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 16px;
+        }
+
+        .task-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-default);
+            border-radius: 6px;
+            flex-shrink: 0;
+            cursor: pointer;
+            margin-top: 2px;
+        }
+
+        .task-checkbox.checked {
+            background: var(--primary-500);
+            border-color: var(--primary-500);
+        }
+
+        .task-title {
+            flex: 1;
+            font-size: 16px;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .task-title.completed {
+            text-decoration: line-through;
+            color: var(--text-tertiary);
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 16px;
+            padding-left: 32px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Tags Section */
+        .tags-section {
+            padding-left: 32px;
+        }
+
+        .tags-label {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-bottom: 8px;
+        }
+
+        .tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            color: white;
+            transition: all 0.15s ease;
+        }
+
+        .tag-close {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        .tag-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .add-tag-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            background: transparent;
+            border: 1px dashed var(--border-default);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .add-tag-btn:hover {
+            border-color: var(--primary-500);
+            color: var(--primary-500);
+            background: var(--primary-500);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        /* Popover */
+        .popover {
+            display: none;
+            position: absolute;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            padding: 12px;
+            z-index: 100;
+            width: 240px;
+            animation: popoverIn 0.15s ease;
+        }
+
+        @keyframes popoverIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .popover.active {
+            display: block;
+        }
+
+        .popover-search {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--text-tertiary);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 34px;
+            border: 1px solid var(--border-default);
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-500);
+        }
+
+        .tag-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .tag-option:hover {
+            background: var(--bg-secondary);
+        }
+
+        .tag-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .tag-option-name {
+            flex: 1;
+            font-size: 13px;
+        }
+
+        .empty-tags {
+            padding: 12px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .create-tag-btn {
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+            border-top: 1px solid var(--border-default);
+            background: transparent;
+            border-radius: 8px;
+            color: var(--primary-500);
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .create-tag-btn:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Icons */
+        .icon {
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="margin-bottom: 24px;">任务标签演示</h2>
+
+        <!-- Task 1 -->
+        <div class="task-card">
+            <div class="task-header">
+                <input type="checkbox" class="task-checkbox">
+                <div class="task-title">完成项目需求文档并评审</div>
+            </div>
+            <div class="task-meta">
+                <div class="meta-item">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>2026-03-20</span>
+                </div>
+                <div class="meta-item">
+                    <span style="color: #FF6B6B;">🔴 高优先级</span>
+                </div>
+            </div>
+            <div class="tags-section">
+                <div class="tags-label">标签</div>
+                <div class="tags-list" id="task1Tags">
+                    <!-- Tags rendered by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Task 2 -->
+        <div class="task-card">
+            <div class="task-header">
+                <input type="checkbox" class="task-checkbox" checked>
+                <div class="task-title completed">购买健身卡并制定锻炼计划</div>
+            </div>
+            <div class="task-meta">
+                <div class="meta-item">
+                    <span>✅ 已完成</span>
+                </div>
+                <div class="meta-item">
+                    <span style="color: #4ECDC4;">🟢 低优先级</span>
+                </div>
+            </div>
+            <div class="tags-section">
+                <div class="tags-label">标签</div>
+                <div class="tags-list" id="task2Tags">
+                    <!-- Tags rendered by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Task 3 -->
+        <div class="task-card">
+            <div class="task-header">
+                <input type="checkbox" class="task-checkbox">
+                <div class="task-title">学习 Vue 3 Composition API</div>
+            </div>
+            <div class="task-meta">
+                <div class="meta-item">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>2026-03-25</span>
+                </div>
+                <div class="meta-item">
+                    <span style="color: #F59E0B;">🟡 中优先级</span>
+                </div>
+            </div>
+            <div class="tags-section">
+                <div class="tags-label">标签</div>
+                <div class="tags-list" id="task3Tags">
+                    <!-- Tags rendered by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Available tags
+        const availableTags = [
+            { id: 1, name: '工作', color: '#FF6B6B' },
+            { id: 2, name: '个人', color: '#4ECDC4' },
+            { id: 3, name: '重要', color: '#45B7D1' },
+            { id: 4, name: '学习', color: '#F7DC6F' },
+            { id: 5, name: '健康', color: '#FFA07A' },
+            { id: 6, name: '购物', color: '#BB8FCE' },
+        ];
+
+        // Task tags
+        const taskTags = {
+            task1Tags: [
+                { id: 1, name: '工作', color: '#FF6B6B' },
+                { id: 3, name: '重要', color: '#45B7D1' },
+            ],
+            task2Tags: [
+                { id: 2, name: '个人', color: '#4ECDC4' },
+                { id: 5, name: '健康', color: '#FFA07A' },
+            ],
+            task3Tags: []
+        };
+
+        // Render tags
+        function renderTags(containerId, tags) {
+            const container = document.getElementById(containerId);
+
+            if (tags.length === 0) {
+                container.innerHTML = `<span class="empty-tags">暂无标签</span>`;
+            } else {
+                container.innerHTML = tags.map(tag => `
+                    <span class="tag-badge" style="background: ${tag.color};">
+                        ${tag.name}
+                        <span class="tag-close" onclick="removeTag('${containerId}', ${tag.id})">×</span>
+                    </span>
+                `).join('');
+            }
+
+            // Add button
+            const btn = document.createElement('button');
+            btn.className = 'add-tag-btn';
+            btn.innerHTML = '+ 添加标签';
+            btn.onclick = (e) => showPopover(e, containerId);
+            container.appendChild(btn);
+        }
+
+        // Remove tag
+        function removeTag(containerId, tagId) {
+            const tags = taskTags[containerId];
+            const index = tags.findIndex(t => t.id === tagId);
+            if (index > -1) {
+                tags.splice(index, 1);
+                renderTags(containerId, tags);
+            }
+        }
+
+        // Popover
+        let currentContainerId = null;
+        let currentButton = null;
+        let searchQuery = '';
+
+        function showPopover(event, containerId) {
+            event.stopPropagation();
+            currentContainerId = containerId;
+            currentButton = event.target;
+
+            // Remove existing popover
+            const existing = document.querySelector('.popover');
+            if (existing) existing.remove();
+
+            // Create popover
+            const popover = document.createElement('div');
+            popover.className = 'popover';
+            popover.innerHTML = `
+                <div class="popover-search">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" class="search-input" placeholder="搜索标签..." oninput="filterTags(this.value)">
+                </div>
+                <div class="tag-list" id="popoverTags">
+                    ${renderTagOptions(containerId)}
+                </div>
+                <button class="create-tag-btn">+ 创建新标签</button>
+            `;
+
+            document.body.appendChild(popover);
+
+            // Position
+            const rect = currentButton.getBoundingClientRect();
+            popover.style.top = (rect.bottom + 8) + 'px';
+            popover.style.left = rect.left + 'px';
+
+            setTimeout(() => popover.classList.add('active'), 0);
+
+            // Close on outside click
+            setTimeout(() => {
+                document.addEventListener('click', closePopover);
+            }, 0);
+        }
+
+        function renderTagOptions(containerId) {
+            const currentTags = taskTags[containerId];
+            const currentTagIds = currentTags.map(t => t.id);
+            const filtered = availableTags.filter(t => {
+                return !currentTagIds.includes(t.id) &&
+                       t.name.toLowerCase().includes(searchQuery.toLowerCase());
+            });
+
+            if (filtered.length === 0) {
+                return `<div class="empty-tags">${searchQuery ? '未找到匹配的标签' : '没有可用标签'}</div>`;
+            }
+
+            return filtered.map(tag => `
+                <div class="tag-option" onclick="addTag(${tag.id})">
+                    <span class="tag-dot" style="background: ${tag.color};"></span>
+                    <span class="tag-option-name">${tag.name}</span>
+                </div>
+            `).join('');
+        }
+
+        function filterTags(query) {
+            searchQuery = query;
+            const list = document.getElementById('popoverTags');
+            if (list) {
+                list.innerHTML = renderTagOptions(currentContainerId);
+            }
+        }
+
+        function addTag(tagId) {
+            const tag = availableTags.find(t => t.id === tagId);
+            if (tag && currentContainerId) {
+                taskTags[currentContainerId].push({...tag});
+                renderTags(currentContainerId, taskTags[currentContainerId]);
+            }
+            closePopover();
+        }
+
+        function closePopover() {
+            const popover = document.querySelector('.popover');
+            if (popover) {
+                popover.remove();
+            }
+            document.removeEventListener('click', closePopover);
+            currentContainerId = null;
+            currentButton = null;
+            searchQuery = '';
+        }
+
+        // Task checkbox toggle
+        document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const title = this.parentElement.querySelector('.task-title');
+                title.classList.toggle('completed', this.checked);
+            });
+        });
+
+        // Initial render
+        renderTags('task1Tags', taskTags.task1Tags);
+        renderTags('task2Tags', taskTags.task2Tags);
+        renderTags('task3Tags', taskTags.task3Tags);
+    </script>
+</body>
+</html>
