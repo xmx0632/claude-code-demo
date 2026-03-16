@@ -1,9 +1,10 @@
 # SDLC Framework
 
-> 完整的软件开发生命周期框架，基于 Claude Code + Skills + Subagents
+> 完整的软件开发生命周期框架，基于 Claude Code + Skills + Subagents + SDD 增强
 
-[![Framework Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com)
+[![Framework Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![SDD Enhanced](https://img.shields.io/badge/SDD-Enhanced-purple.svg)](./SDD-IMPROVEMENT-PLAN.md)
 
 ---
 
@@ -77,7 +78,67 @@ SDLC Framework 是一个生产级的软件开发生命周期框架，旨在帮�
 
 - **Full SDLC**: 完整的 15 阶段工作流
 - **Agile Sprint**: 敏捷 Sprint 工作流
-- **Bug Fix**: Bug 修复工作流
+- **Bug Fix**: Bug 修复工作流（含框架反馈循环）
+
+### 📋 顶层指导文档（SDD 增强）
+
+借鉴 SDD 方法论，新增两层指导文档：
+
+- **Constitution（项目宪法）**: 定义项目的基本原则和约束
+- **Steering Docs（方向指导）**: 针对特定领域的详细规范
+- **框架反馈循环**: 从每个 Bug 中学习，持续改进框架
+
+详见 [指导文档索引](./guidance/index.md)
+
+### 🔄 框架反馈循环（SDD 增强）
+
+基于 SDD 方法论，每个 Bug 修复后进行框架反思：
+
+```
+Bug 报告 → 复现定位 → 框架反思 → 修复实现 → 验证关闭 → 框架更新
+```
+
+**缺口分类**:
+- **A: 规范→实现** - 规范清楚但实现跑偏
+- **B: 意图→规范** - 需求遗漏导致规范缺失
+- **C: 角色协作** - 角色交接时信息丢失
+
+详见 [Bug 修复工作流](./workflows/bug-fix-workflow.md)
+
+### 📦 本地需求管理（SDD 增强）
+
+基于 Markdown 的轻量级需求管理，与 SDLC 深度集成：
+
+```
+requirements/
+├── backlog/      # 待处理需求
+├── active/       # 进行中需求
+└── completed/    # 已完成需求
+```
+
+**特性**:
+- 需求文件内置 SDLC 进度追踪表
+- 状态自动流转 (backlog → active → completed)
+- 与 SDLC 阶段双向同步
+
+详见 [需求管理工作流](./workflows/requirement-sync-workflow.md)
+
+### 🤖 角色约束智能体（SDD 增强）
+
+自动注入领域知识的约束智能体：
+
+| 智能体 | 关注领域 | 触发阶段 |
+|--------|----------|----------|
+| **Security Agent** | 安全检查、输入验证、权限控制 | 编码/测试/部署 |
+| **Performance Agent** | 性能基准、缓存策略、查询优化 | 设计/编码/测试 |
+| **Infra Agent** | 部署配置、监控告警、资源限制 | 编码/部署/运维 |
+
+**触发方式**:
+- 按阶段自动触发
+- 按关键词触发 (登录、查询、部署等)
+- 手动指令触发
+
+详见 [智能体注入工作流](./workflows/agent-injection-workflow.md)
 
 ---
 
@@ -129,6 +190,7 @@ SDLC Framework 是一个生产级的软件开发生命周期框架，旨在帮�
 ```
 SDLC-Framework/
 ├── README.md                      # 框架概览（本文件）
+├── SDD-IMPROVEMENT-PLAN.md        # SDD 改进计划
 ├── framework-config.yaml          # 全局配置
 │
 ├── 01-requirements-analysis/      # 阶段 1: 需求分析
@@ -147,7 +209,7 @@ SDLC-Framework/
 ├── 14-deployment-instructions/    # 阶段 14: 部署说明
 ├── 15-incremental-upgrade/        # 阶段 15: 增量升级
 │
-├── subagents/                     # Subagent 角色定义
+├── roles/                     # Subagent 角色定义
 │   ├── product-manager-agent.md
 │   ├── architect-agent.md
 │   ├── backend-developer-agent.md
@@ -157,16 +219,38 @@ SDLC-Framework/
 │   ├── db-admin-agent.md
 │   └── technical-writer-agent.md
 │
+├── guards/                        # 约束智能体（SDD 增强）
+│   ├── security-agent.md          # 安全约束
+│   ├── performance-agent.md       # 性能约束
+│   └── infra-agent.md             # 基础设施约束
+│
+├── requirements/                  # 本地需求管理（SDD 增强）
+│   ├── README.md                  # 使用说明
+│   ├── TEMPLATE.md                # 需求模板
+│   ├── backlog/                   # 待处理
+│   ├── active/                    # 进行中
+│   └── completed/                 # 已完成
+│
 ├── workflows/                     # 工作流编排
 │   ├── full-sdlc-workflow.md      # 完整 SDLC 工作流
 │   ├── agile-sprint-workflow.md   # 敏捷 Sprint 工作流
-│   └── bug-fix-workflow.md        # Bug 修复工作流
+│   ├── bug-fix-workflow.md        # Bug 修复工作流
+│   ├── requirement-sync-workflow.md   # 需求同步工作流
+│   └── agent-injection-workflow.md    # 智能体注入工作流
 │
 ├── guides/                        # 框架指南
 │   ├── getting-started.md         # 快速开始
 │   ├── subagent-guide.md          # Subagent 指南
 │   ├── skill-integration-guide.md # 技能集成指南
 │   └── best-practices.md          # 最佳实践
+│
+├── guidance/                      # 顶层指导文档（SDD 增强）
+│   ├── CONSTITUTION.md            # 项目宪法
+│   ├── STEERING-DOCS.md           # 方向指导索引
+│   ├── templates/                 # 规范模板
+│   └── feedback/                  # 框架反馈记录
+│       ├── FRAMEWORK-FEEDBACK.md  # 反馈总览
+│       └── templates/             # 反思模板
 │
 └── config/                        # 配置文件
     ├── stage-dependencies.yaml    # 阶段依赖关系
@@ -364,7 +448,22 @@ custom_templates:
 
 ## 版本
 
-当前版本: **1.0.0**
+当前版本: **1.1.0** (SDD Enhanced)
+
+### 更新日志
+
+**v1.1.0** (2026-03-16)
+- ✨ 新增本地需求管理（Markdown 格式）
+- ✨ 新增角色约束智能体（Security/Performance/Infra）
+- ✨ 新增智能体注入工作流
+- ✨ 新增需求同步工作流
+- 📝 完善 SDD 改进计划文档
+
+**v1.0.0** (2026-03-01)
+- 🎉 初始版本发布
+- ✅ 15 个 SDLC 阶段
+- ✅ 8 个 Subagent 角色
+- ✅ 50+ 模板
 
 ---
 
