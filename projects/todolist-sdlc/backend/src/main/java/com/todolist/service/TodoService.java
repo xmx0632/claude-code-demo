@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.todolist.dto.TodoDTO;
 import com.todolist.dto.TodoQueryDTO;
 import com.todolist.entity.Todo;
+import com.todolist.vo.TodoStatsVO;
 import com.todolist.vo.TodoVO;
 
 /**
@@ -49,4 +50,9 @@ public interface TodoService extends IService<Todo> {
      * 取消完成
      */
     TodoVO uncomplete(Long id);
+
+    /**
+     * 获取任务统计数据
+     */
+    TodoStatsVO getStats();
 }

@@ -5,19 +5,12 @@
 -- 日期：2026-03-16
 
 CREATE TABLE t_tag (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
-    user_id BIGINT NOT NULL COMMENT '用户ID',
-    name VARCHAR(20) NOT NULL COMMENT '标签名称',
-    color VARCHAR(7) DEFAULT '#999999' COMMENT '标签颜色（HEX格式）',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    name VARCHAR(20) NOT NULL,
+    color VARCHAR(7) DEFAULT '#999999',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-    -- 唯一约束：同一用户下标签名唯一
-    UNIQUE KEY uk_user_name (user_id, name),
-
-    -- 索引：按用户ID查询标签列表
-    KEY idx_user_id (user_id),
-
-    -- 外键：关联用户表
-    CONSTRAINT fk_tag_user FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='任务标签表';
+ALTER TABLE t_tag ADD CONSTRAINT uk_user_name UNIQUE (user_id, name);

@@ -3,10 +3,10 @@
     <!-- 状态标签页 -->
     <div class="status-tabs">
       <el-radio-group v-model="activeStatus" @change="handleStatusChange">
-        <el-radio-button :value="null">全部 ({{ stats.all }})</el-radio-button>
-        <el-radio-button :value="0">待办 ({{ stats.pending }})</el-radio-button>
-        <el-radio-button :value="1">进行中 ({{ stats.inProgress }})</el-radio-button>
-        <el-radio-button :value="2">已完成 ({{ stats.completed }})</el-radio-button>
+        <el-radio-button :value="null">全部 ({{ todoStore.stats.all }})</el-radio-button>
+        <el-radio-button :value="0">待办 ({{ todoStore.stats.pending }})</el-radio-button>
+        <el-radio-button :value="1">进行中 ({{ todoStore.stats.inProgress }})</el-radio-button>
+        <el-radio-button :value="2">已完成 ({{ todoStore.stats.completed }})</el-radio-button>
       </el-radio-group>
     </div>
 
@@ -21,6 +21,29 @@
         @clear="handleSearch"
         @keyup.enter="handleSearch"
       />
+      <!-- 标签筛选 -->
+      <el-select
+        v-model="selectedTagIds"
+        multiple
+        collapse-tags
+        collapse-tags-tooltip
+        placeholder="按标签筛选"
+        clearable
+        class="tag-filter"
+        @change="handleTagFilter"
+      >
+        <el-option
+          v-for="tag in tagStore.tagList"
+          :key="tag.id"
+          :label="tag.name"
+          :value="tag.id"
+        >
+          <span class="tag-option">
+            <span class="tag-color-dot" :style="{ backgroundColor: tag.color }"></span>
+            {{ tag.name }}
+          </span>
+        </el-option>
+      </el-select>
       <el-button type="primary" icon="Plus" @click="showAddDialog">
         新建任务
       </el-button>
@@ -58,6 +81,16 @@
               effect="light"
             >
               {{ todo.categoryName }}
+            </el-tag>
+            <!-- 显示标签 -->
+            <el-tag
+              v-for="tag in (todo.tags || [])"
+              :key="tag.id"
+              :color="tag.color"
+              size="small"
+              effect="light"
+            >
+              {{ tag.name }}
             </el-tag>
             <span v-if="todo.dueDate" class="due-date">
               截止: {{ formatDate(todo.dueDate) }}
@@ -115,6 +148,26 @@
             <el-option label="高" :value="2" />
           </el-select>
         </el-form-item>
+        <el-form-item label="标签">
+          <el-select
+            v-model="formData.tagIds"
+            multiple
+            placeholder="选择标签"
+            class="tag-select"
+          >
+            <el-option
+              v-for="tag in tagStore.tagList"
+              :key="tag.id"
+              :label="tag.name"
+              :value="tag.id"
+            >
+              <span class="tag-option">
+                <span class="tag-color-dot" :style="{ backgroundColor: tag.color }"></span>
+                {{ tag.name }}
+              </span>
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="截止日期">
           <el-date-picker
             v-model="formData.dueDate"
@@ -135,14 +188,17 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useTodoStore } from '@/stores/todo'
+import { useTagStore } from '@/stores/tag'
 import { formatDate } from '@/utils/format'
 
 const todoStore = useTodoStore()
+const tagStore = useTagStore()
 
 const activeStatus = ref(null)
 const searchKeyword = ref('')
+const selectedTagIds = ref([])
 const currentPage = ref(1)
 const dialogVisible = ref(false)
 const isEdit = ref(false)
@@ -155,6 +211,7 @@ const formData = reactive({
   description: '',
   priority: 1,
   categoryId: null,
+  tagIds: [],
   dueDate: ''
 })
 
@@ -162,19 +219,11 @@ const formRules = {
   title: [{ required: true, message: '请输入标题', trigger: 'blur' }]
 }
 
-// 统计数据
-const stats = computed(() => {
-  const list = todoStore.todoList
-  return {
-    all: todoStore.total,
-    pending: list.filter(t => t.status === 0).length,
-    inProgress: list.filter(t => t.status === 1).length,
-    completed: list.filter(t => t.status === 2).length
-  }
-})
-
-onMounted(() => {
-  todoStore.fetchTodoList()
+onMounted(async () => {
+  await Promise.all([
+    tagStore.fetchTagList(),
+    todoStore.fetchTodoList()
+  ])
 })
 
 function handleStatusChange() {
@@ -183,6 +232,11 @@ function handleStatusChange() {
 
 function handleSearch() {
   todoStore.queryParams.keyword = searchKeyword.value
+  todoStore.fetchTodoList()
+}
+
+function handleTagFilter() {
+  todoStore.queryParams.tagIds = selectedTagIds.value
   todoStore.fetchTodoList()
 }
 
@@ -198,6 +252,7 @@ function showAddDialog() {
     description: '',
     priority: 1,
     categoryId: null,
+    tagIds: [],
     dueDate: ''
   })
   dialogVisible.value = true
@@ -211,6 +266,7 @@ function handleEdit(todo) {
     description: todo.description,
     priority: todo.priority,
     categoryId: todo.categoryId,
+    tagIds: (todo.tags || []).map(t => t.id),
     dueDate: todo.dueDate
   })
   dialogVisible.value = true
@@ -275,6 +331,10 @@ function getPriorityText(priority) {
   width: 300px;
 }
 
+.tag-filter {
+  width: 200px;
+}
+
 .todo-list {
   min-height: 200px;
 }
@@ -313,6 +373,7 @@ function getPriorityText(priority) {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .due-date {
@@ -329,5 +390,22 @@ function getPriorityText(priority) {
   margin-top: 20px;
   display: flex;
   justify-content: center;
+}
+
+.tag-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tag-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.tag-select {
+  width: 100%;
 }
 </style>

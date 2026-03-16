@@ -2,6 +2,14 @@
   <div class="layout-container">
     <header class="layout-header">
       <div class="logo">📋 TodoList</div>
+      <nav class="nav-menu">
+        <router-link to="/todos" class="nav-item" active-class="active">
+          待办事项
+        </router-link>
+        <router-link to="/tags" class="nav-item" active-class="active">
+          标签管理
+        </router-link>
+      </nav>
       <div class="user-info">
         <span class="username">{{ userStore.userInfo?.nickname || '用户' }}</span>
         <el-dropdown @command="handleCommand">
@@ -67,6 +75,30 @@ function handleCommand(command) {
   font-size: 20px;
   font-weight: 600;
   color: #333;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 24px;
+}
+
+.nav-item {
+  color: #666;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.nav-item:hover {
+  color: #409eff;
+  background: #f0f9ff;
+}
+
+.nav-item.active {
+  color: #409eff;
+  background: #e6f4ff;
+  font-weight: 500;
 }
 
 .user-info {

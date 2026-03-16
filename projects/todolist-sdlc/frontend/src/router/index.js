@@ -26,6 +26,12 @@ const routes = [
         name: 'TodoList',
         component: () => import('@/views/TodoList.vue'),
         meta: { title: '待办事项' }
+      },
+      {
+        path: 'tags',
+        name: 'TagManage',
+        component: () => import('@/views/TagManage.vue'),
+        meta: { title: '标签管理' }
       }
     ]
   }

@@ -8,6 +8,7 @@ import com.todolist.common.exception.BusinessException;
 import com.todolist.dto.TagDTO;
 import com.todolist.dto.TagQueryDTO;
 import com.todolist.entity.Tag;
+import com.todolist.entity.TodoTag;
 import com.todolist.mapper.TagMapper;
 import com.todolist.mapper.TodoTagMapper;
 import com.todolist.service.TagService;
@@ -157,11 +158,11 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
         // 查询任务数量
         if (tag.getId() != null) {
-            Integer count = todoTagMapper.selectCount(
-                    new LambdaQueryWrapper<>()
-                            .eq(com.todolist.entity.TodoTag::getTagId, tag.getId())
+            Long count = todoTagMapper.selectCount(
+                    new LambdaQueryWrapper<TodoTag>()
+                            .eq(TodoTag::getTagId, tag.getId())
             );
-            vo.setTaskCount(count);
+            vo.setTaskCount(count.intValue());
         }
 
         return vo;

@@ -16,6 +16,7 @@ import com.todolist.mapper.TodoMapper;
 import com.todolist.service.TodoService;
 import com.todolist.util.SecurityUtils;
 import com.todolist.vo.TagVO;
+import com.todolist.vo.TodoStatsVO;
 import com.todolist.vo.TodoVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,19 +56,12 @@ public class TodoServiceImpl extends ServiceImpl<TodoMapper, Todo> implements To
 
         // 标签筛选（AND逻辑：任务必须同时包含所有选中标签）
         if (query.getTagIds() != null && !query.getTagIds().isEmpty()) {
-            List<Long> todoIdsWithTag = tagMapper.selectTodoIdsByTagIds(query.getTagIds());
-            if (todoIdsWithTag.isEmpty()) {
-                // 如果没有符合条件的任务，返回空结果
-                Page<Todo> emptyPage = new Page<>(query.getPage(), query.getSize());
-                return emptyPage;
-            }
-            // 使用子查询进一步筛选：任务必须拥有所有选中的标签
-            wrapper.in(Todo::getId, todoIdsWithTag)
-                   .and(w -> {
-                       for (Long tagId : query.getTagIds()) {
-                           w.exists("SELECT 1 FROM t_todo_tag tt WHERE tt.todo_id = t.id AND tt.tag_id = {0}", tagId);
-                       }
-                   });
+            // 使用子查询筛选：任务必须拥有所有选中的标签
+            wrapper.and(w -> {
+                for (Long tagId : query.getTagIds()) {
+                    w.exists("SELECT 1 FROM t_todo_tag tt WHERE tt.todo_id = t.id AND tt.tag_id = {0}", tagId);
+                }
+            });
         }
 
         Page<Todo> page = new Page<>(query.getPage(), query.getSize());
@@ -171,6 +166,24 @@ public class TodoServiceImpl extends ServiceImpl<TodoMapper, Todo> implements To
         this.updateById(todo);
 
         return convertToVO(todo);
+    }
+
+    @Override
+    public TodoStatsVO getStats() {
+        Long userId = SecurityUtils.getCurrentUserId();
+
+        LambdaQueryWrapper<Todo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Todo::getUserId, userId);
+
+        List<Todo> allTodos = this.list(wrapper);
+
+        TodoStatsVO stats = new TodoStatsVO();
+        stats.setAll((long) allTodos.size());
+        stats.setPending(allTodos.stream().filter(t -> t.getStatus() == 0).count());
+        stats.setInProgress(allTodos.stream().filter(t -> t.getStatus() == 1).count());
+        stats.setCompleted(allTodos.stream().filter(t -> t.getStatus() == 2).count());
+
+        return stats;
     }
 
     private TodoVO convertToVO(Todo todo) {
