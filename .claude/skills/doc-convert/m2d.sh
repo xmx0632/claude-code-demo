@@ -166,11 +166,14 @@ echo ""
 
 echo "正在转换..."
 
+# Pandoc 转换（优化列表格式）
 pandoc "$PROCESSED_MD_FILE" \
   --resource-path=.:"$AUTODOC_TEMP_DIR" \
   --table-of-contents \
   --toc-depth=6 \
   --number-sections \
+  --from markdown+hard_line_breaks+smart \
+  --to docx \
   $TEMPLATE_OPTION \
   -o "$OUTPUT_FILE"
 
