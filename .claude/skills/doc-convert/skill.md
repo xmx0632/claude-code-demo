@@ -1,11 +1,8 @@
 ---
-name: auto-doc
+name: doc-convert
 description: 自动文档转换工具，支持 Markdown 与 Word 文档双向转换，自动将 Mermaid 图表转换为 PNG 图片插入 Word 文档。
 allowed-tools: ["Read", "Write", "Edit", "Bash"]
-disable-model-invocation: false
 user-invocable: true
-context: fork
-agent: general-purpose
 ---
 
 # AutoDoc 自动文档转换技能
