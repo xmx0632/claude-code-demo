@@ -59,7 +59,7 @@ class TagControllerTest {
     void pageList_Success() throws Exception {
         // Arrange
         when(tagService.pageList(any(TagQueryDTO.class)))
-                .thenReturn(new com.baomidou.mybatisplus.core.metadata.Page<>(1, 10));
+                .thenReturn(new com.baomidou.mybatisplus.extension.plugins.pagination.Page<>(1, 10));
 
         // Act & Assert
         mockMvc.perform(get("/api/tags")

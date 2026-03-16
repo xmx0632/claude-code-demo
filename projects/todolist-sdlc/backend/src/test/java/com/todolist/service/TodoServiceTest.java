@@ -7,6 +7,7 @@ import com.todolist.dto.TodoDTO;
 import com.todolist.dto.TodoQueryDTO;
 import com.todolist.entity.Todo;
 import com.todolist.mapper.CategoryMapper;
+import com.todolist.mapper.TagMapper;
 import com.todolist.mapper.TodoMapper;
 import com.todolist.service.impl.TodoServiceImpl;
 import com.todolist.vo.TodoVO;
@@ -42,6 +43,9 @@ class TodoServiceTest {
     @Mock
     private CategoryMapper categoryMapper;
 
+    @Mock
+    private TagMapper tagMapper;
+
     private TodoServiceImpl todoService;
 
     private Todo testTodo;
@@ -50,7 +54,7 @@ class TodoServiceTest {
     @BeforeEach
     void setUp() {
         // 使用构造函数创建服务
-        todoService = new TodoServiceImpl(categoryMapper);
+        todoService = new TodoServiceImpl(categoryMapper, tagMapper);
 
         // 使用 ReflectionTestUtils 注入 baseMapper
         ReflectionTestUtils.setField(todoService, "baseMapper", todoMapper);
