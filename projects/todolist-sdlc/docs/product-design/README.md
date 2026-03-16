@@ -1,84 +1,103 @@
-# 任务标签功能 - UI 设计交付文档
+# 任务标签功能 - 产品设计交付
 
-| 版本 | 1.0 |
+| 版本 | 1.1 |
 |------|-----|
 | 日期 | 2026-03-16 |
-| 设计工具 | Vue 3 + Tailwind CSS |
+| 实现方式 | HTML + CSS + JavaScript |
 
 ---
 
-## 1. 交付概览
+## 1. 交付概述
 
-### 1.1 设计范围
+本次设计交付包含 TodoList 项目任务标签功能的**可交互 HTML 原型**，可直接在浏览器中打开演示。
 
-本次设计交付包含 TodoList 项目任务标签功能的完整 UI 设计，涵盖：
+### 1.1 设计原则
 
-| 模块 | 组件 | 文件 |
-|------|------|------|
-| 标签管理 | TagManager.vue | 标签管理主页面 |
-| 标签管理 | TagCard.vue | 标签卡片组件 |
-| 标签管理 | TagModal.vue | 创建/编辑弹窗 |
-| 任务标签 | TaskTags.vue | 任务标签添加/移除 |
-| 标签筛选 | TagFilter.vue | 标签筛选器 |
+| 原则 | 描述 |
+|------|------|
+| **清晰** | 信息层级分明，操作意图明确 |
+| **高效** | 减少点击次数，提供快捷操作 |
+| **一致** | 组件样式统一，交互模式一致 |
+| **反馈** | 每个操作都有即时视觉反馈 |
 
-### 1.2 设计交付物
+---
 
-```
-docs/product-design/
-├── README.md                 # 本文档
-├── design-system.md          # 设计系统规范
-└── components/
-    ├── TagManager.vue        # 标签管理页面
-    ├── TagCard.vue           # 标签卡片
-    ├── TagModal.vue          # 创建/编辑弹窗
-    ├── TaskTags.vue          # 任务标签组件
-    ├── TagFilter.vue         # 标签筛选器
-    └── ui/
-        ├── Button.vue        # 按钮组件
-        ├── TagBadge.vue      # 标签徽章
-        ├── Input.vue         # 输入框（待实现）
-        ├── Modal.vue         # 弹窗（待实现）
-        └── ...               # 其他基础组件
+## 2. 交付物列表
+
+| 文件 | 功能 | 可直接打开 |
+|------|------|------------|
+| `prototypes/tag-manager.html` | 标签管理页面 | ✅ |
+| `prototypes/task-tags.html` | 任务标签组件 | ✅ |
+| `prototypes/tag-filter.html` | 标签筛选器 | ✅ |
+
+### 打开方式
+
+```bash
+# 方式 1: 直接双击文件
+open prototypes/tag-manager.html
+
+# 方式 2: 使用浏览器打开
+# macOS
+open -a "Google Chrome" prototypes/tag-manager.html
+
+# Windows
+start chrome prototypes\tag-manager.html
+
+# Linux
+xdg-open prototypes/tag-manager.html
 ```
 
 ---
 
-## 2. 设计规范
+## 3. 设计规范
 
-### 2.1 色彩
+### 3.1 色彩系统
 
-参见 `design-system.md` 第 2 节
+```css
+/* Primary - 主要操作色 */
+--primary-500: #6366F1;  /* Indigo */
 
-关键颜色：
-- 主色：Indigo-500 (#6366F1)
-- 成功：Emerald-500 (#10B981)
-- 错误：Red-500 (#EF4444)
-- 标签：8 种预设颜色
+/* Tag Colors - 标签预设颜色 */
+--tag-red: #FF6B6B;
+--tag-orange: #FFA07A;
+--tag-amber: #F7DC6F;
+--tag-green: #4ECDC4;
+--tag-cyan: #45B7D1;
+--tag-blue: #5C9DED;
+--tag-purple: #BB8FCE;
+--tag-pink: #FF9FF3;
+```
 
-### 2.2 排版
+### 3.2 排版
 
-- 字体：Inter
-- 大小：12px ~ 30px
+- 字体：系统字体栈
+- 大小：12px ~ 28px
 - 字重：400/500/600/700
 
-### 2.3 间距
+### 3.3 间距
 
-基于 4px 栅格系统：
-- 基础单位：4px
-- 常用间距：8px / 16px / 24px / 32px
+基于 4px 栅格：4/8/12/16/20/24/32px
 
-### 2.4 圆角
+### 3.4 圆角
 
-- 小：4px
+- 小：4-6px
 - 中：8px
 - 大：12px
-- 胶囊：9999px
+- 胶囊：20px
+
+### 3.5 阴影
+
+```css
+shadow-sm: 0 1px 3px rgba(0,0,0,0.1)
+shadow-md: 0 4px 6px rgba(0,0,0,0.1)
+shadow-lg: 0 10px 25px rgba(0,0,0,0.15)
+```
 
 ---
 
-## 3. 组件说明
+## 4. 组件说明
 
-### 3.1 TagManager（标签管理页面）
+### 4.1 标签管理页面 (tag-manager.html)
 
 **功能**：标签的 CRUD 操作管理界面
 
@@ -86,188 +105,56 @@ docs/product-design/
 - 标签卡片网格布局
 - 响应式设计（1/2/3 列）
 - 空状态提示
-- 创建/编辑/删除操作
-
-**关键交互**：
-- 点击"创建标签"打开创建弹窗
-- 点击标签卡片上的编辑/删除图标
-- 删除前确认关联任务数
-
-```vue
-<TagManager />
-```
-
-### 3.2 TagCard（标签卡片）
-
-**功能**：展示单个标签信息
-
-**Props**：
-```typescript
-interface Props {
-  tag: Tag;  // 标签数据
-}
-```
-
-**Events**：
-```typescript
-emits: {
-  edit: [tag: Tag];
-  delete: [tag: Tag];
-}
-```
-
-### 3.3 TagModal（创建/编辑弹窗）
-
-**功能**：标签创建和编辑表单
-
-**Props**：
-```typescript
-interface Props {
-  open: boolean;
-  tag?: Tag | null;
-  existingNames?: string[];
-}
-```
-
-**特性**：
-- 名称输入（最多 20 字符）
-- 颜色选择器（8 预设 + 自定义）
-- 实时预览
+- 创建/编辑/删除弹窗
 - 表单验证
 
-### 3.4 TaskTags（任务标签组件）
+**交互**：
+- 点击"创建标签"打开弹窗
+- 选择颜色时有视觉反馈
+- 实时预览标签效果
+- 删除前确认关联任务数
+
+---
+
+### 4.2 任务标签组件 (task-tags.html)
 
 **功能**：为任务添加/移除标签
 
-**Props**：
-```typescript
-interface Props {
-  tags: Tag[];           // 已添加的标签
-  availableTags: Tag[];  // 可选标签列表
-  size?: 'sm' | 'md' | 'lg';
-}
-```
-
-**Events**：
-```typescript
-emits: {
-  add: [tag: Tag];
-  remove: [tag: Tag];
-}
-```
-
 **特性**：
-- Popover 下拉选择
-- 标签搜索
-- 快速创建新标签
-- 动画过渡
+- Popover 下拉选择器
+- 标签搜索过滤
+- 快速添加/移除
+- 动画过渡效果
 
-### 3.5 TagFilter（标签筛选器）
+**交互**：
+- 点击"添加标签"显示选择器
+- 点击标签移除
+- 搜索标签名称
+- 显示"暂无标签"状态
+
+---
+
+### 4.3 标签筛选器 (tag-filter.html)
 
 **功能**：按标签筛选任务列表
-
-**Props**：
-```typescript
-interface Props {
-  tags: Tag[];
-  modelValue?: Tag[];
-  filteredCount?: number;
-}
-```
 
 **特性**：
 - 多标签选择（AND 逻辑）
 - 筛选状态显示
 - 移动端浮动按钮
-- 快速清除
+- 快速清除筛选
 
----
-
-## 4. 使用示例
-
-### 4.1 标签管理页面
-
-```vue
-<script setup lang="ts">
-import TagManager from '@/components/tags/TagManager.vue';
-</script>
-
-<template>
-  <TagManager />
-</template>
-```
-
-### 4.2 任务详情中的标签
-
-```vue
-<script setup lang="ts">
-import { ref } from 'vue';
-import TaskTags from '@/components/tags/TaskTags.vue';
-
-const taskTags = ref<Tag[]>([]);
-const allTags = ref<Tag[]>([
-  { id: 1, name: '工作', color: '#FF6B6B', taskCount: 12 },
-  { id: 2, name: '个人', color: '#4ECDC4', taskCount: 8 },
-]);
-
-const handleAddTag = (tag: Tag) => {
-  taskTags.value.push(tag);
-};
-
-const handleRemoveTag = (tag: Tag) => {
-  taskTags.value = taskTags.value.filter(t => t.id !== tag.id);
-};
-</script>
-
-<template>
-  <TaskTags
-    v-model="taskTags"
-    :available-tags="allTags"
-    @add="handleAddTag"
-    @remove="handleRemoveTag"
-  />
-</template>
-```
-
-### 4.3 任务列表筛选
-
-```vue
-<script setup lang="ts">
-import { ref } from 'vue';
-import TagFilter from '@/components/tags/TagFilter.vue';
-
-const selectedTags = ref<Tag[]>([]);
-const allTags = ref<Tag[]>([/* ... */]);
-
-const filteredTaskCount = ref(5);
-</script>
-
-<template>
-  <div>
-    <TagFilter
-      v-model="selectedTags"
-      :tags="allTags"
-      :filtered-count="filteredTaskCount"
-    />
-    <!-- 任务列表... -->
-  </div>
-</template>
-```
+**交互**：
+- 点击标签进行筛选/取消
+- 支持多标签组合筛选
+- 实时更新任务数量
+- 移动端自适应
 
 ---
 
 ## 5. 响应式设计
 
-### 5.1 断点
-
-```css
---breakpoint-sm: 640px;
---breakpoint-md: 768px;
---breakpoint-lg: 1024px;
---breakpoint-xl: 1280px;
-```
-
-### 5.2 标签管理页面
+### 5.1 标签管理页面
 
 | 屏幕尺寸 | 列数 |
 |----------|------|
@@ -275,92 +162,23 @@ const filteredTaskCount = ref(5);
 | 640px - 1024px | 2 列 |
 | > 1024px | 3 列 |
 
-### 5.3 标签筛选器
+### 5.2 标签筛选器
 
-- 桌面端：展开在侧边栏
-- 移动端：浮动按钮在右下角
-
----
-
-## 6. 状态设计
-
-### 6.1 空状态
-
-| 场景 | 描述 | 图示 |
-|------|------|------|
-| 无标签 | "还没有标签，创建您的第一个标签" | Tag 图标 |
-| 筛选无结果 | "没有找到符合条件的任务" | Filter 图标 |
-| 搜索无结果 | "未找到匹配的标签" | Search 图标 |
-
-### 6.2 加载状态
-
-- 按钮加载：Spinner 动画
-- 列表加载：骨架屏
-- 弹窗加载：遮罩 + Spinner
-
-### 6.3 错误状态
-
-- 表单错误：红色边框 + 错误提示
-- 网络错误：Toast 提示
-- 删除确认：警告色弹窗
+- 桌面端：展开在任务列表上方
+- 移动端：浮动按钮 + 全屏弹窗
 
 ---
 
-## 7. 动画规范
+## 6. 技术实现
 
-### 7.1 过渡时长
+### 6.1 纯 HTML + CSS + JavaScript
 
-```css
---transition-fast: 150ms;
---transition-base: 200ms;
---transition-slow: 300ms;
-```
+- 无需构建工具
+- 无需框架依赖
+- 无需服务器
+- 可直接在浏览器运行
 
-### 7.2 常用动画
-
-| 交互 | 动画 |
-|------|------|
-| Hover | 颜色/透明度 150ms |
-| Focus | Ring 扩散 200ms |
-| Modal | 淡入 + 缩放 200ms |
-| 标签添加 | 缩放 + 淡入 150ms |
-| 标签移除 | 缩小 + 淡出 150ms |
-
-### 7.3 Easing
-
-默认使用 `cubic-bezier(0.4, 0, 0.2, 1)`
-
----
-
-## 8. 无障碍设计
-
-### 8.1 键盘导航
-
-- Tab：焦点移动
-- Enter/Space：激活按钮
-- Escape：关闭弹窗
-- 方向键：列表导航
-
-### 8.2 ARIA 属性
-
-```vue
-<!-- 按钮 -->
-<button :aria-label="'编辑标签'" />
-
-<!-- 弹窗 -->
-<div role="dialog" :aria-label="'创建标签'" />
-
-<!-- 标签 -->
-<span role="badge">{{ tag.name }}</span>
-```
-
-### 8.3 颜色对比度
-
-所有文本与背景对比度 ≥ 4.5:1
-
----
-
-## 9. 浏览器兼容性
+### 6.2 浏览器兼容性
 
 | 浏览器 | 最低版本 |
 |--------|----------|
@@ -369,51 +187,138 @@ const filteredTaskCount = ref(5);
 | Firefox | 88+ |
 | Edge | 90+ |
 
----
+### 6.3 使用特性
 
-## 10. 待实现组件
-
-以下组件为设计规范中的基础组件，待实现：
-
-- [ ] Input.vue
-- [ ] Modal.vue
-- [ ] Popover.vue
-- [ ] Spinner.vue
-- [ ] IconButton.vue
-- [ ] EmptyState.vue
-- [ ] ConfirmDialog.vue
-- [ ] FormField.vue
-- [ ] TagQuickCreate.vue
+- CSS Variables（自定义属性）
+- CSS Grid（网格布局）
+- CSS Animations（动画）
+- ES6+ JavaScript
+- SVG 图标
 
 ---
 
-## 11. 下一步
+## 7. 图标使用
 
-1. **开发对接**
-   - 将设计组件集成到项目
-   - 连接后端 API
-   - 实现状态管理
+使用 SVG 内联图标（来自 Lucide Icons）：
 
-2. **测试验证**
-   - 单元测试
-   - 视觉回归测试
-   - 无障碍测试
-
-3. **文档完善**
-   - Storybook 组件文档
-   - 使用示例
-   - 最佳实践
+| 图标 | 文件 | 用途 |
+|------|------|------|
+| Plus | 通用 | 添加/创建 |
+| Edit2 | 通用 | 编辑 |
+| Trash2 | 通用 | 删除 |
+| X | 通用 | 关闭/移除 |
+| Search | 通用 | 搜索 |
+| Filter | tag-filter | 筛选 |
+| Tag | tag-manager | 标签 |
 
 ---
 
-## 12. 设计资源
+## 8. 状态设计
+
+### 8.1 空状态
+
+| 场景 | 描述 |
+|------|------|
+| 无标签 | "还没有标签，创建您的第一个标签" |
+| 筛选无结果 | "没有找到符合条件的任务" |
+| 搜索无结果 | "未找到匹配的标签" |
+
+### 8.2 加载状态
+
+（原型中未实现，实际开发时添加）
+
+### 8.3 错误状态
+
+- 表单错误：红色边框 + 错误提示
+- 删除确认：警告弹窗
+
+---
+
+## 9. 动画规范
+
+### 9.1 过渡时长
+
+- 快速：150ms（hover、focus）
+- 基础：200ms（弹窗、下拉）
+- 慢速：300ms（页面切换）
+
+### 9.2 缓动函数
+
+```css
+transition: all 0.15s ease;
+```
+
+### 9.3 常用动画
+
+| 交互 | 动画 |
+|------|------|
+| Hover | 颜色/透明度变化 |
+| Focus | 边框高亮 |
+| Modal | 淡入 + 缩放 |
+| Popover | 淡入 + 上移 |
+
+---
+
+## 10. 无障碍设计
+
+### 10.1 键盘导航
+
+- Tab：焦点移动
+- Enter/Space：激活按钮
+- Escape：关闭弹窗
+
+### 10.2 颜色对比度
+
+所有文本与背景对比度 ≥ 4.5:1
+
+### 10.3 语义化 HTML
+
+- 使用 `<button>` 而非 `<div>`
+- 表单使用 `<label>` 关联
+- SVG 图标添加 `aria-label`
+
+---
+
+## 11. 设计资源
+
+### 11.1 参考链接
 
 | 资源 | 链接 |
 |------|------|
-| 设计系统 | `docs/product-design/design-system.md` |
-| Tailwind CSS | https://tailwindcss.com |
 | Lucide Icons | https://lucide.dev |
-| Inter 字体 | https://fonts.google.com/specimen/Inter |
+| MDN CSS Docs | https://developer.mozilla.org/en-US/docs/Web/CSS |
+
+### 11.2 设计文件位置
+
+```
+docs/product-design/
+├── README.md              # 本文档
+├── design-system.md       # 设计系统规范
+└── prototypes/
+    ├── tag-manager.html   # 标签管理页面
+    ├── task-tags.html     # 任务标签组件
+    └── tag-filter.html    # 标签筛选器
+```
+
+---
+
+## 12. 下一步
+
+### 12.1 开发对接
+
+1. 将 HTML 原型转换为 Vue 3 组件
+2. 连接后端 API
+3. 实现状态管理（Pinia）
+4. 添加路由和导航
+
+### 12.2 实现优先级
+
+| 优先级 | 功能 | 说明 |
+|--------|------|------|
+| P0 | 标签 CRUD | 基础功能 |
+| P0 | 任务标签关联 | 核心交互 |
+| P1 | 标签筛选 | 查询功能 |
+| P2 | 标签统计 | 增强功能 |
 
 ---
 
@@ -421,4 +326,5 @@ const filteredTaskCount = ref(5);
 
 | 版本 | 日期 | 变更内容 | 作者 |
 |------|------|----------|------|
-| 1.0 | 2026-03-16 | 初始版本 | Claude Code |
+| 1.0 | 2026-03-16 | 初始版本（Vue 组件） | Claude Code |
+| 1.1 | 2026-03-16 | 改为 HTML 可交互原型 | Claude Code |
