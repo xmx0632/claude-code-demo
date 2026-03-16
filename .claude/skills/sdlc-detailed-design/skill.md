@@ -65,6 +65,69 @@ user-invocable: true
 - 规划迁移策略
 ```
 
+## Mermaid 图表约定
+
+详细设计阶段必须使用 Mermaid 绘制以下图表：
+
+| 图表类型 | Mermaid 关键字 | 用途 | 示例场景 |
+|----------|----------------|------|----------|
+| ER 图 | `erDiagram` | 数据库表关系 | 用户-订单关系 |
+| 类图 | `classDiagram` | 类结构关系 | Service-Mapper 关系 |
+| 时序图 | `sequenceDiagram` | API 调用时序 | 用户注册流程 |
+| 对象图 | `objectDiagram` | 对象实例关系 | 订单对象结构 |
+| 流程图 | `flowchart` | 业务流程 | 订单处理流程 |
+
+### 图表命名规范
+
+- 文件命名：`diagrams/{name}-design.mmd`
+- ER 图表名：`{实体1}{关系}{实体2}`
+
+### 图表示例
+
+**ER 图**
+```mermaid
+erDiagram
+    USER ||--o{ ORDER : places
+    USER {
+        int id PK
+        string username
+        string email
+        datetime created_at
+    }
+    ORDER {
+        int id PK
+        int user_id FK
+        string status
+        decimal amount
+    }
+```
+
+**类图**
+```mermaid
+classDiagram
+    class UserController {
+        +login(LoginDTO)
+        +register(RegisterDTO)
+        +getInfo(Long)
+    }
+    class IUserService {
+        <<interface>>
+        +login(LoginDTO)
+        +register(RegisterDTO)
+    }
+    class UserServiceImpl {
+        +login(LoginDTO)
+        +register(RegisterDTO)
+    }
+    class UserMapper {
+        +selectById(Long)
+        +insert(User)
+    }
+    UserController --> IUserService : uses
+    IUserService <|.. UserServiceImpl : implements
+    UserServiceImpl --> UserMapper : uses
+```
+
 ## 使用方法
 
 ### 开始详细设计

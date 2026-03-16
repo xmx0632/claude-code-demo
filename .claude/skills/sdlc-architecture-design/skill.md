@@ -67,6 +67,52 @@ user-invocable: true
 - 解释选择理由
 ```
 
+## Mermaid 图表约定
+
+架构设计阶段必须使用 Mermaid 绘制以下图表：
+
+| 图表类型 | Mermaid 关键字 | 用途 | 示例场景 |
+|----------|----------------|------|----------|
+| 系统架构图 | `graph` | 展示系统组件关系 | 微服务架构图 |
+| 部署架构图 | `graph` | 展示部署拓扑 | K8s 部署图 |
+| 时序图 | `sequenceDiagram` | 展示组件交互 | API 调用流程 |
+| 状态图 | `stateDiagram` | 展示状态流转 | 订单状态机 |
+| ER 图 | `erDiagram` | 展示数据关系 | 数据模型概览 |
+
+### 图表命名规范
+
+- 文件命名：`diagrams/{name}-architecture.mmd`
+- 图表标题：使用中文描述
+- 节点命名：使用中文，简洁明了
+
+### 图表示例
+
+**系统架构图**
+```mermaid
+graph TB
+    用户[用户] --> Web[Web 服务]
+    Web --> API[API 网关]
+    API --> Service1[用户服务]
+    API --> Service2[订单服务]
+    Service1 --> DB[(数据库)]
+```
+
+**时序图**
+```mermaid
+sequenceDiagram
+    participant 用户
+    participant Web
+    participant API
+    participant DB
+
+    用户->>Web: 登录请求
+    Web->>API: POST /api/auth/login
+    API->>DB: 查询用户
+    DB-->>API: 返回用户信息
+    API-->>Web: 返回 Token
+    Web-->>用户: 登录成功
+```
+
 ## 使用方法
 
 ### 开始架构设计

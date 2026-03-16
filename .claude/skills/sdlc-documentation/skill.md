@@ -96,6 +96,53 @@ user-invocable: true
 /api-doc UserController
 ```
 
+## Mermaid 图表约定
+
+文档编写阶段应使用 Mermaid 绘制说明性图表：
+
+| 图表类型 | Mermaid 关键字 | 用途 | 放置位置 |
+|----------|----------------|------|----------|
+| 流程图 | `flowchart` | 操作步骤 | 用户手册 |
+| 时序图 | `sequenceDiagram` | API 交互 | API 文档 |
+| 甘特图 | `gantt` | 部署计划 | 运维手册 |
+| 思维导图 | `mindmap` | 概念说明 | 系统概述 |
+| 饼图 | `pie` | 数据分布 | 统计报告 |
+
+### 文档中的图表规范
+
+- 图表前必须有说明文字
+- 图表后必须有示例说明
+- 复杂图表需要分步骤展示
+- 使用中文标注，提高可读性
+
+### 图表示例
+
+**用户手册中的操作流程**
+```mermaid
+flowchart LR
+    A[登录系统] --> B{账号验证}
+    B -->|成功| C[进入首页]
+    B -->|失败| D[显示错误]
+    D --> A
+    C --> E[选择功能]
+```
+
+**运维手册中的部署流程**
+```mermaid
+gantt
+    title 系统部署时间线
+    dateFormat  HH:mm
+    section 准备阶段
+    环境检查      :a1, 09:00, 30m
+    依赖安装      :a2, after a1, 30m
+    section 部署阶段
+    应用部署      :b1, after a2, 20m
+    数据库迁移    :b2, after b1, 10m
+    section 验证阶段
+    健康检查      :c1, after b2, 10m
+    冒烟测试      :c2, after c1, 20m
+```
+
 ## 文档模板
 
 ### 用户手册结构
