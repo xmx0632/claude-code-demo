@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * @since 2026-03-16
  */
 @Data
-@TableName("category")
+@TableName("t_category")
 public class Category {
 
     @TableId(type = IdType.AUTO)

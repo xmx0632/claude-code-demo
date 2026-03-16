@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * @since 2026-03-16
  */
 @Data
-@TableName("user")
+@TableName("t_user")
 public class User {
 
     @TableId(type = IdType.AUTO)

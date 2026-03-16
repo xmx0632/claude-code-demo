@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @since 2026-03-16
  */
 @Data
-@TableName("todo")
+@TableName("t_todo")
 public class Todo {
 
     @TableId(type = IdType.AUTO)
