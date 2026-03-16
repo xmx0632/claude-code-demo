@@ -27,7 +27,14 @@ user-invocable: true
 | 用户故事 | `docs/requirements/user-stories.md` | 用户故事列表 |
 | 验收标准 | `docs/requirements/acceptance-criteria.md` | 验收条件 |
 | 干系人分析 | `docs/requirements/stakeholders.md` | 干系人列表 |
-| 原型设计页面 | `docs/requirements/prototypes/` | 可交互的原型页面 |
+| 业务流程图 | `docs/requirements/diagrams/*.mmd` | Mermaid 流程图 |
+
+## 下一阶段
+
+需求分析完成后，执行产品设计：
+```
+/ui-ux-pro-max --type prototype --style modern
+```
 
 ## 执行步骤
 
@@ -141,146 +148,18 @@ mindmap
         HTTPS 传输
 ```
 
-## 原型设计约定
+## 下一阶段工作
 
-需求分析阶段必须创建可交互的原型设计页面，帮助干系人直观理解需求。
-
-### 原型设计方式
-
-| 方式 | 使用场景 | 技术栈 |
-|------|----------|--------|
-| HTML/CSS/JS | 快速原型、静态页面展示 | 原生 Web 技术 |
-| ui-ux-pro-max | 完整 UI/UX 设计、高保真原型 | 专业设计 skill |
-
-### 原型设计规范
-
-#### 文件命名规范
+需求分析完成后，使用 **ui-ux-pro-max** skill 进行产品设计：
 
 ```
-docs/requirements/prototypes/
-├── login.html                    # 登录页面
-├── register.html                 # 注册页面
-├── dashboard.html                # 仪表盘
-├── user-profile.html             # 用户资料
-└── components/                   # 共享组件
-    ├── header.html
-    └── footer.html
+/ui-ux-pro-max --type design --style modern --framework vue
 ```
 
-#### 原型页面要求
-
-1. **结构要求**
-   - 使用语义化 HTML5 标签
-   - 页面需包含完整的 DOCTYPE 和 meta 标签
-   - 使用外部 CSS/JS 文件（非内联）
-
-2. **样式要求**
-   - 使用响应式设计（支持移动端）
-   - 颜色方案与产品一致
-   - 字体大小和间距符合设计规范
-
-3. **交互要求**
-   - 表单验证（前端）
-   - 按钮点击反馈
-   - 页面跳转演示
-
-4. **注释要求**
-   - 每个页面顶部注释说明功能
-   - 复杂逻辑添加行内注释
-   - 交互效果添加说明
-
-### 原型设计方式选择
-
-#### 方式一：HTML/CSS/JavaScript
-
-**适用场景：**
-- 快速验证需求
-- 简单页面原型
-- 需要完全自定义
-
-**使用方法：**
-```
-创建原生 HTML 原型，使用内联 CSS 或独立样式表，
-必要时添加轻量级 JavaScript 交互。
-```
-
-**页面模板：**
-```html
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>用户登录 - 原型设计</title>
-    <link rel="stylesheet" href="../css/common.css">
-    <!--
-    功能说明：用户登录页面
-    交互：点击登录按钮验证表单，跳转到首页
-    -->
-</head>
-<body>
-    <header class="prototype-header">
-        <span class="badge">原型页面</span>
-    </header>
-
-    <main class="login-container">
-        <form class="login-form" onsubmit="return handleLogin(event)">
-            <h2>用户登录</h2>
-            <input type="text" placeholder="用户名" required>
-            <input type="password" placeholder="密码" required>
-            <button type="submit">登录</button>
-        </form>
-    </main>
-
-    <script>
-    function handleLogin(e) {
-        e.preventDefault();
-        // 原型演示：跳转到首页
-        window.location.href = 'dashboard.html';
-        return false;
-    }
-    </script>
-</body>
-</html>
-```
-
-#### 方式二：ui-ux-pro-max Skill
-
-**适用场景：**
-- 高保真原型
-- 完整 UI/UX 设计
-- 多页面系统
-
-**使用方法：**
-```
-/ui-ux-pro-max --type prototype --style modern --framework vue
-```
-
-**参数说明：**
-- `--type`: 原型类型（prototype/production）
-- `--style`: 设计风格（modern/minimal/brutalism/glassmorphism等）
-- `--framework`: 前端框架（vue/react/svelte/html）
-
-**生成命令示例：**
-```
-# 创建登录页面原型
-/ui-ux-pro-max create login-page --style modern
-
-# 创建完整仪表盘原型
-/ui-ux-pro-max create dashboard --framework vue --type prototype
-
-# 设计系统原型
-/ui-ux-pro-max design --color-scheme blue --typography sans
-```
-
-### 原型验收标准
-
-- [ ] 所有核心页面都有原型
-- [ ] 原型页面可正常浏览
-- [ ] 表单可提交（前端验证）
-- [ ] 响应式设计已验证
-- [ ] 页面间跳转正常
-- [ ] 代码注释完整
+产品设计将输出：
+- 设计系统文档
+- Vue 3 组件代码
+- UI 规范说明
 
 ## 使用方法
 
@@ -310,8 +189,6 @@ docs/requirements/prototypes/
 - [ ] 干系人已确认
 - [ ] 无模糊或冲突的需求
 - [ ] Mermaid 业务图表已完成
-- [ ] 原型页面已创建（HTML 或 ui-ux-pro-max）
-- [ ] 原型页面可交互浏览
 
 ## 模板位置
 
@@ -325,7 +202,12 @@ SDLC-Framework/01-requirements-analysis/templates/
 
 ## 下一步
 
-需求分析完成后，执行：
+需求分析完成后，执行产品设计：
 ```
-/architecture-design
+/ui-ux-pro-max --type design --style modern
+```
+
+产品设计完成后，执行架构设计：
+```
+/sdlc-architecture-design
 ```
