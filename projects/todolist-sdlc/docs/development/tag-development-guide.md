@@ -9,16 +9,116 @@
 
 ## 目录
 
-1. [技术架构](#1-技术架构)
-2. [数据模型](#2-数据模型)
-3. [API 接口](#3-api-接口)
-4. [核心逻辑](#4-核心逻辑)
-5. [扩展指南](#5-扩展指南)
-6. [故障排查](#6-故障排查)
+1. [快速开始](#1-快速开始)
+2. [技术架构](#2-技术架构)
+3. [数据模型](#3-数据模型)
+4. [API 接口](#4-api-接口)
+5. [核心逻辑](#5-核心逻辑)
+6. [扩展指南](#6-扩展指南)
+7. [故障排查](#7-故障排查)
 
 ---
 
-## 1. 技术架构
+## 1. 快速开始
+
+### 1.1 环境要求
+
+| 软件 | 版本要求 |
+|------|----------|
+| JDK | 17+ |
+| Maven | 3.6+ |
+| IDE | IntelliJ IDEA / Eclipse / VS Code |
+
+### 1.2 启动应用（使用 H2 数据库）
+
+项目默认配置使用 H2 内存数据库，无需额外安装数据库即可启动。
+
+#### 启动命令
+
+```bash
+# 进入项目目录
+cd backend
+
+# 方式一：使用 Maven 启动（推荐）
+mvn spring-boot:run
+
+# 方式二：使用 Maven 打包后启动
+mvn clean package
+java -jar target/todolist-sdlc-1.0.0.jar
+
+# 方式三：IDE 中直接运行
+# 运行 com.todolist.TodoListApplication 主类
+```
+
+#### 访问应用
+
+启动成功后，访问以下地址：
+
+| 功能 | 地址 |
+|------|------|
+| 应用首页 | http://localhost:8080 |
+| API 文档 (Knife4j) | http://localhost:8080/doc.html |
+| H2 控制台 | http://localhost:8080/h2-console |
+
+#### H2 数据库控制台
+
+**连接信息**：
+- JDBC URL: `jdbc:h2:mem:todolist`
+- 用户名: `sa`
+- 密码: (留空)
+
+**查看表结构**：
+```sql
+-- 查看标签表
+SELECT * FROM t_tag;
+
+-- 查看关联表
+SELECT * FROM t_todo_tag;
+
+-- 查看表结构
+SHOW TABLES;
+DESCRIBE t_tag;
+```
+
+### 1.3 使用 MySQL 数据库
+
+如需使用 MySQL 代替 H2，修改 `application.yml` 配置：
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/todolist?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: your_password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  h2:
+    enabled: false
+```
+
+启动前确保 MySQL 服务已运行且数据库已创建。
+
+### 1.4 Maven 常用命令
+
+```bash
+# 清理编译
+mvn clean
+
+# 编译项目
+mvn compile
+
+# 运行测试
+mvn test
+
+# 打包（跳过测试）
+mvn clean package -DskipTests
+
+# 查看依赖树
+mvn dependency:tree
+```
+
+---
+
+## 2. 技术架构
 
 ### 1.1 技术栈
 
@@ -403,3 +503,4 @@ logging:
 | 版本 | 日期 | 变更内容 | 作者 |
 |------|------|----------|------|
 | 1.0 | 2026-03-16 | 初始版本 | Claude Code |
+| 1.1 | 2026-03-16 | 添加 H2 数据库启动说明 | Claude Code |
