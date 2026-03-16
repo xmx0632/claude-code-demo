@@ -13,6 +13,7 @@ source "$SCRIPT_DIR/config.sh"
 
 M2D_SCRIPT="$SCRIPT_DIR/m2d.sh"
 D2M_SCRIPT="$SCRIPT_DIR/d2m.sh"
+BATCH_M2D_SCRIPT="$SCRIPT_DIR/batch-m2d.sh"
 
 # 显示使用帮助
 show_help() {
@@ -23,6 +24,7 @@ AutoDoc - 自动文档转换工具
     /auto-doc <file>                          # 自动识别文件类型并转换
     /auto-doc m2d <file.md>                   # Markdown 转 Word
     /auto-doc d2m <file.docx>                 # Word 转 Markdown
+    /auto-doc batch <目录|文件...>            # 批量转换 Markdown 为 Word
     /auto-doc help                           # 显示帮助信息
 
 示例:
@@ -36,6 +38,12 @@ AutoDoc - 自动文档转换工具
 
     # 使用自定义模板
     /auto-doc m2d docs/design.md --template=company.docx
+
+    # 批量转换
+    /auto-doc batch docs/                    # 转换目录下所有 MD
+    /auto-doc batch docs/ --recursive        # 递归转换子目录
+    /auto-doc batch *.md                     # 转换当前目录所有 MD
+    /auto-doc batch file1.md file2.md        # 转换指定多个文件
 
 工作目录:
     所有文档操作在项目目录下的固定工作目录进行
@@ -145,7 +153,7 @@ m2d() {
 # Word 转 Markdown
 d2m() {
     if [ ! -f "$D2M_SCRIPT" ]; then
-        echo "错误: 找不到转换脚本: $D2D_SCRIPT"
+        echo "错误: 找不到转换脚本: $D2M_SCRIPT"
         exit 1
     fi
 
@@ -164,6 +172,20 @@ d2m() {
     bash "$D2M_SCRIPT" "$@"
 }
 
+# 批量 Markdown 转 Word
+batch_m2d() {
+    if [ ! -f "$BATCH_M2D_SCRIPT" ]; then
+        echo "错误: 找不到批量转换脚本: $BATCH_M2D_SCRIPT"
+        exit 1
+    fi
+
+    # 初始化工作目录
+    init_workspace
+
+    # 调用 batch-m2d.sh 脚本
+    bash "$BATCH_M2D_SCRIPT" "$@"
+}
+
 # 主函数
 main() {
     if [ $# -eq 0 ]; then
@@ -180,6 +202,9 @@ main() {
             ;;
         d2m)
             d2m "$@"
+            ;;
+        batch)
+            batch_m2d "$@"
             ;;
         init)
             init_workspace

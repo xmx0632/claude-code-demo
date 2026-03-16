@@ -15,7 +15,8 @@ user-invocable: true
 
 1. **Markdown 转 Word** (`m2d`): 将 Markdown 文档转换为格式规范的 Word 文档
 2. **Word 转 Markdown** (`d2m`): 将 Word 文档转换为 Markdown 格式
-3. **Mermaid 图表支持**: 自动将 Mermaid 图表渲染为 PNG 图片并嵌入 Word 文档
+3. **批量转换** (`batch`): 批量将多个 Markdown 文件转换为 Word 文档
+4. **Mermaid 图表支持**: 自动将 Mermaid 图表渲染为 PNG 图片并嵌入 Word 文档
 
 ## 使用方法
 
@@ -88,18 +89,86 @@ user-invocable: true
 
 **输出**: 生成 `.md` 文件到 `output/文档名-时间戳/` 目录，图片提取到同目录的 `media/`
 
+### 4. 批量转换
+
+批量将多个 Markdown 文件转换为 Word 文档：
+
+```bash
+/auto-doc batch <目录|文件...> [选项]
+```
+
+#### 示例
+
+```bash
+# 转换指定目录下所有 Markdown 文件
+/auto-doc batch docs/
+
+# 递归转换子目录中的所有 Markdown 文件
+/auto-doc batch docs/ --recursive
+
+# 转换当前目录所有 Markdown 文件
+/auto-doc batch *.md
+
+# 转换指定的多个文件
+/auto-doc batch file1.md file2.md file3.md
+
+# 使用自定义模板批量转换
+/auto-doc batch docs/ --template=company.docx
+
+# 预览将要转换的文件（不实际转换）
+/auto-doc batch docs/ --dry-run
+```
+
+#### 批量转换选项
+
+| 选项 | 说明 |
+|------|------|
+| `--recursive` | 递归查找子目录中的 Markdown 文件 |
+| `--template=<文件>` | 使用指定的 Word 模板 |
+| `--dry-run` | 仅显示将要转换的文件，不执行转换 |
+
+#### 批量转换输出
+
+批量转换会显示每个文件的转换进度和结果：
+
+```
+=== 批量 Markdown 转 Word ===
+找到 3 个 Markdown 文件
+
+  [ 1] docs/architecture.md
+  [ 2] docs/api.md
+  [ 3] docs/user-guide.md
+
+开始批量转换...
+
+[1/3] 转换: docs/architecture.md
+       ✓ 转换成功
+
+[2/3] 转换: docs/api.md
+       ✓ 转换成功
+
+[3/3] 转换: docs/user-guide.md
+       ✓ 转换成功
+
+=== 转换完成 ===
+
+总计:     3 个文件
+成功:     3 个
+```
+
 ## 目录结构
 
 ```
-.claude/skills/auto-doc/
+.claude/skills/doc-convert/
 ├── input_doc/           # 输入文档目录
-├── output_doc/          # 输出文档目录
+├── output/              # 输出文档目录（工作空间）
 │   └── media/           # 提取的媒体文件
 ├── template/            # Word 模板目录
 │   └── template.docx    # 默认模板（可选）
 ├── temp/                # 临时文件目录
 ├── m2d.sh               # Markdown 转 Word 脚本
 ├── d2m.sh               # Word 转 Markdown 脚本
+├── batch-m2d.sh         # 批量 Markdown 转 Word 脚本
 ├── skill.sh             # 技能主入口脚本
 └── skill.md             # 本说明文档
 ```
@@ -295,11 +364,17 @@ Markdown 文件 + 媒体目录
 
 ### 批量处理
 
+使用内置的批量转换命令：
+
 ```bash
-# 处理整个文档目录
-for file in input_doc/*.md; do
-    /auto-doc m2d "$file"
-done
+# 转换整个文档目录
+/auto-doc batch input_doc/
+
+# 递归转换所有子目录
+/auto-doc batch docs/ --recursive
+
+# 预览将要转换的文件
+/auto-doc batch docs/ --dry-run
 ```
 
 ## 故障排除
@@ -389,10 +464,6 @@ mmdc -i test.mmd -o test.png
 ### 样式定制
 
 修改 Word 模板以匹配公司/项目样式规范。
-
-### 批量处理脚本
-
-创建脚本批量处理整个项目的文档。
 
 ## 相关资源
 
