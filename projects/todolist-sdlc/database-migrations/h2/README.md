@@ -37,13 +37,43 @@ cd h2
 ./clean.sh
 ```
 
-### 启动 H2 Console
+### 启动 H2 Console（独立运行）
+
+H2 Console 可以独立运行，无需启动 Spring Boot 应用：
 
 ```bash
 ./console.sh
 ```
 
+H2 Console 将自动启动，并在浏览器中打开。
+
+**独立模式的连接信息：**
+```
+JDBC URL: jdbc:h2:tcp://localhost:9092/todolist
+User Name: sa
+Password: (留空)
+```
+
+**注意：** 独立模式使用 TCP 服务器，避免文件锁定问题。
+
+### 启动 H2 Console（通过 Spring Boot）
+
+如果 Spring Boot 应用正在运行，也可以使用内置的 H2 Console：
+
+```bash
+# 启动应用（dev 模式）
+cd ../backend
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
 然后访问: http://localhost:8080/h2-console
+
+**应用模式的连接信息：**
+```
+JDBC URL: jdbc:h2:file:../database-migrations/h2/data/todolist
+User Name: sa
+Password: (留空)
+```
 
 ## Maven 命令
 
