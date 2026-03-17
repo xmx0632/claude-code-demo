@@ -17,7 +17,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <flyway.version>7.15.0</flyway.version>
-        <h2.version>2.1.214</h2.version>
+        <h2.version>1.4.200</h2.version>
     </properties>
 
     <dependencies>

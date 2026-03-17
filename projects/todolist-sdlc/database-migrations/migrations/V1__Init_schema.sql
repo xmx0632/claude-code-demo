@@ -7,16 +7,12 @@
 
 -- =============================================
 -- MySQL 特定配置
--- H2 会忽略这些语句
+-- 使用 MySQL 条件注释 /*!...*/ ，H2 会将其作为普通注释跳过
 -- =============================================
 
--- MySQL: 创建数据库（如果不存在）
--- H2: 自动忽略（H2 在连接时自动创建内存数据库）
-CREATE DATABASE IF NOT EXISTS todolist CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+/*! CREATE DATABASE IF NOT EXISTS todolist CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
 
--- MySQL: 使用数据库
--- H2: 自动忽略（已在连接 URL 中指定）
-USE todolist;
+/*! USE todolist */;
 
 -- =============================================
 -- 创建表（兼容 MySQL 和 H2）
