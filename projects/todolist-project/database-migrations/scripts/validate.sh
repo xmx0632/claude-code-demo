@@ -1,9 +1,7 @@
 #!/bin/bash
 # Flyway 验证脚本
 # 功能：验证迁移脚本
-# 用法：
-#   ./validate.sh         # 默认 MySQL
-#   DB=h2 ./validate.sh   # 使用 H2
+# 用法：./validate.sh
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -26,25 +24,10 @@ if ! command -v mvn &> /dev/null; then
     exit 1
 fi
 
-# 根据环境变量选择数据库
-DB_TYPE=${DB:-mysql}
-
-if [ "$DB_TYPE" = "h2" ]; then
-    echo "数据库: H2 (开发环境)"
-    PROFILE="-Ph2"
-    echo ""
-else
-    echo "数据库: MySQL (生产环境)"
-    PROFILE=""
-    echo ""
-fi
-
 # 验证
-mvn flyway:validate $PROFILE
+echo "数据库: MySQL"
+echo ""
+mvn flyway:validate
 
 echo ""
 echo "======================================"
-echo ""
-echo "提示："
-echo "  H2 开发环境: DB=h2 ./validate.sh"
-echo "  MySQL 生产环境: ./validate.sh"

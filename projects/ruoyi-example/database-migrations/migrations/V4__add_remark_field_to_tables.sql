@@ -3,7 +3,8 @@
 -- ========================================
 -- 演示如何在同一个迁移中修改多个表
 
-USE ruoyi_example;
+-- MySQL 特定：选择数据库（H2 会忽略）
+/*! USE ruoyi_example */;
 
 -- 用户表添加备注
 ALTER TABLE sys_user

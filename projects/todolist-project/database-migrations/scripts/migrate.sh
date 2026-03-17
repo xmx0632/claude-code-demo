@@ -1,9 +1,7 @@
 #!/bin/bash
 # Flyway 迁移脚本
 # 功能：执行数据库迁移
-# 用法：
-#   ./migrate.sh         # 默认 MySQL
-#   DB=h2 ./migrate.sh   # 使用 H2
+# 用法：./migrate.sh
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -26,27 +24,12 @@ if ! command -v mvn &> /dev/null; then
     exit 1
 fi
 
-# 根据环境变量选择数据库
-DB_TYPE=${DB:-mysql}
-
-if [ "$DB_TYPE" = "h2" ]; then
-    echo "数据库: H2 (开发环境)"
-    PROFILE="-Ph2"
-    echo ""
-else
-    echo "数据库: MySQL (生产环境)"
-    PROFILE=""
-    echo ""
-fi
-
 # 执行迁移
-mvn flyway:migrate $PROFILE
+echo "数据库: MySQL"
+echo ""
+mvn flyway:migrate
 
 echo ""
 echo "======================================"
 echo "迁移完成"
 echo "======================================"
-echo ""
-echo "提示："
-echo "  H2 开发环境: DB=h2 ./migrate.sh"
-echo "  MySQL 生产环境: ./migrate.sh"

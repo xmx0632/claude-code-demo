@@ -10,6 +10,7 @@
 -- status tracking, and soft delete support.
 -- =====================================================
 
+-- MySQL 特定：选择数据库（H2 会忽略）
 USE `todolist`;
 
 -- Drop table if exists (for rollback purposes)

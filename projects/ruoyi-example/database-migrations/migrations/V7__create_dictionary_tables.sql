@@ -3,7 +3,8 @@
 -- ========================================
 -- 演示如何创建数据字典系统
 
-USE ruoyi_example;
+-- MySQL 特定：选择数据库（H2 会忽略）
+/*! USE ruoyi_example */;
 
 -- ----------------------------
 -- 字典类型表
@@ -17,8 +18,8 @@ CREATE TABLE IF NOT EXISTS sys_dict_type (
     create_time  DATETIME        DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time  DATETIME        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (dict_id),
-    UNIQUE KEY uk_dict_type (dict_type)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COMMENT='字典类型表';
+    UNIQUE KEY uk_sys_dict_type (dict_type)
+);
 
 -- ----------------------------
 -- 字典数据表
@@ -37,8 +38,8 @@ CREATE TABLE IF NOT EXISTS sys_dict_data (
     create_time  DATETIME        DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time  DATETIME        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (dict_code),
-    KEY idx_dict_type (dict_type)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COMMENT='字典数据表';
+    KEY idx_sys_dict_data_dict_type (dict_type)
+);
 
 -- ----------------------------
 -- 初始化字典类型数据

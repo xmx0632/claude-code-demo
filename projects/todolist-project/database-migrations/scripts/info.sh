@@ -1,9 +1,7 @@
 #!/bin/bash
 # Flyway 信息查看脚本
 # 功能：查看数据库迁移状态
-# 用法：
-#   ./info.sh            # 默认 MySQL
-#   DB=h2 ./info.sh      # 使用 H2
+# 用法：./info.sh
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -26,25 +24,10 @@ if ! command -v mvn &> /dev/null; then
     exit 1
 fi
 
-# 根据环境变量选择数据库
-DB_TYPE=${DB:-mysql}
-
-if [ "$DB_TYPE" = "h2" ]; then
-    echo "数据库: H2 (开发环境)"
-    PROFILE="-Ph2"
-    echo ""
-else
-    echo "数据库: MySQL (生产环境)"
-    PROFILE=""
-    echo ""
-fi
-
 # 查看状态
-mvn flyway:info $PROFILE
+echo "数据库: MySQL"
+echo ""
+mvn flyway:info
 
 echo ""
 echo "======================================"
-echo ""
-echo "提示："
-echo "  H2 开发环境: DB=h2 ./info.sh"
-echo "  MySQL 生产环境: ./info.sh"
