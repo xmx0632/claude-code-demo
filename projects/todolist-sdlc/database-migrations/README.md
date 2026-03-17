@@ -99,7 +99,27 @@ mvn flyway:migrate -Ph2
 mvn flyway:validate -Ph2
 ```
 
-**方式二：使用 H2 辅助脚本**
+**方式二：使用辅助脚本**
+
+```bash
+cd database-migrations
+
+# MySQL（默认）
+./scripts/info.sh
+./scripts/migrate.sh
+./scripts/validate.sh
+./scripts/clean.sh      # 清理并重建数据库
+./scripts/repair.sh     # 修复 Schema History
+
+# H2（开发环境）
+DB=h2 ./scripts/info.sh
+DB=h2 ./scripts/migrate.sh
+DB=h2 ./scripts/validate.sh
+DB=h2 ./scripts/clean.sh
+DB=h2 ./scripts/repair.sh
+```
+
+**方式三：使用 H2 专用脚本**
 
 ```bash
 cd database-migrations/h2
