@@ -12,10 +12,9 @@ spring:
     password: root
 
   flyway:
-    enabled: true
+    enabled: false  # 默认禁用，仅在 dev 模式启用
     locations: classpath:db/migration,filesystem:database-migrations/migrations
     baseline-on-migrate: true
-    # 数据库配置由具体 profile 提供（dev/prod）
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml

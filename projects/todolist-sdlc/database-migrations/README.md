@@ -29,6 +29,13 @@ database-migrations/
 4. **可移植性**：可以在不同环境独立部署
 5. **多数据库支持**：支持 MySQL（生产）和 H2（开发）
 
+## 迁移策略
+
+- **开发环境 (dev)**: 应用启动时自动执行 Flyway 迁移
+- **其他环境 (prod/test)**: 禁用自动迁移，需人工使用脚本操作
+
+这样可以避免生产环境的意外数据库操作。
+
 ## 前置要求
 
 ### Java 版本
@@ -171,31 +178,50 @@ V6__create_notification_table.sql
 
 ## 与后端集成
 
-后端应用启动时会自动执行迁移。
+### 迁移策略
 
-### 生产环境（application.yml）
+- **dev 模式**: 应用启动时自动执行 Flyway 迁移
+- **prod 模式**: 禁用自动迁移，需人工操作
+
+### dev 模式配置（application-dev.yml）
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:h2:file:../database-migrations/h2/data/todolist;MODE=MySQL
+  flyway:
+    enabled: true  # 启用自动迁移
+    locations: filesystem:../database-migrations/migrations
+```
+
+### 生产环境配置（application.yml）
 
 ```yaml
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/todolist
   flyway:
-    enabled: true
-    locations: filesystem:database-migrations/migrations
-    baseline-on-migrate: true
+    enabled: false  # 禁用自动迁移，需人工操作
 ```
 
-### 开发环境（application-dev.yml）
+### 生产环境迁移操作
 
-```yaml
-spring:
-  datasource:
-    url: jdbc:h2:mem:todolist;DB_CLOSE_DELAY=-1;MODE=MySQL
-  flyway:
-    enabled: true
-    locations: filesystem:../database-migrations/migrations
-    baseline-on-migrate: true
+生产环境的数据库迁移需要使用 `database-migrations` 目录中的脚本：
+
+```bash
+cd database-migrations
+
+# 查看状态
+./scripts/info.sh
+
+# 执行迁移
+./scripts/migrate.sh
+
+# 验证
+./scripts/validate.sh
 ```
+
+这样可以确保生产环境的数据库变更由 DBA 完全控制。
 
 ## Maven Profile 配置
 
