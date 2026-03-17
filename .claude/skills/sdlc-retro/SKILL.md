@@ -1,14 +1,8 @@
 ---
 name: sdlc-retro
-description: |
-  周度工程复盘。分析提交历史、工作模式和代码质量指标，支持团队感知：
-  识别当前用户，分析每个贡献者的优点和成长空间。
-allowed-tools:
-  - Bash
-  - Read
-  - Write
-  - Glob
-  - AskUserQuestion
+description: 周度工程复盘。分析提交历史、工作模式和代码质量指标，支持团队感知，识别当前用户，分析每个贡献者的优点和成长空间。
+allowed-tools: ["Bash", "Read", "Write", "Glob", "AskUserQuestion"]
+user-invocable: true
 ---
 
 # /sdlc-retro — 周度工程复盘

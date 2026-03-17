@@ -1,17 +1,8 @@
 ---
-name: browse
-version: 1.1.0
-description: |
-  Fast headless browser for QA testing and site dogfooding. Navigate any URL, interact with
-  elements, verify page state, diff before/after actions, take annotated screenshots, check
-  responsive layouts, test forms and uploads, handle dialogs, and assert element states.
-  ~100ms per command. Use when you need to test a feature, verify a deployment, dogfood a
-  user flow, or file a bug with evidence.
-allowed-tools:
-  - Bash
-  - Read
-  - AskUserQuestion
-
+name: sdlc-qa-browse
+description: 快速无头浏览器，用于 QA 测试和站点验证。导航任意 URL，与元素交互，验证页面状态，对比操作前后差异，截取带注释的截图，检查响应式布局，测试表单和上传。
+allowed-tools: ["Bash", "Read", "AskUserQuestion"]
+user-invocable: true
 ---
 <!-- AUTO-GENERATED from SKILL.md.tmpl — do not edit directly -->
 <!-- Regenerate: bun run gen:skill-docs -->

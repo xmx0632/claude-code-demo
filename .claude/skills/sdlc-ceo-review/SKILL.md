@@ -1,15 +1,8 @@
 ---
 name: sdlc-ceo-review
-description: |
-  CEO/创始人视角的计划审视。重新思考问题，找出10星产品，挑战前提假设，
-  在创造更好产品时扩展范围。四种模式：范围扩展(大胆梦想)、选择性扩展(保持范围+精选扩展)、
-  保持范围(最大严谨性)、范围缩减(精简到核心)。
-allowed-tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
-  - AskUserQuestion
+description: CEO/创始人视角的计划审视。重新思考问题，找出10星产品，挑战前提假设，在创造更好产品时扩展范围。四种模式：范围扩展、选择性扩展、保持范围、范围缩减。
+allowed-tools: ["Read", "Grep", "Glob", "Bash", "AskUserQuestion"]
+user-invocable: true
 ---
 
 # CEO 计划审视模式
