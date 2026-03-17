@@ -3,7 +3,8 @@
 -- ========================================
 -- 演示如何创建新表并建立关联
 
-USE ruoyi_example;
+-- MySQL 特定：选择数据库（H2 会忽略）
+/*! USE ruoyi_example */;
 
 -- ----------------------------
 -- 操作日志表
@@ -25,10 +26,10 @@ CREATE TABLE IF NOT EXISTS sys_oper_log (
     status         INT             DEFAULT 0 COMMENT '操作状态（0正常 1异常）',
     error_msg      VARCHAR(2000)   DEFAULT '' COMMENT '错误消息',
     oper_time      DATETIME        DEFAULT NULL COMMENT '操作时间',
-    cost_time      BIGINT(20)      DEFAULT 0 COMMENT '消耗时间(毫秒)',
+    cost_time      BIGINT          DEFAULT 0 COMMENT '消耗时间(毫秒)',
     PRIMARY KEY (oper_id),
-    KEY idx_oper_time (oper_time),
-    KEY idx_oper_name (oper_name),
-    KEY idx_business_type (business_type),
-    KEY idx_status (status)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COMMENT='操作日志记录';
+    KEY idx_sys_oper_log_oper_time (oper_time),
+    KEY idx_sys_oper_log_oper_name (oper_name),
+    KEY idx_sys_oper_log_business_type (business_type),
+    KEY idx_sys_oper_log_status (status)
+);

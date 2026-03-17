@@ -1,0 +1,10 @@
+# H2 数据库文件（仅忽略 db 文件，保留脚本）
+h2/data/*.db
+*.trace.db
+*.lock.db
+
+# Flyway 生成的文件
+.flyway/
+
+# 本地配置文件
+flyway.local.conf

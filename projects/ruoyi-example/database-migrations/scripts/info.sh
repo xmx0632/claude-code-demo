@@ -1,42 +1,50 @@
 #!/bin/bash
+# Flyway 信息查看脚本
+# 功能：查看数据库迁移状态
+# 用法：
+#   ./info.sh            # 默认 MySQL
+#   DB=h2 ./info.sh      # 使用 H2
 
-# 查看迁移状态
-#
-# 使用方法:
-#   ./scripts/info.sh
-
-set -e
-
-# 获取脚本所在目录
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 
-# 颜色输出
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
+cd "$PROJECT_DIR"
 
-log_info() {
-    echo -e "${GREEN}[INFO]${NC} $1"
-}
+echo "======================================"
+echo "Flyway 迁移状态"
+echo "======================================"
+echo ""
 
-# 检查 Flyway
-if ! command -v flyway &> /dev/null; then
-    echo "错误: Flyway 未安装"
-    echo "请访问 https://flywaydb.org/download 下载安装"
+# 检查 Maven 是否安装
+if ! command -v mvn &> /dev/null; then
+    echo "错误: 未找到 Maven 命令"
+    echo ""
+    echo "安装方法："
+    echo "  macOS: brew install maven"
+    echo "  Linux: sudo apt install maven"
+    echo ""
     exit 1
 fi
 
-cd "$PROJECT_DIR"
+# 根据环境变量选择数据库
+DB_TYPE=${DB:-mysql}
 
-# 确定配置文件
-if [ -f "flyway.local.conf" ]; then
-    CONFIG_FILE="flyway.local.conf"
+if [ "$DB_TYPE" = "h2" ]; then
+    echo "数据库: H2 (开发环境)"
+    PROFILE="-Ph2"
+    echo ""
 else
-    CONFIG_FILE="flyway.conf"
+    echo "数据库: MySQL (生产环境)"
+    PROFILE=""
+    echo ""
 fi
 
-log_info "数据库迁移状态"
-echo "=========================================="
+# 查看状态
+mvn flyway:info $PROFILE
 
-flyway -configFiles="$CONFIG_FILE" info
+echo ""
+echo "======================================"
+echo ""
+echo "提示："
+echo "  H2 开发环境: DB=h2 ./info.sh"
+echo "  MySQL 生产环境: ./info.sh"
