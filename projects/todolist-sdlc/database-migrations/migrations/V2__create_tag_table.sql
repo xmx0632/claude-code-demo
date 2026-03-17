@@ -1,4 +1,4 @@
--- V1.0.1__create_tag_table.sql
+-- V2__create_tag_table.sql
 -- 任务标签表
 -- 功能：为用户提供任务标签管理功能，支持按标签对任务进行分类和筛选
 -- 作者：Claude Code

@@ -1,4 +1,4 @@
--- V1.0.2__create_todo_tag_table.sql
+-- V3__create_todo_tag_table.sql
 -- 任务标签关联表（多对多）
 -- 功能：实现任务与标签的多对多关联关系
 -- 作者：Claude Code
