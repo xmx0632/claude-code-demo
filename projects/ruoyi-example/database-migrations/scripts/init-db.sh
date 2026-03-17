@@ -4,6 +4,7 @@
 #
 # 使用方法:
 #   ./scripts/init-db.sh
+#   DB=h2 ./scripts/init-db.sh  # 使用 H2 数据库
 
 set -e
 
@@ -29,41 +30,59 @@ log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# 读取配置
-read_config() {
-    if [ -f "$PROJECT_DIR/flyway.local.conf" ]; then
-        CONFIG_FILE="$PROJECT_DIR/flyway.local.conf"
-    else
-        CONFIG_FILE="$PROJECT_DIR/flyway.conf"
-    fi
-
-    # 解析配置文件获取数据库信息
-    DB_URL=$(grep "^flyway.url=" "$CONFIG_FILE" | cut -d'=' -f2-)
-    DB_USER=$(grep "^flyway.user=" "$CONFIG_FILE" | cut -d'=' -f2)
-    DB_NAME=$(echo "$DB_URL" | grep -oP 'dbname=\K[^?]+' || echo "$DB_URL" | grep -oP '/\K[^?]+' | tail -n1)
-
-    if [ -z "$DB_NAME" ]; then
-        log_error "无法从配置文件解析数据库名称"
-        exit 1
-    fi
+# 创建 H2 数据库
+create_h2_database() {
+    log_info "H2 数据库将自动创建，无需手动初始化"
+    log_info "运行迁移: ./h2/migrate.sh"
 }
 
-# 创建数据库
-create_database() {
-    log_info "创建数据库: $DB_NAME"
+# 创建 MySQL 数据库
+create_mysql_database() {
+    # 从 pom.xml 读取配置
+    POM_FILE="$PROJECT_DIR/pom.xml"
 
-    # 提取主机和端口
-    DB_HOST=$(echo "$DB_URL" | grep -oP '//([^:]+)' | cut -d'/' -f3 || echo "localhost")
-    DB_PORT=$(echo "$DB_URL" | grep -oP ':\d+' | cut -d':' -f2 || echo "3306")
+    if [ ! -f "$POM_FILE" ]; then
+        log_error "未找到 pom.xml 配置文件"
+        exit 1
+    fi
 
+    # 提取配置 (使用 awk 处理 XML)
+    DB_URL=$(awk -F'[<>]' '/<url>/ {gsub(/&amp;/, "&"); print $3; exit}' "$POM_FILE")
+    DB_USER=$(awk -F'[<>]' '/<user>/ {print $3; exit}' "$POM_FILE")
+    DB_PASSWORD=$(awk -F'[<>]' '/<password>/ {print $3; exit}' "$POM_FILE")
+    DB_SCHEMA=$(awk -F'[<>]' '/<schemas>/ {print $3; exit}' "$POM_FILE")
+
+    if [ -z "$DB_SCHEMA" ]; then
+        log_error "无法从 pom.xml 解析数据库 schema"
+        exit 1
+    fi
+
+    # 解析主机和端口
+    # 移除 jdbc:mysql: 前缀
+    DB_URL_CLEAN="${DB_URL#jdbc:mysql:}"
+    # 提取主机 (格式: //host:port 或 //host)
+    DB_HOST=$(echo "$DB_URL_CLEAN" | sed 's|^//\([^:/]*\).*|\1|')
+    # 提取端口
+    DB_PORT=$(echo "$DB_URL_CLEAN" | sed 's|^//[^:]*:\([0-9]*\).*|\1|')
+
+    # 如果没有端口，使用默认值
+    if [ -z "$DB_PORT" ] || [ "$DB_PORT" = "$DB_URL_CLEAN" ]; then
+        DB_PORT="3306"
+    fi
+
+    log_info "创建数据库: $DB_SCHEMA"
     log_info "主机: $DB_HOST"
     log_info "端口: $DB_PORT"
 
     # 创建数据库 SQL
-    SQL="CREATE DATABASE IF NOT EXISTS \`$DB_NAME\` DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+    SQL="CREATE DATABASE IF NOT EXISTS \`$DB_SCHEMA\` DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
     # 执行创建
-    mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p -e "$SQL"
+    if [ -n "$DB_PASSWORD" ]; then
+        mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASSWORD" -e "$SQL"
+    else
+        mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p -e "$SQL"
+    fi
 
     if [ $? -eq 0 ]; then
         log_info "数据库创建成功！"
@@ -78,11 +97,18 @@ main() {
     log_info "初始化数据库"
     echo "=========================================="
 
-    read_config
-    create_database
+    if [ "$DB" = "h2" ]; then
+        create_h2_database
+    else
+        create_mysql_database
+    fi
 
     echo ""
-    log_info "执行迁移: ./scripts/migrate.sh"
+    if [ "$DB" = "h2" ]; then
+        log_info "执行迁移: ./h2/migrate.sh"
+    else
+        log_info "执行迁移: ./scripts/migrate.sh"
+    fi
 }
 
 # 执行主流程
