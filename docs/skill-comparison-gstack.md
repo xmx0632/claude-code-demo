@@ -117,19 +117,74 @@ sync main → run tests → resolve reviews → push → open PR
 
 ---
 
-## 四、改进计划（补充）
+## 四、Roles/Subagents 对比分析
 
-### 4.1 高优先级 - 学习 gstack 创新
+### 4.1 gstack vs SDLC-Framework 角色对比
 
-| 序号 | 改进项 | 说明 | 工作量 |
-|------|--------|------|--------|
-| G1 | 添加认知模式定义 | 在每个 skill 中定义"用什么脑子思考" | 2h |
-| G2 | 新增 `/sdlc-ceo-review` | 创始人视角的需求审视 | 3h |
-| G3 | 新增 `/sdlc-qa-browse` | 浏览器自动化测试（需 Playwright） | 4h |
-| G4 | 新增 `/sdlc-retro` | 工程复盘 skill | 2h |
-| G5 | 增强 `/sdlc-design-review` | 添加 AI Slop 检测 | 3h |
+| gstack Skill | 角色 | SDLC-Framework Role | 职责对比 |
+|--------------|------|---------------------|----------|
+| `/plan-ceo-review` | CEO/创始人 | ❌ 无对应 | gstack 有独立的产品战略审视角色 |
+| `/plan-eng-review` | 工程经理 | ✅ Architect | 类似，但 SDLC 更偏技术架构 |
+| `/plan-design-review` | 产品设计师 | ⚠️ Product Manager | SDLC PM 偏需求，非设计审计 |
+| `/review` | 偏执型工程师 | ⚠️ QA Engineer | SDLC QA 偏测试，非代码审查 |
+| `/ship` | 发布工程师 | ❌ 无对应 | SDLC 有部署阶段，但无自动化角色 |
+| `/browse` | QA 工程师 | ⚠️ QA Engineer | SDLC QA 缺少浏览器能力 |
+| `/qa` | QA + 修复 | ⚠️ QA Engineer | gstack 更强调"测+修"闭环 |
+| `/qa-only` | QA 报告员 | ⚠️ QA Engineer | gstack 有"只报告不修复"模式 |
+| `/qa-design-review` | 设计师+前端 | ❌ 无对应 | 缺少设计+QA 结合的角色 |
+| `/setup-browser-cookies` | 会话管理器 | ❌ 无对应 | 浏览器会话管理 |
+| `/retro` | 工程经理 | ❌ 无对应 | 缺少工程复盘角色 |
+| `/document-release` | 技术文档工程师 | ⚠️ Backend Developer | SDLC 有文档阶段，但非独立角色 |
 
-### 4.2 中优先级 - 工作流自动化
+### 4.2 SDLC-Framework Roles 定义
+
+| Role | 核心职责 | 工具配置 |
+|------|----------|----------|
+| **Product Manager** | 需求收集、分析、定义 | Read, Write, Edit, Bash |
+| **Architect** | 架构设计、技术选型、ADR | Read, Write, Edit, Glob, Grep, Bash |
+| **Backend Developer** | API 开发、业务逻辑、测试 | Read, Write, Edit, Glob, Grep, Bash |
+| **QA Engineer** | 测试策略、用例设计、质量保证 | Read, Write, Edit, Grep, Bash |
+
+### 4.3 功能重复分析
+
+#### ✅ 无重复（可直接复制）
+| gstack Skill | 说明 |
+|--------------|------|
+| `/plan-ceo-review` | CEO 视角审视，SDLC 无此角色 |
+| `/retro` | 工程复盘，SDLC 无此功能 |
+| `/browse` | 浏览器测试，SDLC QA 无此能力 |
+| `/setup-browser-cookies` | 会话管理，完全缺失 |
+
+#### ⚠️ 部分重叠（需要整合）
+| gstack Skill | SDLC 对应 | 整合建议 |
+|--------------|-----------|----------|
+| `/plan-eng-review` | Architect | 增强 Architect 的工程审查能力 |
+| `/plan-design-review` | Product Manager | 新增设计审计子功能 |
+| `/review` | sdlc-code-review skill | 合并偏执审查 checklist |
+| `/qa`, `/qa-only` | QA Engineer + sdlc-testing | 增强自动化测试流程 |
+| `/ship` | sdlc-deployment skill | 增加自动化发布流程 |
+| `/document-release` | sdlc-documentation skill | 类似，可合并 |
+
+#### ❌ 不需要复制
+| gstack Skill | 原因 |
+|--------------|------|
+| `/qa-design-review` | 与 ui-ux-pro-max 功能重叠 |
+
+---
+
+## 五、改进计划（补充）
+
+### 5.1 高优先级 - 学习 gstack 创新
+
+| 序号 | 改进项 | 说明 | 工作量 | 状态 |
+|------|--------|------|--------|------|
+| G1 | 添加认知模式定义 | 在每个 skill 中定义"用什么脑子思考" | 2h | 待开始 |
+| G2 | 新增 `/sdlc-ceo-review` | 创始人视角的需求审视 | 3h | 待开始 |
+| G3 | 新增 `/sdlc-qa-browse` | 浏览器自动化测试（需 Playwright） | 4h | ✅ 已完成 |
+| G4 | 新增 `/sdlc-retro` | 工程复盘 skill | 2h | 待开始 |
+| G5 | 增强 `/sdlc-design-review` | 添加 AI Slop 检测 | 3h | 待开始 |
+
+### 5.2 中优先级 - 工作流自动化
 
 | 序号 | 改进项 | 说明 | 工作量 |
 |------|--------|------|--------|
@@ -137,7 +192,7 @@ sync main → run tests → resolve reviews → push → open PR
 | G7 | 增强 `/sdlc-qa` | Diff-aware 测试 + 自动修复 | 4h |
 | G8 | 添加外部服务集成 | 支持 Greptile/CodeRabbit 等 | 4h |
 
-### 4.3 低优先级 - 体验优化
+### 5.3 低优先级 - 体验优化
 
 | 序号 | 改进项 | 说明 | 工作量 |
 |------|--------|------|--------|
@@ -146,9 +201,9 @@ sync main → run tests → resolve reviews → push → open PR
 
 ---
 
-## 五、建议新增的 Skills
+## 六、建议新增的 Skills
 
-### 5.1 `/sdlc-ceo-review` - 创始人视角审视
+### 6.1 `/sdlc-ceo-review` - 创始人视角审视
 
 ```markdown
 ---
@@ -179,7 +234,7 @@ description: 以创始人/CEO视角重新审视需求，找出10星产品
 - 下一步行动建议
 ```
 
-### 5.2 `/sdlc-retro` - 工程复盘
+### 6.2 `/sdlc-retro` - 工程复盘
 
 ```markdown
 ---
@@ -205,7 +260,7 @@ description: 分析代码提交历史，生成工程复盘报告
 - 下周期建议
 ```
 
-### 5.3 `/sdlc-qa-browse` - 浏览器自动化测试
+### 6.3 `/sdlc-qa-browse` - 浏览器自动化测试 ✅ 已完成
 
 ```markdown
 ---
@@ -239,14 +294,14 @@ allowed-tools: ["Read", "Write", "Edit", "Bash", "mcp__plugin_playwright_*"]
 
 ---
 
-## 六、实施优先级总表
+## 七、实施优先级总表
 
 | 优先级 | 来源 | 改进项 | 工作量 |
 |--------|------|--------|--------|
 | **P0** | gstack | G1: 添加认知模式定义 | 2h |
 | **P0** | gstack | G2: 新增 `/sdlc-ceo-review` | 3h |
 | **P0** | SDLC | 1-4: 结构标准化 | 5h |
-| **P1** | gstack | G3: 新增 `/sdlc-qa-browse` | 4h |
+| **P1** | gstack | G3: 新增 `/sdlc-qa-browse` | 4h | ✅ 已完成 |
 | **P1** | gstack | G4: 新增 `/sdlc-retro` | 2h |
 | **P1** | SDLC | 5-7: 功能补充 | 6h |
 | **P2** | gstack | G5: 增强 AI Slop 检测 | 3h |
@@ -257,7 +312,7 @@ allowed-tools: ["Read", "Write", "Edit", "Bash", "mcp__plugin_playwright_*"]
 
 ---
 
-## 七、总结
+## 八、总结
 
 ### gstack 的核心启示
 
@@ -268,10 +323,10 @@ allowed-tools: ["Read", "Write", "Edit", "Bash", "mcp__plugin_playwright_*"]
 
 ### 我们的差距
 
-| 差距类型 | 说明 | 优先级 |
-|----------|------|--------|
-| **浏览器测试** | 完全缺失 | P0 |
-| **CEO 视角** | 缺少产品思维审视 | P0 |
+| 差距类型 | 说明 | 优先级 | 状态 |
+|----------|------|--------|------|
+| **浏览器测试** | ✅ 已完成 | P0 | sdlc-qa-browse |
+| **CEO 视角** | 缺少产品思维审视 | P0 | 待开发 |
 | **认知模式** | skill 描述缺少角色定义 | P0 |
 | **工程复盘** | 缺少 retro 功能 | P1 |
 | **AI Slop 检测** | 设计审计缺少此项 | P2 |
