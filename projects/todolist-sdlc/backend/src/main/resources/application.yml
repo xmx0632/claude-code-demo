@@ -7,9 +7,10 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/todolist?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai
+    # MySQL 配置（与 database-migrations/pom.xml 保持一致）
+    url: jdbc:mysql://127.0.0.1:13306/todolist?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&rewriteBatchedStatements=true&useSSL=false&serverTimezone=GMT%2B8
     username: root
-    password: root
+    password: root@P@SSw0Rd
 
   flyway:
     enabled: false  # 默认禁用，仅在 dev 模式启用
