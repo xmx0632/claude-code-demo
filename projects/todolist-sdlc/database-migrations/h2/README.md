@@ -1,153 +1,154 @@
 # H2 开发数据库
 
-此目录用于存储 H2 开发数据库的持久化文件。
+H2 数据库管理目录，提供本地开发环境的数据持久化。
 
 ## 目录结构
 
 ```
 h2/
-├── todolist.mv.db    # H2 数据库主文件
-└── todolist.trace.db # H2 追踪文件（调试时生成）
+├── data/                    # 数据库文件目录（本地生成，git 忽略）
+│   ├── todolist.mv.db      # H2 数据库主文件
+│   └── todolist.trace.db   # H2 追踪文件（调试时生成）
+├── clean.sh                # 清理数据库脚本
+├── console.sh              # 启动 H2 Console
+├── info.sh                 # 查看数据库状态
+├── migrate.sh              # 执行迁移脚本
+└── README.md               # 本文档
 ```
 
-## 使用方法
+## 快速开始
 
-### 1. 使用 Maven 管理 H2 数据库
+### 初始化数据库
+
+```bash
+cd h2
+./migrate.sh
+```
+
+### 查看状态
+
+```bash
+./info.sh
+```
+
+### 清理数据库
+
+```bash
+./clean.sh
+```
+
+### 启动 H2 Console
+
+```bash
+./console.sh
+```
+
+然后访问: http://localhost:8080/h2-console
+
+## Maven 命令
+
+也可以直接使用 Maven（从项目根目录）：
 
 ```bash
 cd database-migrations
 
-# 初始化/迁移 H2 数据库
+# 迁移
 mvn flyway:migrate -Ph2
 
-# 查看迁移状态
+# 查看状态
 mvn flyway:info -Ph2
 
-# 验证脚本
+# 验证
 mvn flyway:validate -Ph2
 
-# 清空数据库
+# 清空
 mvn flyway:clean -Ph2
 ```
 
-### 2. 使用 H2 Console
-
-启动后端应用后，访问 H2 Console：
+## H2 Console 连接信息
 
 ```
-URL: http://localhost:8080/h2-console
-```
-
-连接信息：
-- **JDBC URL**: `jdbc:h2:file:./database-migrations/h2/todolist`
-- **User Name**: `sa`
-- **Password**: (留空)
-
-### 3. 直接使用 H2 CLI
-
-```bash
-# 进入 H2 目录
-cd database-migrations/h2
-
-# 使用 java -jar 运行 H2（需要 H2 jar 包）
-java -cp ~/.m2/repository/com/h2database/h2/1.4.200/h2-1.4.200.jar org.h2.tools.Console
+JDBC URL: jdbc:h2:file:./database-migrations/h2/data/todolist
+User Name: sa
+Password: (留空)
 ```
 
 ## 数据库文件说明
 
-### todolist.mv.db
+### data/todolist.mv.db
 - H2 数据库主文件
 - 包含所有表结构和数据
 - 持久化到本地磁盘
 
-### todolist.trace.db
+### data/todolist.trace.db
 - H2 追踪文件（仅调试时生成）
 - 记录 SQL 执行日志
 - 可以安全删除
 
-## 清理数据库
+## 开发工作流
 
-### 完全重置
+### 典型开发流程
 
 ```bash
-cd database-migrations
+# 1. 清理旧数据
+cd h2 && ./clean.sh
 
-# 方法 1: 使用 Flyway clean
-mvn flyway:clean -Ph2
+# 2. 执行迁移
+./migrate.sh
 
-# 方法 2: 手动删除文件
-rm -rf h2/*.db
+# 3. 启动应用测试
+cd ../../backend
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
 
-# 方法 3: 重新迁移
-mvn flyway:clean -Ph2 && mvn flyway:migrate -Ph2
+# 4. 查看数据
+# 使用 H2 Console 或直接查看 data/ 目录
 ```
 
-### 仅重置数据（保留表结构）
+### 调试模式
 
-使用 H2 Console 或 Flyway 迁移到版本 0 再迁移回来。
-
-## 调试技巧
-
-### 启用 SQL 日志
-
-在 `application-dev.yml` 中添加：
+在 `application-dev.yml` 中启用 SQL 日志：
 
 ```yaml
 logging:
   level:
+    com.todolist: debug
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 ```
 
-### 查看 Flyway 历史表
-
-```sql
-SELECT * FROM flyway_schema_history ORDER BY installed_rank;
-```
-
-### 导出数据
-
-```bash
-# 使用 H2 Script 工具
-java -cp ~/.m2/repository/com/h2database/h2/1.4.200/h2-1.4.200.jar \
-     org.h2.tools.Script -url jdbc:h2:file:./h2/todolist -user sa \
-     -script backup.sql
-```
-
-## 注意事项
-
-1. **不要提交到 Git**：`h2/` 目录已在 `.gitignore` 中
-2. **数据隔离**：每个开发者拥有独立的 H2 数据库
-3. **定期清理**：开发完成后建议清理数据库文件
-4. **兼容性**：H2 运行在 MySQL 模式，语法与 MySQL 基本兼容
-
-## 故障排查
+## 常见问题
 
 ### 数据库锁定
 
-如果遇到数据库锁定错误：
-
 ```bash
-# 检查是否有进程占用
-lsof | grep todolist.mv.db
-
-# 强制删除锁文件（谨慎使用）
-rm -f h2/todolist.lock.db
+# 删除锁文件
+rm -f h2/data/*.lock.db
 ```
 
 ### 迁移失败
 
 ```bash
-# 查看详细错误
-mvn flyway:migrate -Ph2 -X
-
-# 重新开始
-mvn flyway:clean -Ph2
-mvn flyway:migrate -Ph2
+# 完全重置
+cd h2 && ./clean.sh && ./migrate.sh
 ```
+
+### 查看表结构
+
+使用 H2 Console 或执行：
+
+```sql
+SHOW TABLES;
+DESCRIBE t_user;
+```
+
+## 注意事项
+
+1. **本地文件**：`data/` 目录在 `.gitignore` 中，不会提交到 git
+2. **数据隔离**：每个开发者拥有独立的 H2 数据库
+3. **定期清理**：开发完成后建议运行 `./clean.sh` 清理数据
+4. **兼容性**：H2 运行在 MySQL 模式，与生产环境 MySQL 语法兼容
 
 ## 相关链接
 
 - [H2 数据库文档](https://www.h2database.com/html/main.html)
-- [H2 MySQL 兼容模式](https://www.h2database.com/html/features.html#compatibility)
 - [Flyway 文档](https://flywaydb.org/documentation/)
+- [Spring Boot H2 配置](https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto.data-initialization.using-database-tools)

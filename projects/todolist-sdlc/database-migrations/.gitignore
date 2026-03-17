@@ -1,5 +1,5 @@
 # H2 数据库文件（仅忽略 db 文件，保留脚本）
-*.db
+h2/data/*.db
 *.trace.db
 *.lock.db
 

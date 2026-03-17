@@ -22,16 +22,18 @@ if [ ! -f "$H2_JAR" ]; then
 fi
 
 # 检查数据库文件
-if [ ! -f "h2/todolist.mv.db" ]; then
+if [ ! -f "h2/data/todolist.mv.db" ]; then
     echo "警告: H2 数据库文件不存在"
-    echo "请先运行: mvn flyway:migrate -Ph2"
+    echo "请先运行: ./h2/migrate.sh"
     echo ""
 fi
+
+DB_PATH="$(pwd)/h2/data/todolist"
 
 echo "正在启动 H2 Console..."
 echo ""
 echo "连接信息："
-echo "  JDBC URL: jdbc:h2:file:$(pwd)/h2/todolist"
+echo "  JDBC URL: jdbc:h2:file:${DB_PATH}"
 echo "  User Name: sa"
 echo "  Password: (留空)"
 echo ""
@@ -42,6 +44,6 @@ java -cp "$H2_JAR" org.h2.tools.Console \
     -web -webAllowOthers \
     -browser \
     -driver "org.h2.Driver" \
-    -url "jdbc:h2:file:$(pwd)/h2/todolist" \
+    -url "jdbc:h2:file:${DB_PATH}" \
     -user "sa" \
     -password ""
