@@ -23,7 +23,7 @@
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <druid.version>1.2.18</druid.version>
         <hutool.version>5.8.20</hutool.version>
-        <knife4j.version>3.0.3</knife4j.version>
+        <knife4j.version>4.3.0</knife4j.version>
     </properties>
 
     <dependencies>
@@ -68,14 +68,12 @@
             <version>${hutool.version}</version>
         </dependency>
 
-        <!-- Knife4j - 暂时注释，因与 Spring Boot 2.7 存在兼容性问题 -->
-        <!--
+        <!-- Knife4j API 文档 -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
             <version>${knife4j.version}</version>
         </dependency>
-        -->
 
         <!-- Spring Boot Actuator -->
         <dependency>

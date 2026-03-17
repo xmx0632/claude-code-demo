@@ -62,10 +62,20 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 
+# Knife4j 配置
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
 knife4j:
-  enable: false
+  enable: true
   setting:
     language: zh_cn
+  production: false
 
 # Spring Boot Actuator 健康检查配置
 management:
