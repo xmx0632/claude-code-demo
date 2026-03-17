@@ -18,7 +18,7 @@
 | 2. 产品设计 | ✅ | [ui-design.md](./docs/product-design/ui-design.md) |
 | 3. 架构设计 | ✅ | [architecture.md](./docs/architecture/architecture.md) |
 | 4. 详细设计 | ✅ | [api-specs.md](./docs/detailed-design/api-specs.md) |
-| 5. 数据库迁移 | ✅ | [V1.0.0__Init_schema.sql](./backend/src/main/resources/db/migration/V1.0.0__Init_schema.sql) |
+| 5. 数据库迁移 | ✅ | [database-migrations/](./database-migrations/) |
 | 6. 代码开发 | ✅ | backend/ + frontend/ |
 | 7. 项目文档 | ✅ | README.md |
 
@@ -38,6 +38,19 @@ todolist-sdlc/
 │   └── detailed-design/            # 详细设计
 │       └── api-specs.md
 │
+├── database-migrations/            # 数据库迁移（独立目录）
+│   ├── migrations/                 # Flyway 迁移脚本
+│   │   ├── V1__Init_schema.sql
+│   │   ├── V2__create_tag_table.sql
+│   │   ├── V3__create_todo_tag_table.sql
+│   │   └── V4__init_data.sql
+│   ├── scripts/                    # 管理脚本
+│   │   ├── migrate.sh
+│   │   ├── info.sh
+│   │   └── validate.sh
+│   ├── flyway.conf                 # Flyway 配置
+│   └── README.md                   # 迁移说明
+│
 ├── backend/                        # Spring Boot 后端
 │   ├── pom.xml
 │   └── src/main/
@@ -52,8 +65,7 @@ todolist-sdlc/
 │       │   ├── security/           # 安全
 │       │   └── common/             # 通用类
 │       └── resources/
-│           ├── application.yml
-│           └── db/migration/       # Flyway 迁移
+│           └── application.yml
 │
 └── frontend/                       # Vue3 前端
     ├── package.json
@@ -123,6 +135,60 @@ npm run dev
 ```
 
 前端服务: http://localhost:5173
+
+---
+
+## 数据库迁移管理
+
+本项目使用 Flyway 进行数据库版本控制，迁移脚本独立管理在 `database-migrations/` 目录。
+
+### 目录结构
+
+```
+database-migrations/
+├── migrations/           # Flyway 迁移脚本
+│   ├── V1__Init_schema.sql
+│   ├── V2__create_tag_table.sql
+│   ├── V3__create_todo_tag_table.sql
+│   └── V4__init_data.sql
+├── scripts/             # 管理脚本
+│   ├── migrate.sh       # 执行迁移
+│   ├── info.sh          # 查看状态
+│   └── validate.sh      # 验证脚本
+├── flyway.conf          # Flyway 配置
+└── README.md            # 详细说明
+```
+
+### 使用方法
+
+```bash
+cd database-migrations
+
+# 执行迁移
+./scripts/migrate.sh
+
+# 查看状态
+./scripts/info.sh
+
+# 验证脚本
+./scripts/validate.sh
+```
+
+### 创建新迁移
+
+按照 Flyway 命名约定创建新脚本：
+
+```bash
+# 格式：V{版本}__{描述}.sql
+touch migrations/V5__add_new_feature.sql
+```
+
+**注意**：
+- 版本号使用简单递增数字（V1, V2, V3...）
+- 不要修改已执行的迁移脚本
+- 应用启动时会自动执行待执行的迁移
+
+详细说明请参考 [database-migrations/README.md](./database-migrations/README.md)
 
 ---
 

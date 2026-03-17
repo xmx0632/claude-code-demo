@@ -222,8 +222,7 @@ docker run --rm \
 docker-compose exec ruoyi-app sh
 
 # 在容器内执行迁移
-cd /app/database-migrations
-./scripts/migrate.sh
+cd /app && ./database-migrations/scripts/migrate.sh
 
 # 退出容器
 exit
@@ -236,7 +235,7 @@ exit
    docker-compose ps
    ```
 
-2. 修改 `../database-migrations/flyway.conf`：
+2. 修改 `../projects/ruoyi-example/database-migrations/flyway.conf`：
    ```properties
    flyway.url=jdbc:mysql://localhost:3306/ruoyi_example
    flyway.user=ruoyi
@@ -245,7 +244,7 @@ exit
 
 3. 执行迁移：
    ```bash
-   cd ../database-migrations
+   cd ../projects/ruoyi-example/database-migrations
    ./scripts/migrate.sh
    ```
 
@@ -337,7 +336,7 @@ APP_PORT=8081
 ./scripts/start.sh
 
 # 重新执行数据库迁移
-docker-compose exec ruoyi-app sh -c "cd /app/database-migrations && ./scripts/migrate.sh"
+docker-compose exec ruoyi-app sh -c "cd /app && ./database-migrations/scripts/migrate.sh"
 ```
 
 ## 生产环境部署
@@ -407,8 +406,8 @@ docker stats ruoyi-app ruoyi-mysql ruoyi-redis
 ## 相关文档
 
 - [项目主 README](../README.md)
-- [应用文档](../ruoyi-example/README.md)
-- [数据库迁移文档](../database-migrations/README.md)
+- [应用文档](../projects/ruoyi-example/README.md)
+- [数据库迁移文档](../projects/ruoyi-example/database-migrations/README.md)
 
 ## 技术支持
 

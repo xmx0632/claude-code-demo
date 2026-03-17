@@ -70,7 +70,7 @@ output:
   # 测试目录
   test_dir: "test"
   # 数据库迁移目录
-  migration_dir: "database-migrations"
+  migration_dir: "projects/ruoyi-example/database-migrations"
 
 # 集成配置
 integration:

@@ -1,5 +1,5 @@
 -- =============================================
--- Flyway Migration: V1.0.3__init_data.sql
+-- Flyway Migration: V4__init_data.sql
 -- 描述: 初始化测试数据
 -- 作者: Claude Code
 -- 日期: 2026-03-16

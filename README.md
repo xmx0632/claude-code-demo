@@ -15,10 +15,6 @@
 ```
 claude-code-demo/
 ├── README.md                    # 本文件
-├── database-migrations/         # 独立数据库迁移组件
-│   ├── migrations/              # Flyway 迁移脚本
-│   ├── scripts/                 # 辅助脚本
-│   └── docs/                    # 组件文档
 ├── docker/                      # Docker 基础服务配置
 │   ├── docker-compose.yml       # Docker Compose 配置
 │   ├── services/                # 服务配置（MySQL、Redis）
@@ -37,7 +33,14 @@ claude-code-demo/
 │   ├── test-gen/                # 单元测试生成器
 │   ├── sql-optimizer/           # SQL 优化建议
 │   └── flyway-migration/        # Flyway 数据库迁移管理
-├── ruoyi-example/               # Ruoyi 示例项目
+├── projects/                    # 项目目录
+│   └── ruoyi-example/           # Ruoyi 示例项目
+│       ├── database-migrations/ # Flyway 数据库迁移组件
+│       │   ├── migrations/      # Flyway 迁移脚本
+│       │   ├── scripts/         # 辅助脚本
+│       │   └── docs/            # 组件文档
+│       ├── src/                 # 源代码
+│       └── docs/                # 项目文档
 └── docs/                        # 详细文档
     ├── quick-start.md           # 快速入门
     ├── happy-remote.md          # Happy 远程开发
@@ -101,7 +104,7 @@ claude-code-demo/
 
 ### database-migrations
 
-独立的数据库迁移组件，使用 Flyway 管理数据库版本。
+数据库迁移组件位于 `projects/ruoyi-example/database-migrations/`，使用 Flyway 管理数据库版本。
 
 ### docker
 
