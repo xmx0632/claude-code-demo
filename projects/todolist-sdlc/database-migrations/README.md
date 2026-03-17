@@ -88,6 +88,8 @@ mvn flyway:validate
 
 ### 开发环境（H2）
 
+**方式一：使用 Maven（推荐）**
+
 ```bash
 cd database-migrations
 
@@ -96,6 +98,26 @@ mvn flyway:info -Ph2
 mvn flyway:migrate -Ph2
 mvn flyway:validate -Ph2
 ```
+
+**方式二：使用 H2 辅助脚本**
+
+```bash
+cd database-migrations/h2
+
+# 迁移数据库
+./migrate.sh
+
+# 查看状态
+./info.sh
+
+# 清空数据库
+./clean.sh
+
+# 启动 H2 Console
+./console.sh
+```
+
+H2 数据库文件持久化到 `h2/` 目录，方便测试和调试。
 
 ### 使用脚本（默认 MySQL）
 
