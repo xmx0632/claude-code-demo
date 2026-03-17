@@ -1,116 +1,118 @@
 ---
 name: sdlc-deployment
-description: 部署阶段，生成部署指南、配置文件和升级说明。部署上线时使用。
-allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash"]
+description: |
+  发布阶段，生成部署指南、配置文件和升级说明。部署上线时使用。
+  **增强版**: 完全自动化发布流程 - sync → test → push → PR 一 一条命令搞定。
+allowed-tools: ["Bash", "Read", "Write", "Edit", "Glob", "grep", "AskUserQuestion"]
 user-invocable: true
 ---
 
-# 部署助手
+# /sdlc-deployment — 自动化发布
 
-执行 SDLC 阶段 14-15：部署和升级，生成部署文档和配置。
+生成部署指南和配置文件和升级说明。**增强版: 完全自动化发布流程。**
 
-## 阶段目标
+## 认知模式
 
-生成部署指南、Docker 配置、升级说明等。
+**你是发布工程师** —— 机器化、精确、一丝不苟。 目标： 逶 commit都干净， 每次测试都通过，每次发布都成功.
 
-## 输出
+## 参数
+- `/sdlc-deployment` — 默认: 自动发布流程
+- `/sdlc-deployment --dry-run` — 模拟发布,不实际推送
+- `/sdlc-deployment --skip-tests` - 跳过测试
+- `/sdlc-deployment --no-pr` - 只创建 PR，不推送
+## 工作流
 
-| 产出物 | 文件路径 | 说明 |
-|--------|----------|------|
-| 部署指南 | `docs/deployment/deployment-guide.md` | 部署步骤 |
-| Docker 配置 | `docker/Dockerfile` | 容器构建 |
-| Docker Compose | `docker/docker-compose.yml` | 服务编排 |
-| 升级指南 | `docs/deployment/upgrade-guide.md` | 版本升级 |
-| CI/CD 配置 | `.github/workflows/` | 自动化流水线 |
-
-## 执行步骤
-
-### 1. 部署准备
-
-```markdown
-- 确认部署环境
-- 准备配置文件
-- 检查依赖服务
-- 准备数据库迁移脚本
+### Step 0: 检测基础分支
+```bash
+# 1. 检查是否有 PR
+gh pr view --json baseRefName -q .baseRefName 2>/dev/null
+# 2. 如果没有 PR， 获取默认分支
+gh repo view --json defaultBranchRef -q .defaultBranchRef.name 2>/dev/null
+# 3. 都失败则使用 main
+echo "main"
 ```
-
-### 2. 容器化
-
-```markdown
-- 编写 Dockerfile
-- 配置 docker-compose
-- 设置环境变量
-- 配置数据卷
+### Step 1: 检查分支状态
+```bash
+# 1. 裀当前分支
+git branch --show-current
+# 2. 检查是否有变更
+git status --porcelain
+if [ -n "$(git status --porcelain)" ]; then
+  echo "ERROR: 工作树有未提交更改。 请先提交或暂存。"
+  exit 1
+fi
+# 3. 裀取并合并基础分支
+git fetch origin <base> --quiet
+git merge origin/<base> --ff-only
 ```
-
-### 3. CI/CD 配置
-
-```markdown
-- 配置构建流水线
-- 配置测试流水线
-- 配置部署流水线
-- 配置通知
+### Step 2: 运行测试
+```bash
+# 单元测试
+mvn test -q
+# 集成测试
+mvn verify -Pintegration-test -q
+# 检查测试覆盖率
+mvn jacoco:report
 ```
-
-### 4. 部署文档
-
-```markdown
-- 编写部署步骤
-- 记录配置说明
-- 编写回滚流程
-- 编写升级流程
+如果测试失败， 停止并报告错误。
+### Step 3: 枣索器发布流程（可跳过)
+**用户指定 `--skip-tests`:**
+跳过此步骤.
+### Step 4: 版本号更新
+```bash
+# 读取当前版本
+VERSION=$(cat VERSION 2>/dev/null || echo "0.0.0.0")
+# 分析提交历史
+COMMITS=$(git log origin/<base>..HEAD --oneline)
+# 根据提交数量决定版本号变化
+# ...
 ```
-
-## 使用方法
-
-### 生成部署指南
-
+### Step 5: 更新 CHANGELOG
+**自动生成 CHANGELOG 条目****
+### Step 6: 提交变更
+```bash
+git add .
+git commit -m "chore: release v${VERSION}"
 ```
-/deployment --type guide
+### Step 7: 推送到远程
+```bash
+git push origin <current-branch>
 ```
+### Step 8: 创建 PR
+**用户指定 `--no-pr`:**
+跳过此步骤。
+```bash
+gh pr create --base <base> --title "<type>: <summary>" --body "$(cat <<'EOF'
+## Summary
+<bullet points from CHANGELOG>
 
-### 生成 Docker 配置
+## Test coverage
+- 如果 step 3 ran: "Tests: {before} → {after} (+{delta} new)"
+- All tests passed ✅
 
+- Coverage: X%
+
+## Pre-landing review
+- if step 3.5 ran, "No issues found. 🎉"
+
+- All findings addressed or verified
+
+- Fix(qa): commits for resolved issues
+
+EOF
+)"
 ```
-/deployment --type docker
-```
-
-### 生成 CI/CD 配置
-
-```
-/deployment --type cicd
-```
-
-### 生成所有部署文件
-
-```
-/deployment --all
-```
-
-## 配置模板
-
-### Dockerfile
-
-```dockerfile
-FROM eclipse-temurin:17-jre-alpine
-
-WORKDIR /app
-
-COPY target/app.jar app.jar
-
-ENV TZ=Asia/Shanghai
-ENV JAVA_OPTS="-Xms256m -Xmx512m"
-
-EXPOSE 8080
-
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
-```
-
+## 配置文件
+- `docs/deployment/deployment-guide.md` - 部署指南
+- `docs/deployment/config/` - 配置文件目录
+  - `docker-compose.yml` - Docker Compose 配置
+  - `D` - Dockerfile` - 应用 Dockerfile
+  - `nginx/` - Nginx 配置
+- `scripts/` - 部署脚本
+## Docker 配置示例
 ### docker-compose.yml
-
 ```yaml
 version: '3.8'
-
 services:
   app:
     build: .
@@ -118,117 +120,55 @@ services:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - DB_HOST=mysql
     depends_on:
       - mysql
       - redis
-    networks:
-      - app-network
-
   mysql:
     image: mysql:8.0
     environment:
-      - MYSQL_ROOT_PASSWORD=root123
-      - MYSQL_DATABASE=app_db
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: app_db
     volumes:
-      - mysql-data:/var/lib/mysql
-    networks:
-      - app-network
-
+      - mysql_data:/var/lib/mysql
   redis:
     image: redis:7-alpine
-    networks:
-      - app-network
-
-volumes:
-  mysql-data:
-
-networks:
-  app-network:
 ```
-
-### GitHub Actions
-
-```yaml
-name: CI/CD Pipeline
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Build with Maven
-        run: mvn clean package -DskipTests
-
-      - name: Run tests
-        run: mvn test
-
-      - name: Build Docker image
-        run: docker build -t app:${{ github.sha }} .
-
-      - name: Push to registry
-        run: |
-          docker tag app:${{ github.sha }} registry.example.com/app:latest
-          docker push registry.example.com/app:latest
+### Dockerfile
+```dockerfile
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
-
+## 升级说明
+### 版本升级
+1. 壚备份数据（使用 Flyway)
+2. 停止旧版本服务
+3. 启动新版本服务
+4. 验证服务健康
+### 配置变更
+1. 备份当前配置
+2. 应用新配置
+3. 验证配置生效
+### 回滚计划
+1. 保留旧版本镜像
+2. 准备回滚脚本
+3. 监控新版本 24 小时
+4. 如有问题， 执行回滚
+## 装署检查清单
+- [ ] 所有测试通过
+- [ ] 代码已合并到主分支
+- [ ] 版本号已更新
+- [ ] CHANGELOG 已更新
+- [ ] Docker 镜像已构建
+- [ ] 配置文件已准备
+- [ ] 数据库迁移已准备
+- [ ] 回滚计划已准备
 ## 触发的 Guards
-
 | Guard | 触发条件 |
 |-------|----------|
-| Infra Agent | 涉及部署配置 |
-| Security Agent | 涉及密钥配置 |
-
-## 质量门禁
-
-- [ ] 部署指南已完成
-- [ ] Docker 配置已测试
-- [ ] CI/CD 流水线已配置
-- [ ] 升级指南已编写
-- [ ] 回滚流程已定义
-
-## 部署检查清单
-
-### 部署前
-
-- [ ] 代码已合并到主分支
-- [ ] 所有测试已通过
-- [ ] 数据库迁移已准备
-- [ ] 配置文件已更新
-- [ ] 回滚方案已准备
-
-### 部署中
-
-- [ ] 服务健康检查通过
-- [ ] 日志输出正常
-- [ ] 监控指标正常
-- [ ] 功能验证通过
-
-### 部署后
-
-- [ ] 用户验收通过
-- [ ] 性能指标达标
-- [ ] 文档已更新
-- [ ] 发布说明已发送
-
-## 相关 Skills
-
-- `/flyway-migration` - 数据库迁移
-- `/code-review` - 代码审查
-
-## 完成标志
-
-部署完成后，SDLC 流程全部结束。项目进入运维阶段。
+| DevOps Agent | 涉及 CI/CD 配置 |
+| Security Agent | 涉及安全配置 |
+## 茩量级
+部署完成后，项目进入运维阶段:

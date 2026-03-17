@@ -181,7 +181,7 @@ sync main → run tests → resolve reviews → push → open PR
 | G1 | 添加认知模式定义 | 在每个 skill 中定义"用什么脑子思考" | 2h | 待开始 |
 | G2 | 新增 `/sdlc-ceo-review` | 创始人视角的需求审视 | 3h | ✅ 已完成 |
 | G3 | 新增 `/sdlc-qa-browse` | 浏览器自动化测试（需 Playwright） | 4h | ✅ 已完成 |
-| G4 | 新增 `/sdlc-retro` | 工程复盘 skill | 2h | 待开始 |
+| G4 | 新增 `/sdlc-retro` | 工程复盘 skill | 2h | ✅ 已完成 |
 | G5 | 增强 `/sdlc-design-review` | 添加 AI Slop 检测 | 3h | 待开始 |
 
 ### 5.2 中优先级 - 工作流自动化
