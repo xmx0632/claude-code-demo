@@ -291,12 +291,12 @@ spring.flyway.baseline-version: 0
 
 ## 独立组件集成
 
-本项目推荐使用独立的 **database-migrations** 组件，将数据库迁移脚本与应用代码分离。
+本项目推荐使用 **database-migrations** 组件（位于项目内），将数据库迁移脚本与应用代码分离。
 
 ### 组件结构
 
 ```
-database-migrations/
+projects/ruoyi-example/database-migrations/
 ├── flyway.conf          # Flyway 配置模板
 ├── migrations/          # 迁移脚本目录
 ├── scripts/             # 辅助脚本
@@ -314,7 +314,7 @@ database-migrations/
 **1. 配置数据库连接**
 
 ```bash
-cd database-migrations
+cd projects/ruoyi-example/database-migrations
 cp flyway.conf flyway.local.conf
 vi flyway.local.conf  # 修改数据库连接信息
 ```
@@ -344,7 +344,7 @@ vi flyway.local.conf  # 修改数据库连接信息
 在 CI/CD 流程中添加迁移步骤：
 
 ```bash
-cd database-migrations
+cd projects/ruoyi-example/database-migrations
 ./scripts/migrate.sh
 ```
 
@@ -355,8 +355,8 @@ cd database-migrations
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-maven-plugin</artifactId>
     <configuration>
-        <configFiles>../database-migrations/flyway.conf</configFiles>
-        <locations>filesystem:../database-migrations/migrations</locations>
+        <configFiles>database-migrations/flyway.conf</configFiles>
+        <locations>filesystem:database-migrations/migrations</locations>
     </configuration>
 </plugin>
 ```
@@ -369,7 +369,7 @@ cd database-migrations
 spring:
   flyway:
     enabled: true
-    locations: filesystem:../database-migrations/migrations
+    locations: filesystem:database-migrations/migrations
 ```
 
 ### 优势
@@ -382,12 +382,12 @@ spring:
 
 ### 生成的脚本位置
 
-使用此 Skill 时，迁移脚本将生成到独立组件目录：
+使用此 Skill 时，迁移脚本将生成到项目的 database-migrations 目录：
 
 ```
 /flyway-migration create --table=sys_user --type=add_column
 
-# 生成文件: database-migrations/migrations/V8__add_field_to_sys_user.sql
+# 生成文件: projects/ruoyi-example/database-migrations/migrations/V8__add_field_to_sys_user.sql
 ```
 
 ## 相关工具

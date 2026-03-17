@@ -203,8 +203,8 @@ SDLC-Framework/01-requirements-analysis/templates/
 ```
 
 **输出**:
-- `database-migrations/migrations/V1__create_table_sys_user.sql`
-- `database-migrations/rollback/V1__rollback.sql`
+- `projects/ruoyi-example/database-migrations/migrations/V1__create_table_sys_user.sql`
+- `projects/ruoyi-example/database-migrations/rollback/V1__rollback.sql`
 
 ### 5. 代码生成
 
@@ -260,9 +260,11 @@ your-project/
 │   ├── main/java/                 # Java 源代码
 │   ├── test/java/                 # 单元测试
 │   └── test-integration/java/     # 集成测试
-└── database-migrations/           # 数据库迁移
-    ├── migrations/                # Flyway 迁移脚本
-    └── rollback/                  # 回滚脚本
+└── projects/                      # 项目目录
+    └── ruoyi-example/             # 示例项目
+        └── database-migrations/   # 数据库迁移
+            ├── migrations/        # Flyway 迁移脚本
+            └── rollback/          # 回滚脚本
 ```
 
 ---

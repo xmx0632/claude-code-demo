@@ -9,8 +9,7 @@ This is a demonstration project for **Claude Code + Skills + Subagents** focused
 The project consists of:
 - **SDLC-Framework**: Complete 15-stage software development lifecycle framework with 8 subagent roles
 - **Skills-Collection**: Reusable skills for common development tasks (CRUD generation, code review, testing, etc.)
-- **ruoyi-example**: Sample Spring Boot application demonstrating the framework
-- **database-migrations**: Flyway-based database migration utilities
+- **ruoyi-example**: Sample Spring Boot application demonstrating the framework (includes database-migrations)
 - **docker**: Docker Compose setup for MySQL 8.0 and Redis 7
 
 ## Common Commands
@@ -54,7 +53,7 @@ docker-compose restart
 ### Database Migrations
 
 ```bash
-cd database-migrations/scripts
+cd projects/ruoyi-example/database-migrations/scripts
 
 # Create a new migration
 ./flyway-create.sh migration_name

@@ -40,7 +40,7 @@
 
 ```bash
 # 1. 进入数据库迁移组件目录
-cd ../database-migrations
+cd database-migrations
 
 # 2. 配置数据库连接
 cp flyway.conf flyway.local.conf
@@ -53,7 +53,7 @@ vi flyway.local.conf  # 修改数据库连接信息
 ./scripts/migrate.sh
 
 # 5. 返回项目目录
-cd ../ruoyi-example
+cd ..
 ```
 
 **方式二：手动导入 SQL**
@@ -67,7 +67,7 @@ mysql -u root -p ruoyi_example < docs/database-schema.sql
 **查看迁移状态**：
 
 ```bash
-cd ../database-migrations
+cd database-migrations
 ./scripts/info.sh
 ```
 
@@ -118,7 +118,7 @@ vi .env
 ./scripts/start.sh
 
 # 5. 执行数据库迁移
-docker-compose exec ruoyi-app sh -c "cd /app/database-migrations && ./scripts/migrate.sh"
+docker-compose exec ruoyi-app sh -c "cd /app && ./database-migrations/scripts/migrate.sh"
 
 # 6. 查看服务状态
 docker-compose ps
@@ -155,6 +155,10 @@ docker-compose ps
 ```
 ruoyi-example/
 ├── pom.xml                          # Maven 配置
+├── database-migrations/             # 数据库迁移组件
+│   ├── migrations/                  # Flyway 迁移脚本
+│   ├── scripts/                     # 辅助脚本
+│   └── docs/                        # 组件文档
 ├── src/main/java/com/example/ruoyi/
 │   ├── controller/                  # 控制器层
 │   │   └── UserController.java

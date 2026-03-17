@@ -71,8 +71,8 @@ stages:
     depends_on:
       - detailed-design
     outputs:
-      - "database-migrations/migrations/VX__description.sql"
-      - "database-migrations/rollback/VX__rollback.sql"
+      - "projects/ruoyi-example/database-migrations/migrations/VX__description.sql"
+      - "projects/ruoyi-example/database-migrations/rollback/VX__rollback.sql"
     quality_gates:
       - "migration_tested"
       - "rollback_plan_exists"
