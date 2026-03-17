@@ -17,6 +17,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <flyway.version>7.15.0</flyway.version>
+        <h2.version>2.1.214</h2.version>
     </properties>
 
     <dependencies>
@@ -25,12 +26,6 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>${flyway.version}</version>
-        </dependency>
-        <!-- MySQL Connector -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.20</version>
         </dependency>
     </dependencies>
 
@@ -42,24 +37,34 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>${flyway.version}</version>
                 <configuration>
-                    <!-- 数据库配置：连接到 MySQL 服务器（不指定数据库） -->
-                    <url>jdbc:mysql://127.0.0.1:13306?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true&amp;rewriteBatchedStatements=true&amp;useSSL=false&amp;serverTimezone=GMT%2B8</url>
-                    <user>root</user>
-                    <password>root@P@SSw0Rd</password>
-
-                    <!-- 指定要管理的数据库/Schema -->
-                    <schemas>todolist</schemas>
-
                     <!-- 迁移脚本位置 -->
                     <locations>filesystem:migrations</locations>
-
                     <!-- 编码 -->
                     <encoding>UTF-8</encoding>
-
                     <!-- 其他配置 -->
                     <baselineOnMigrate>true</baselineOnMigrate>
                     <validateOnMigrate>true</validateOnMigrate>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>flyway-migrate</execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <!-- Profiles for different databases -->
+        <profiles>
+            <!-- MySQL Profile (生产环境) -->
+            <profile>
+                <id>mysql</id>
+                <activation>
+                    <activeByDefault>true</activeByDefault>
+                </activation>
                 <dependencies>
                     <dependency>
                         <groupId>mysql</groupId>
@@ -67,7 +72,63 @@
                         <version>8.0.20</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-        </plugins>
+                <build>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.flywaydb</groupId>
+                            <artifactId>flyway-maven-plugin</artifactId>
+                            <configuration>
+                                <url>jdbc:mysql://127.0.0.1:13306?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true&amp;rewriteBatchedStatements=true&amp;useSSL=false&amp;serverTimezone=GMT%2B8</url>
+                                <user>root</user>
+                                <password>root@P@SSw0Rd</password>
+                                <schemas>todolist</schemas>
+                            </configuration>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>mysql</groupId>
+                                    <artifactId>mysql-connector-java</artifactId>
+                                    <version>8.0.20</version>
+                                </dependency>
+                            </dependencies>
+                        </plugin>
+                    </plugins>
+                </build>
+            </profile>
+
+            <!-- H2 Profile (开发环境) -->
+            <profile>
+                <id>h2</id>
+                <activation>
+                    <activeByDefault>false</activeByDefault>
+                </activation>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>${h2.version}</version>
+                    </dependency>
+                </dependencies>
+                <build>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.flywaydb</groupId>
+                            <artifactId>flyway-maven-plugin</artifactId>
+                            <configuration>
+                                <url>jdbc:h2:mem:todolist;DB_CLOSE_DELAY=-1;MODE=MySQL</url>
+                                <user>sa</user>
+                                <password></password>
+                            </configuration>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>com.h2database</groupId>
+                                    <artifactId>h2</artifactId>
+                                    <version>${h2.version}</version>
+                                </dependency>
+                            </dependencies>
+                        </plugin>
+                    </plugins>
+                </build>
+            </profile>
+        </profiles>
     </build>
 </project>

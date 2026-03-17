@@ -1,15 +1,27 @@
 -- =============================================
 -- Flyway Migration: V1__Init_schema.sql
--- 描述: TodoList 数据库初始化
+-- 描述: TodoList 数据库初始化（兼容 MySQL 和 H2）
 -- 作者: Claude Code (DB Administrator Role)
 -- 日期: 2026-03-16
 -- =============================================
 
--- 创建数据库（如果不存在）
+-- =============================================
+-- MySQL 特定配置
+-- H2 会忽略这些语句
+-- =============================================
+
+-- MySQL: 创建数据库（如果不存在）
+-- H2: 自动忽略（H2 在连接时自动创建内存数据库）
 CREATE DATABASE IF NOT EXISTS todolist CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- 使用数据库
+-- MySQL: 使用数据库
+-- H2: 自动忽略（已在连接 URL 中指定）
 USE todolist;
+
+-- =============================================
+-- 创建表（兼容 MySQL 和 H2）
+-- H2 运行在 MySQL 模式 (MODE=MySQL)
+-- =============================================
 
 -- 创建用户表
 CREATE TABLE IF NOT EXISTS t_user (
