@@ -62,7 +62,7 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
-    locations: classpath:db/migration
+    locations: classpath:db/migration,filesystem:../database-migrations/migrations
     encoding: UTF-8
     validate-on-migrate: true
 
