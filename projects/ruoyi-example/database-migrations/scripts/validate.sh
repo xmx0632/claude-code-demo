@@ -1,53 +1,50 @@
 #!/bin/bash
+# Flyway 验证脚本
+# 功能：验证迁移脚本
+# 用法：
+#   ./validate.sh         # 默认 MySQL
+#   DB=h2 ./validate.sh   # 使用 H2
 
-# 验证迁移脚本
-#
-# 使用方法:
-#   ./scripts/validate.sh
-
-set -e
-
-# 获取脚本所在目录
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 
-# 颜色输出
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-NC='\033[0m'
-
-log_info() {
-    echo -e "${GREEN}[INFO]${NC} $1"
-}
-
-log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
-
-# 检查 Flyway
-if ! command -v flyway &> /dev/null; then
-    log_error "Flyway 未安装"
-    echo "请访问 https://flywaydb.org/download 下载安装"
-    exit 1
-fi
-
 cd "$PROJECT_DIR"
 
-# 确定配置文件
-if [ -f "flyway.local.conf" ]; then
-    CONFIG_FILE="flyway.local.conf"
-else
-    CONFIG_FILE="flyway.conf"
-fi
+echo "======================================"
+echo "Flyway 验证迁移脚本"
+echo "======================================"
+echo ""
 
-log_info "验证迁移脚本"
-echo "=========================================="
-
-flyway -configFiles="$CONFIG_FILE" validate
-
-if [ $? -eq 0 ]; then
-    log_info "验证通过！"
-else
-    log_error "验证失败！"
+# 检查 Maven 是否安装
+if ! command -v mvn &> /dev/null; then
+    echo "错误: 未找到 Maven 命令"
+    echo ""
+    echo "安装方法："
+    echo "  macOS: brew install maven"
+    echo "  Linux: sudo apt install maven"
+    echo ""
     exit 1
 fi
+
+# 根据环境变量选择数据库
+DB_TYPE=${DB:-mysql}
+
+if [ "$DB_TYPE" = "h2" ]; then
+    echo "数据库: H2 (开发环境)"
+    PROFILE="-Ph2"
+    echo ""
+else
+    echo "数据库: MySQL (生产环境)"
+    PROFILE=""
+    echo ""
+fi
+
+# 验证
+mvn flyway:validate $PROFILE
+
+echo ""
+echo "======================================"
+echo ""
+echo "提示："
+echo "  H2 开发环境: DB=h2 ./validate.sh"
+echo "  MySQL 生产环境: ./validate.sh"

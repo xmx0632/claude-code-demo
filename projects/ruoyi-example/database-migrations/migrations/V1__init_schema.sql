@@ -1,10 +1,14 @@
 -- ========================================
 -- V1: 初始化数据库结构
 -- ========================================
--- 创建数据库
-CREATE DATABASE IF NOT EXISTS ruoyi_example DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- 兼容性说明：
+-- - 使用 MySQL 条件注释 /*! ... */ 包裹 MySQL 特定语法
+-- - H2 会将其视为普通注释并跳过
+-- - H2 运行在 MySQL 模式（MODE=MySQL）兼容大部分语法
 
-USE ruoyi_example;
+-- MySQL 特定：创建数据库（H2 会忽略）
+/*! CREATE DATABASE IF NOT EXISTS ruoyi_example DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci */;
+/*! USE ruoyi_example */;
 
 -- ----------------------------
 -- 用户表
@@ -18,14 +22,14 @@ CREATE TABLE IF NOT EXISTS sys_user (
     sex            CHAR(1)         DEFAULT '0' COMMENT '用户性别（0男 1女 2未知）',
     dept_id        BIGINT          DEFAULT NULL COMMENT '部门ID',
     status         CHAR(1)         DEFAULT '0' COMMENT '帐号状态（0正常 1停用）',
-    deleted        TINYINT(1)      DEFAULT 0 COMMENT '删除标志（0代表存在 1代表删除）',
+    deleted        SMALLINT      DEFAULT 0 COMMENT '删除标志（0代表存在 1代表删除）',
     create_time    DATETIME        DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time    DATETIME        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (user_id),
     UNIQUE KEY uk_username (user_name),
     KEY idx_dept_id (dept_id),
     KEY idx_status (status)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+);
 
 -- ----------------------------
 -- 部门表
@@ -39,11 +43,11 @@ CREATE TABLE IF NOT EXISTS sys_dept (
     phone          VARCHAR(11)     DEFAULT NULL COMMENT '联系电话',
     email          VARCHAR(50)     DEFAULT NULL COMMENT '邮箱',
     status         CHAR(1)         DEFAULT '0' COMMENT '部门状态（0正常 1停用）',
-    deleted        TINYINT(1)      DEFAULT 0 COMMENT '删除标志（0代表存在 1代表删除）',
+    deleted        SMALLINT      DEFAULT 0 COMMENT '删除标志（0代表存在 1代表删除）',
     create_time    DATETIME        DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time    DATETIME        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (dept_id)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COMMENT='部门表';
+);
 
 -- ----------------------------
 -- 角色表
@@ -54,12 +58,12 @@ CREATE TABLE IF NOT EXISTS sys_role (
     role_key       VARCHAR(100)    NOT NULL COMMENT '角色权限字符串',
     sort_order     INT             DEFAULT 0 COMMENT '显示顺序',
     status         CHAR(1)         DEFAULT '0' COMMENT '角色状态（0正常 1停用）',
-    deleted        TINYINT(1)      DEFAULT 0 COMMENT '删除标志（0代表存在 1代表删除）',
+    deleted        SMALLINT      DEFAULT 0 COMMENT '删除标志（0代表存在 1代表删除）',
     create_time    DATETIME        DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time    DATETIME        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (role_id),
     UNIQUE KEY uk_role_key (role_key)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
+);
 
 -- ----------------------------
 -- 菜单表
@@ -71,7 +75,7 @@ CREATE TABLE IF NOT EXISTS sys_menu (
     sort_order     INT             DEFAULT 0 COMMENT '显示顺序',
     path           VARCHAR(200)    DEFAULT '' COMMENT '路由地址',
     component      VARCHAR(255)    DEFAULT NULL COMMENT '组件路径',
-    is_frame       TINYINT(1)      DEFAULT 1 COMMENT '是否为外链（0是 1否）',
+    is_frame       SMALLINT      DEFAULT 1 COMMENT '是否为外链（0是 1否）',
     menu_type      CHAR(1)         DEFAULT '' COMMENT '菜单类型（M目录 C菜单 F按钮）',
     visible        CHAR(1)         DEFAULT '0' COMMENT '菜单状态（0显示 1隐藏）',
     status         CHAR(1)         DEFAULT '0' COMMENT '菜单状态（0正常 1停用）',
@@ -80,7 +84,7 @@ CREATE TABLE IF NOT EXISTS sys_menu (
     create_time    DATETIME        DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time    DATETIME        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (menu_id)
-) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4 COMMENT='菜单权限表';
+);
 
 -- ----------------------------
 -- 用户角色关联表
@@ -91,7 +95,7 @@ CREATE TABLE IF NOT EXISTS sys_user_role (
     PRIMARY KEY (user_id, role_id),
     KEY idx_user_id (user_id),
     KEY idx_role_id (role_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色关联表';
+);
 
 -- ----------------------------
 -- 角色菜单关联表
@@ -100,6 +104,6 @@ CREATE TABLE IF NOT EXISTS sys_role_menu (
     role_id        BIGINT          NOT NULL COMMENT '角色ID',
     menu_id        BIGINT          NOT NULL COMMENT '菜单ID',
     PRIMARY KEY (role_id, menu_id),
-    KEY idx_role_id (role_id),
-    KEY idx_menu_id (menu_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色菜单关联表';
+    KEY idx_sys_role_menu_role_id (role_id),
+    KEY idx_sys_role_menu_menu_id (menu_id)
+);

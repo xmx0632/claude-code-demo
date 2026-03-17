@@ -4,7 +4,8 @@
 -- 这是一个增量变更的示例
 -- 使用 ALTER TABLE 添加新字段，而不是重建表
 
-USE ruoyi_example;
+-- MySQL 特定：选择数据库（H2 会忽略）
+/*! USE ruoyi_example */;
 
 -- 添加头像字段
 ALTER TABLE sys_user
