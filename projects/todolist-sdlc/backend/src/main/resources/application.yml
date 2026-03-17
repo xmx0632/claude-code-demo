@@ -13,12 +13,9 @@ spring:
 
   flyway:
     enabled: true
-    locations: filesystem:database-migrations/migrations
+    locations: classpath:db/migration,filesystem:database-migrations/migrations
     baseline-on-migrate: true
-    # 连接到 MySQL 服务器而非特定数据库，以便 V1 脚本可以创建数据库
-    url: jdbc:mysql://localhost:3306?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
-    user: root
-    password: root
+    # 数据库配置由具体 profile 提供（dev/prod）
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
