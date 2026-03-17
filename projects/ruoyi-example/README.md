@@ -96,7 +96,10 @@ mvn spring-boot:run
 ### 5. 访问应用
 
 - 应用地址: http://localhost:8080
-- 接口文档: http://localhost:8080/doc.html
+- Swagger UI: http://localhost:8080/swagger-ui.html
+- Knife4j 文档: http://localhost:8080/doc.html
+- OpenAPI JSON: http://localhost:8080/v3/api-docs
+- 健康检查: http://localhost:8080/actuator/health
 
 ## Docker 启动（推荐）
 
@@ -130,7 +133,9 @@ docker-compose ps
 ### 访问服务
 
 - 应用地址: http://localhost:8080
-- 接口文档: http://localhost:8080/doc.html
+- Swagger UI: http://localhost:8080/swagger-ui.html
+- Knife4j 文档: http://localhost:8080/doc.html
+- OpenAPI JSON: http://localhost:8080/v3/api-docs
 - 健康检查: http://localhost:8080/actuator/health
 - MySQL: localhost:3306
 - Redis: localhost:6379
@@ -310,9 +315,14 @@ RESTful 风格接口：
 
 修改 `application.yml` 中的 `server.port`。
 
-### 3. Swagger 无法访问
+### 3. API 文档无法访问
 
-确保已添加 Knife4j 依赖，访问 http://localhost:8080/doc.html
+Knife4j 4.x 支持多种访问方式：
+- Swagger UI: http://localhost:8080/swagger-ui.html
+- Knife4j 文档: http://localhost:8080/doc.html
+- OpenAPI JSON: http://localhost:8080/v3/api-docs
+
+确保已添加 Knife4j 依赖且配置 `knife4j.enable: true`。
 
 ## 扩展学习
 
