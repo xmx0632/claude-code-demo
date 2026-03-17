@@ -16,6 +16,7 @@ spring:
     name: todolist
 
   # Database Configuration
+  # 使用 docker-compose 中的 MySQL (localhost:3306)
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
