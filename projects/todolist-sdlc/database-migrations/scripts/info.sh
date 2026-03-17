@@ -1,6 +1,9 @@
 #!/bin/bash
 # Flyway 信息查看脚本
 # 功能：查看数据库迁移状态
+# 用法：
+#   ./info.sh            # 默认 MySQL
+#   DB=h2 ./info.sh      # 使用 H2
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -23,19 +26,25 @@ if ! command -v mvn &> /dev/null; then
     exit 1
 fi
 
-# 检查 Java 版本
-JAVA_VERSION=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | cut -d'.' -f1)
-if [ "$JAVA_VERSION" -lt 17 ]; then
-    echo "警告: 需要 Java 17 或更高版本"
-    echo "当前 Java 版本: $JAVA_VERSION"
+# 根据环境变量选择数据库
+DB_TYPE=${DB:-mysql}
+
+if [ "$DB_TYPE" = "h2" ]; then
+    echo "数据库: H2 (开发环境)"
+    PROFILE="-Ph2"
     echo ""
-    echo "请设置 JAVA_HOME 到 Java 17+，例如："
-    echo "  export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home"
+else
+    echo "数据库: MySQL (生产环境)"
+    PROFILE=""
     echo ""
 fi
 
 # 查看状态
-mvn flyway:info
+mvn flyway:info $PROFILE
 
 echo ""
 echo "======================================"
+echo ""
+echo "提示："
+echo "  H2 开发环境: DB=h2 ./info.sh"
+echo "  MySQL 生产环境: ./info.sh"
