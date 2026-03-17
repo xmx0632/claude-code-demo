@@ -1,0 +1,11 @@
+{
+  "name": "browse",
+  "version": "1.0.0",
+  "description": "Fast headless browser for AI coding agents",
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
+    "diff": "^7.0.0",
+    "playwright": "^1.58.2"
+  }
+}
