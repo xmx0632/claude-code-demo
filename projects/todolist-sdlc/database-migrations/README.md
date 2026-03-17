@@ -56,11 +56,15 @@ sudo apt install maven
 
 ### 数据库准备
 
-确保 MySQL 服务运行并且数据库已创建：
+确保 MySQL 服务运行。**数据库会在首次迁移时自动创建**，无需手动创建。
+
+如果需要手动创建：
 
 ```sql
 CREATE DATABASE IF NOT EXISTS todolist CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
+
+> **注意**：V1 迁移脚本包含 `CREATE DATABASE IF NOT EXISTS` 语句，会自动创建 `todolist` 数据库。
 
 ## 使用方法
 

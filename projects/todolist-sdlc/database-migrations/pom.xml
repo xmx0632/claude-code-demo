@@ -42,10 +42,13 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>${flyway.version}</version>
                 <configuration>
-                    <!-- 数据库配置 -->
-                    <url>jdbc:mysql://localhost:3306/todolist</url>
+                    <!-- 数据库配置：连接到 MySQL 服务器（不指定数据库） -->
+                    <url>jdbc:mysql://127.0.0.1:13306?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true&amp;rewriteBatchedStatements=true&amp;useSSL=false&amp;serverTimezone=GMT%2B8</url>
                     <user>root</user>
-                    <password>root</password>
+                    <password>root@P@SSw0Rd</password>
+
+                    <!-- 指定要管理的数据库/Schema -->
+                    <schemas>todolist</schemas>
 
                     <!-- 迁移脚本位置 -->
                     <locations>filesystem:migrations</locations>

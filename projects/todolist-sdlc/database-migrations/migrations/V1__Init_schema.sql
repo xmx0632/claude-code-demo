@@ -1,9 +1,15 @@
 -- =============================================
 -- Flyway Migration: V1__Init_schema.sql
--- 描述: TodoList 数据库初始化 (H2兼容版本)
+-- 描述: TodoList 数据库初始化
 -- 作者: Claude Code (DB Administrator Role)
 -- 日期: 2026-03-16
 -- =============================================
+
+-- 创建数据库（如果不存在）
+CREATE DATABASE IF NOT EXISTS todolist CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- 使用数据库
+USE todolist;
 
 -- 创建用户表
 CREATE TABLE IF NOT EXISTS t_user (
