@@ -60,7 +60,7 @@ spring:
 
   # Flyway Configuration
   flyway:
-    enabled: false  # 默认禁用，仅在 dev 模式启用
+    enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration,filesystem:../database-migrations/migrations
     encoding: UTF-8

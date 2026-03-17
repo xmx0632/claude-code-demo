@@ -21,7 +21,7 @@ DEFAULT CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci */;
 
 -- MySQL 特定：选择数据库（H2 会忽略）
-/*! USE `todolist` */;
+USE `todolist`;
 
 -- MySQL 特定：设置时区（H2 会忽略）
 /*! SET time_zone = '+00:00' */;
