@@ -4,8 +4,11 @@
 -- 创建 ruoyi_example 数据库（如果不存在）
 CREATE DATABASE IF NOT EXISTS ruoyi_example DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- 创建 todolist 数据库（如果不存在）- 用于 todolist-project 和 todolist-sdlc
-CREATE DATABASE IF NOT EXISTS todolist DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- 创建 todolist_project 数据库（如果不存在）
+CREATE DATABASE IF NOT EXISTS todolist_project DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- 创建 todolist_sdlc 数据库（如果不存在）
+CREATE DATABASE IF NOT EXISTS todolist_sdlc DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- 创建应用用户
 CREATE USER IF NOT EXISTS 'ruoyi'@'%' IDENTIFIED BY 'ruoyi_password';

@@ -8,7 +8,7 @@ spring:
   # 使用 docker-compose 中的 MySQL (localhost:3306)
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/todolist?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&rewriteBatchedStatements=true&useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/todolist_sdlc?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&rewriteBatchedStatements=true&useSSL=false&serverTimezone=GMT%2B8
     username: root
     password: root123456
 

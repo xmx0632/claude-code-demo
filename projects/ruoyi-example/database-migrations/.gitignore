@@ -1,0 +1,7 @@
+# H2 数据库文件
+h2/data/*.db
+*.trace.db
+*.lock.db
+
+# Flyway 生成的文件
+.flyway/

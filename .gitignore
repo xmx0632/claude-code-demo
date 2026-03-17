@@ -6,3 +6,4 @@ target/
 
 # AutoDoc 工作目录
 .auto-doc-workspace/
+*.db

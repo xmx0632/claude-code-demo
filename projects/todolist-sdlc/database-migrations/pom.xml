@@ -54,7 +54,7 @@
                             <url>jdbc:mysql://localhost:3306?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true&amp;rewriteBatchedStatements=true&amp;useSSL=false&amp;serverTimezone=GMT%2B8</url>
                             <user>root</user>
                             <password>root123456</password>
-                            <schemas>todolist</schemas>
+                            <schemas>todolist_sdlc</schemas>
                             <locations>filesystem:migrations</locations>
                             <encoding>UTF-8</encoding>
                             <baselineOnMigrate>true</baselineOnMigrate>
