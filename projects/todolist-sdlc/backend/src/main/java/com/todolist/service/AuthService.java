@@ -29,4 +29,11 @@ public interface AuthService extends IService<User> {
      * 获取当前用户
      */
     UserVO getCurrentUser();
+
+    /**
+     * 用户登出
+     *
+     * @paramToken JWT Token
+     */
+    void logout(String token);
 }

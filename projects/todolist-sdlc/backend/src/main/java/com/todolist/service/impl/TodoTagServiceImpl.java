@@ -41,6 +41,39 @@ public class TodoTagServiceImpl implements TodoTagService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public List<TagVO> addTag(Long todoId, Long tagId) {
+        Long userId = SecurityUtils.getCurrentUserId();
+
+        // 验证任务归属
+        Todo todo = todoMapper.selectById(todoId);
+        if (todo == null || !todo.getUserId().equals(userId)) {
+            throw new BusinessException("任务不存在");
+        }
+
+        // 验证标签归属
+        Tag tag = tagMapper.selectById(tagId);
+        if (tag == null || !tag.getUserId().equals(userId)) {
+            throw new BusinessException("标签不存在");
+        }
+
+        // 检查是否已关联
+        List<Long> existingTagIds = todoTagMapper.selectTagIdsByTodoId(todoId);
+        if (existingTagIds.contains(tagId)) {
+            // 已关联，直接返回
+            return getTagsByTodoId(todoId);
+        }
+
+        // 创建关联
+        TodoTag todoTag = new TodoTag();
+        todoTag.setTodoId(todoId);
+        todoTag.setTagId(tagId);
+        todoTagMapper.insert(todoTag);
+
+        return getTagsByTodoId(todoId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public List<TagVO> addTags(Long todoId, TodoTagsDTO dto) {
         Long userId = SecurityUtils.getCurrentUserId();
 

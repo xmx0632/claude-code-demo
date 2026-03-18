@@ -93,6 +93,12 @@ public class AuthServiceImpl extends ServiceImpl<UserMapper, User> implements Au
         return convertToVO(user);
     }
 
+    @Override
+    public void logout(String token) {
+        // 将 Token 加入黑名单
+        jwtUtils.blacklistToken(token);
+    }
+
     private UserVO convertToVO(User user) {
         UserVO vo = new UserVO();
         BeanUtils.copyProperties(user, vo);

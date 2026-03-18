@@ -1,7 +1,9 @@
 package com.todolist.security;
 
+import com.todolist.service.TokenBlacklistService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +18,10 @@ import java.util.Date;
  * @since 2026-03-16
  */
 @Component
+@RequiredArgsConstructor
 public class JwtUtils {
+
+    private final TokenBlacklistService tokenBlacklistService;
 
     @Value("${jwt.secret:todolist-secret-key-for-jwt-token-generation}")
     private String secret;
@@ -60,6 +65,11 @@ public class JwtUtils {
      */
     public boolean validateToken(String token) {
         try {
+            // 先检查黑名单
+            if (tokenBlacklistService.isBlacklisted(token)) {
+                return false;
+            }
+
             Jwts.parser()
                     .verifyWith(getSecretKey())
                     .build()
@@ -68,5 +78,19 @@ public class JwtUtils {
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
+    }
+
+    /**
+     * 将Token加入黑名单
+     */
+    public void blacklistToken(String token) {
+        tokenBlacklistService.blacklist(token, expiration);
+    }
+
+    /**
+     * 获取 Token 过期时间（毫秒）
+     */
+    public Long getExpiration() {
+        return expiration;
     }
 }

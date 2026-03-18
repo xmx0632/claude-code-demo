@@ -14,7 +14,16 @@ import java.util.List;
 public interface TodoTagService {
 
     /**
-     * 为任务添加标签
+     * 为任务添加单个标签
+     *
+     * @param todoId 任务ID
+     * @param tagId  标签ID
+     * @return 标签列表
+     */
+    List<TagVO> addTag(Long todoId, Long tagId);
+
+    /**
+     * 为任务批量添加标签
      *
      * @param todoId 任务ID
      * @param dto    标签DTO

@@ -6,8 +6,10 @@ import com.todolist.dto.RegisterDTO;
 import com.todolist.service.AuthService;
 import com.todolist.vo.LoginVO;
 import com.todolist.vo.UserVO;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -54,7 +56,20 @@ public class AuthController {
      * 退出登录
      */
     @PostMapping("/logout")
-    public R<Void> logout() {
+    public R<Void> logout(HttpServletRequest request) {
+        // 从请求头中提取 Token
+        String token = getTokenFromRequest(request);
+        if (StringUtils.hasText(token)) {
+            authService.logout(token);
+        }
         return R.ok(null, "退出成功");
+    }
+
+    private String getTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 }

@@ -27,9 +27,21 @@ public class TodoTagController {
     private final TodoTagService todoTagService;
 
     /**
-     * 为任务添加标签
+     * 为任务添加单个标签
      */
-    @Operation(summary = "为任务添加标签")
+    @Operation(summary = "为任务添加单个标签")
+    @PostMapping("/{todoId}/tags/{tagId}")
+    public R<List<TagVO>> addTag(
+            @PathVariable Long todoId,
+            @PathVariable Long tagId) {
+        List<TagVO> tags = todoTagService.addTag(todoId, tagId);
+        return R.ok(tags, "添加成功");
+    }
+
+    /**
+     * 为任务批量添加标签
+     */
+    @Operation(summary = "为任务批量添加标签")
     @PostMapping("/{todoId}/tags")
     public R<List<TagVO>> addTags(
             @PathVariable Long todoId,
