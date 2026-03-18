@@ -96,48 +96,110 @@ ALTER TABLE sys_user DROP INDEX idx_email;
 
 ## ⚙️ 配置说明
 
-### 迁移脚本位置
+### 迁移组件结构
 
-默认迁移脚本位置：
 ```
 database-migrations/
-├── migrations/
+├── migrations/              # Flyway 迁移脚本目录
 │   ├── V1__Init_schema.sql
 │   ├── V2__create_table.sql
 │   └── V3__add_index.sql
-├── scripts/
-│   ├── migrate.sh    # 执行迁移
-│   ├── info.sh        # 查看状态
-│   └── validate.sh    # 验证脚本
-└── flyway.conf       # Flyway 配置
+├── pom.xml                  # Maven 配置（数据库连接）
+└── scripts/                 # 辅助脚本
+    ├── migrate.sh           # 执行迁移
+    └── info.sh              # 查看状态
 ```
 
-### Flyway 配置文件
+### pom.xml 配置
 
-```properties
-flyway.url=jdbc:mysql://localhost:3306/database_name
-flyway.user=root
-flyway.password=password
-flyway.schemas=database_schema
-flyway.locations=filesystem:migrations
-flyway.baselineOnMigrate=true
-flyway.encoding=UTF-8
-flyway.validateOnMigrate=true
+数据库连接通过 Maven `profiles` 配置，支持不同环境：
+
+**MySQL Profile（生产环境，默认）**：
+```xml
+<profile>
+    <id>mysql</id>
+    <activation>
+        <activeByDefault>true</activeByDefault>
+    </activation>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <configuration>
+                    <url>jdbc:mysql://localhost:3306/database_name</url>
+                    <user>root</user>
+                    <password>password</password>
+                    <schemas>database_schema</schemas>
+                    <locations>filesystem:migrations</locations>
+                    <encoding>UTF-8</encoding>
+                    <baselineOnMigrate>true</baselineOnMigrate>
+                    <validateOnMigrate>true</validateOnMigrate>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
 ```
+
+**H2 Profile（开发环境）**：
+```xml
+<profile>
+    <id>h2</id>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <configuration>
+                    <url>jdbc:h2:file:./h2/data/todolist;MODE=MySQL</url>
+                    <user>sa</user>
+                    <password></password>
+                    <locations>filesystem:migrations</locations>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+```
+
+**配置说明**：
+- `url`: 数据库连接 URL
+- `user` / `password`: 数据库用户名和密码
+- `schemas`: 目标数据库 schema 名称
+- `locations`: 迁移脚本位置
+- `baselineOnMigrate`: 对现有数据库初始化
+- `validateOnMigrate`: 迁移前验证 SQL
 
 ## 🔧 常用命令
 
 ### 执行迁移
 
 ```bash
-# 查看当前状态
-./scripts/info.sh
+# 进入数据库迁移组件目录
+cd database-migrations
 
-# 执行所有待执行的迁移
-./scripts/migrate.sh
+# 执行迁移（使用默认 profile，如 MySQL）
+mvn flyway:migrate
 
-# 验证迁移脚本
-./scripts/validate.sh
+# 查看迁移状态
+mvn flyway:info
+
+# 验证 SQL 脚本
+mvn flyway:validate
+
+# 清理（开发环境，重置数据库）
+mvn flyway:clean flyway:migrate
+```
+
+### 不同环境切换
+
+```bash
+# 使用 MySQL profile（默认）
+mvn flyway:migrate
+
+# 使用 H2 profile（开发环境）
+mvn flyway:migrate -Ph2
 ```
 
 ### SQL 类型和迁移类型
@@ -172,7 +234,9 @@ flyway.validateOnMigrate=true
 3. 定期同步 `flyway_schema_history` 表
 
 ### Q: 如何在不同环境使用不同配置？
-**A**: 使用 Flyway 的配置文件或环境变量
+**A**: 使用 Maven profiles 切换不同环境的数据库配置：
+- `mvn flyway:migrate` - 使用默认的 MySQL profile（生产环境）
+- `mvn flyway:migrate -Ph2` - 使用 H2 profile（开发环境）
 
 ## 📚 最佳实践
 
