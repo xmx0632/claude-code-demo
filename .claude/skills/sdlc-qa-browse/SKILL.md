@@ -96,7 +96,6 @@ fi
 _ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 B=""
 [ -n "$_ROOT" ] && [ -x "$_ROOT/.claude/skills/sdlc-qa-browse/dist/browse" ] && B="$_ROOT/.claude/skills/sdlc-qa-browse/dist/browse"
-[ -z "$B" ] && B=~/.claude/skills/gstack/browse/dist/browse
 if [ -x "$B" ]; then
   echo "READY: $B"
 else
@@ -105,8 +104,13 @@ fi
 ```
 
 If `NEEDS_SETUP`:
-1. Tell the user: "gstack browse 需要首次编译（~30 秒）。是否继续？" Then STOP and wait.
+1. Tell the user: "browse 工具需要首次编译（~30 秒）。是否继续？" Then STOP and wait.
 2. Run: `cd <SKILL_DIR> && ./build.sh`
+
+**build.sh 会执行**：
+- 安装 npm 依赖
+- 编译 browse 二进制文件
+- 安装 Playwright Chromium 浏览器
 
 ## Core QA Patterns
 
