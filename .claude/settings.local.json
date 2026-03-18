@@ -15,7 +15,22 @@
       "Bash(mvn spring-boot:run:*)",
       "Bash(mvn clean:*)",
       "Bash(npm run dev)",
-      "Bash(git checkout main && git pull)"
+      "Bash(git checkout main && git pull)",
+      "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse *)",
+      "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse fill:*)",
+      "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse snapshot:*)",
+      "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse html:*)",
+      "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse screenshot:*)",
+      "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse html:*)",
+      "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse wait:*)",
+      "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse url:*)",
+      "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse console:*)",
+      "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse network:*)",
+      "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse goto:*)",
+      "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse snapshot:*)",
+      "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse js:*)",
+      "Bash(mkdir -p .test-report)",
+      "Bash(cp /tmp/browse-*.png .test-report/)"
     ]
   }
 }
