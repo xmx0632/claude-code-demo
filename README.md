@@ -127,4 +127,4 @@ Docker Compose 配置，一键启动 MySQL、Redis 等基础服务。
 
 ## 许可证
 
-MIT
+GPL-3.0 license
