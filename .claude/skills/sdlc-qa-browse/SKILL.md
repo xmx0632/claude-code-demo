@@ -79,10 +79,23 @@ State persists between calls (cookies, tabs, login sessions).
 
 ## SETUP (run this check BEFORE any browse command)
 
+**前置要求**: 首次使用需要安装 Bun（~30 秒）
+
+```bash
+# 检查 bun 是否已安装
+if ! command -v bun &> /dev/null; then
+  echo "正在安装 Bun..."
+  curl -fsSL https://bun.sh/install | bash
+  export PATH="$HOME/.bun/bin:$PATH"
+fi
+```
+
+然后检查 browse 工具状态：
+
 ```bash
 _ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 B=""
-[ -n "$_ROOT" ] && [ -x "$_ROOT/.claude/skills/gstack/browse/dist/browse" ] && B="$_ROOT/.claude/skills/gstack/browse/dist/browse"
+[ -n "$_ROOT" ] && [ -x "$_ROOT/.claude/skills/sdlc-qa-browse/dist/browse" ] && B="$_ROOT/.claude/skills/sdlc-qa-browse/dist/browse"
 [ -z "$B" ] && B=~/.claude/skills/gstack/browse/dist/browse
 if [ -x "$B" ]; then
   echo "READY: $B"
@@ -92,9 +105,8 @@ fi
 ```
 
 If `NEEDS_SETUP`:
-1. Tell the user: "gstack browse needs a one-time build (~10 seconds). OK to proceed?" Then STOP and wait.
-2. Run: `cd <SKILL_DIR> && ./setup`
-3. If `bun` is not installed: `curl -fsSL https://bun.sh/install | bash`
+1. Tell the user: "gstack browse 需要首次编译（~30 秒）。是否继续？" Then STOP and wait.
+2. Run: `cd <SKILL_DIR> && ./build.sh`
 
 ## Core QA Patterns
 
