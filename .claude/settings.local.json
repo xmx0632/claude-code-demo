@@ -32,5 +32,18 @@
       "Bash(mkdir -p .test-report)",
       "Bash(cp /tmp/browse-*.png .test-report/)"
     ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p .local/prompts && echo \"[$(date '+%Y-%m-%d %H:%M:%S')] $(jq -r '.prompt' <<< \"$(cat)\")\" >> .local/prompts/$(date '+%Y-%m-%d').log"
+          }
+        ]
+      }
+    ]
   }
 }
