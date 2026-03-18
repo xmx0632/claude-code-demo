@@ -1,0 +1,12 @@
+# Build artifacts
+dist/
+*.bun
+
+# Dependencies
+node_modules/
+
+# Playwright browsers
+.playwright/
+
+# OS files
+.DS_Store
