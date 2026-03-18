@@ -117,6 +117,14 @@ Docker Compose 配置，一键启动 MySQL、Redis 等基础服务。
 - [Claude Code 文档](https://code.claude.com/docs)
 - [Ruoyi 官网](https://ruoyi.vip/)
 
+## 致谢
+
+本项目在开发过程中参考和使用了以下优秀的开源项目：
+
+- **[gstack](https://github.com/garrytan/gstack)** - 感谢 garrytan 开发的 gstack 项目，本项目的 `sdlc-qa-browse` skill 基于 gstack 的 browse 工具进行了本地化适配和扩展，为 QA 测试提供了强大的无头浏览器支持。
+
+感谢所有为开源社区做出贡献的开发者！
+
 ## 许可证
 
 MIT
