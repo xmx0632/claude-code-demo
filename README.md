@@ -26,21 +26,12 @@ claude-code-demo/
 │   ├── workflows/               # 工作流编排
 │   ├── guides/                  # 框架指南
 │   └── config/                  # 配置文件
-├── Skills-Collection/           # Skills 示例集合
-│   ├── ruoyi-crud/              # CRUD 代码生成
-│   ├── code-review/             # 代码审查助手
-│   ├── api-doc/                 # API 文档生成器
-│   ├── test-gen/                # 单元测试生成器
-│   ├── sql-optimizer/           # SQL 优化建议
-│   └── flyway-migration/        # Flyway 数据库迁移管理
+├── .claude/skills/              # SDLC Skills 集合
+│   ├── sdlc-*/                  # 18 个 SDLC 专业技能
+│   └── doc-convert/             # 文档转换工具
 ├── projects/                    # 项目目录
-│   └── ruoyi-example/           # Ruoyi 示例项目
-│       ├── database-migrations/ # Flyway 数据库迁移组件
-│       │   ├── migrations/      # Flyway 迁移脚本
-│       │   ├── scripts/         # 辅助脚本
-│       │   └── docs/            # 组件文档
-│       ├── src/                 # 源代码
-│       └── docs/                # 项目文档
+│   ├── ruoyi-example/           # Ruoyi 示例项目
+│   └── todolist-sdlc/           # TodoList 完整示例
 └── docs/                        # 详细文档
     ├── quick-start.md           # 快速入门
     ├── happy-remote.md          # Happy 远程开发
@@ -66,9 +57,22 @@ claude-code-demo/
 
 - **15 个开发阶段**: 需求分析 → 产品设计 → 架构设计 → 详细设计 → 数据库迁移 → 代码开发 → 测试 → 验收 → 文档 → 部署 → 升级
 - **8 种 Subagent 角色**: 产品经理、架构师、开发工程师、QA 工程师、DevOps、DBA、技术文档工程师
+- **18 个 SDLC Skills**: 覆盖完整开发生命周期的专业技能集合
 - **50+ 专业模板**: 需求规格说明书、API 规范、测试用例、部署指南等
 - **质量门禁**: 每个阶段都有严格的质量检查点
 - **灵活工作流**: 支持完整 SDLC、敏捷 Sprint、Bug 修复等多种场景
+
+### SDLC Skills
+
+**新增 Skills**：
+- `sdlc-ceo-review` - CEO/创始人视角的计划审视，四种模式（范围扩展/选择性扩展/保持范围/范围缩减）
+- `sdlc-qa-browse` - 快速无头浏览器 QA 测试，支持页面交互、截图、响应式布局验证
+- `sdlc-qa-report` - 只报告模式的 QA 测试，生成结构化测试报告
+- `sdlc-retro` - 周度工程复盘，分析提交历史和代码质量指标
+
+**完整 Skills 列表**（18 个）：需求分析、架构设计、详细设计、代码开发、测试、部署、文档、代码审查、QA 测试、复盘、Mermaid 图表、数据库迁移、API 文档、SQL 优化、测试生成、Ruoyi CRUD、文档转换。
+
+详见 `.claude/skills/` 目录。
 
 ### 快速使用
 
@@ -90,17 +94,6 @@ claude-code-demo/
 - [完整工作流文档](./SDLC-Framework/workflows/full-sdlc-workflow.md) - 15 个阶段详解
 
 ## 项目组件
-
-### Skills-Collection
-
-可重用的技能集合，展示 Claude Code 在实际开发中的应用：
-
-- `ruoyi-crud` - 快速生成 CRUD 代码
-- `code-review` - 代码质量审查
-- `api-doc` - API 文档生成
-- `test-gen` - 单元测试生成
-- `sql-optimizer` - SQL 优化建议
-- `flyway-migration` - 数据库迁移管理
 
 ### database-migrations
 
