@@ -245,27 +245,37 @@ QA 测试完成后应生成结构化报告，包含：
 1. **browse 命令优先**: 当 browse 可执行时，直接使用，不进行编译
 2. **测试用例驱动**: 按照测试用例计划执行测试
 3. **脚本可复现**: 测试脚本能够独立复现测试场景
-4. **路径明确**: 所有文件路径使用绝对路径
+4. **路径明确**: 测试报告位于被测试项目目录下
 5. **使用 gstack browse**: 不使用 MCP Playwright
 
 **报告结构** (按时间戳分目录):
 ```
-.test-report/
-├── 2026-03-19-170034/          # 时间戳目录 (YYYY-MM-DD-HHMMSS)
-│   ├── TEST-PLAN.md              # 测试用例计划（先制定）⭐
-│   ├── TEST-REPORT.md             # 测试报告
-│   ├── test-script.sh             # 测试复现脚本 ⭐
-│   ├── test-output.log            # 测试执行日志
-│   ├── screenshot-1.png           # 测试截图
-│   └── ...
-├── 2026-03-19-170145/
-│   └── ...
-└── LATEST -> 2026-03-19-170145  # 符号链接指向最新测试
+projects/todolist-sdlc/          # 被测试项目目录
+└── .test-report/                # 项目级测试报告目录
+    ├── 2026-03-19-170034/       # 时间戳目录 (YYYY-MM-DD-HHMMSS)
+    │   ├── TEST-PLAN.md              # 测试用例计划（先制定）⭐
+    │   ├── TEST-REPORT.md             # 测试报告
+    │   ├── test-script.sh             # 测试复现脚本 ⭐
+    │   ├── test-output.log            # 测试执行日志
+    │   ├── screenshot-1.png           # 测试截图
+    │   └── ...
+    ├── 2026-03-19-170145/
+    │   └── ...
+    └── LATEST -> 2026-03-19-170145  # 符号链接指向最新测试
 ```
 
 ### 测试流程
 
-**第一步: 制定测试用例计划**
+**重要**: 测试报告应保存在被测试项目的 `.test-report/` 目录下。
+
+**第一步: 进入被测试项目目录**
+
+```bash
+# 示例：测试 todolist-sdlc 项目
+cd projects/todolist-sdlc
+```
+
+**第二步: 制定测试用例计划**
 
 在开始测试前，先制定测试用例计划 `TEST-PLAN.md`：
 
@@ -332,10 +342,12 @@ cd "$REPORT_DIR"
 ### 快速复现问题
 
 ```bash
-# 方法1: 运行测试脚本
+# 方法1: 运行测试脚本（需先进入项目目录）
+cd projects/todolist-sdlc
 cd .test-report/{TIMESTAMP}
 ./test-script.sh
 
 # 方法2: 查看最新测试
-cd .test-report/LATEST && ./test-script.sh
+cd projects/todolist-sdlc/.test-report/LATEST
+./test-script.sh
 ```
