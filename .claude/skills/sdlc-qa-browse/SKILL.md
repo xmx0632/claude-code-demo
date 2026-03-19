@@ -11,23 +11,25 @@ Persistent headless Chromium. First call auto-starts (~3s), then ~100ms per comm
 
 ## SETUP
 
-**前置要求**: 首次使用需要安装 Bun（~30 秒）
+**前置要求**: 首次使用需要编译 browse 工具（~30 秒）
 
 ```bash
-# 检查 bun 是否已安装
-if ! command -v bun &> /dev/null; then
-  echo "正在安装 Bun..."
-  curl -fsSL https://bun.sh/install | bash
-  export PATH="$HOME/.bun/bin:$PATH"
-fi
-
-# 检查 browse 工具状态
+# 1. 先检查 browse 工具是否已存在且可执行
 _ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 B=""
 [ -n "$_ROOT" ] && [ -x "$_ROOT/.claude/skills/sdlc-qa-browse/dist/browse" ] && B="$_ROOT/.claude/skills/sdlc-qa-browse/dist/browse"
+
 if [ -x "$B" ]; then
   echo "READY: $B"
 else
+  # 2. browse 不存在，检查并安装 Bun（编译需要）
+  if ! command -v bun &> /dev/null; then
+    echo "正在安装 Bun（用于编译 browse）..."
+    curl -fsSL https://bun.sh/install | bash
+    export PATH="$HOME/.bun/bin:$PATH"
+  fi
+
+  # 3. 编译 browse 工具
   echo "NEEDS_SETUP"
 fi
 ```
