@@ -172,15 +172,103 @@ $B html @e2       $B css @e5 "color"      $B attrs @e6
 
 ## 测试报告
 
-QA 测试完成后应生成结构化报告，详见:
-```
-.claude/skills/sdlc-qa-browse-legacy/REPORT-TEMPLATE.md
-```
+QA 测试完成后应生成结构化报告，包含：
+- `TEST-PLAN.md` - 测试用例计划（先制定）⭐
+- `TEST-REPORT.md` - 测试报告
+- `test-script.sh` - 测试复现脚本 ⭐
+- `test-output.log` - 测试执行日志
+- `screenshot-*.png` - 测试截图
 
-报告结构:
+详见: `.claude/skills/sdlc-qa-browse-legacy/REPORT-TEMPLATE.md`
+
+**报告结构** (按时间戳分目录):
 ```
 .test-report/
-├── TEST-REPORT.md
-├── screenshot-1.png
-└── ...
+├── 2026-03-19-170034/          # 时间戳目录 (YYYY-MM-DD-HHMMSS)
+│   ├── TEST-PLAN.md              # 测试用例计划（先制定）⭐
+│   ├── TEST-REPORT.md             # 测试报告
+│   ├── test-script.sh             # 测试复现脚本 ⭐
+│   ├── test-output.log            # 测试执行日志
+│   ├── screenshot-1.png           # 测试截图
+│   └── ...
+├── 2026-03-19-170145/
+│   └── ...
+└── LATEST -> 2026-03-19-170145  # 符号链接指向最新测试
+```
+
+### 测试流程
+
+**第一步: 制定测试用例计划**
+
+在开始测试前，先制定测试用例计划 `TEST-PLAN.md`：
+
+```markdown
+# TodoList SDLC - 注册登录功能测试计划
+
+## 测试范围
+- 用户注册功能
+- 用户登录功能
+- 表单验证
+- 错误处理
+
+## 测试用例
+
+### TC001: 用户注册 - 正常流程
+**优先级**: P0
+**前置条件**: 访问注册页面
+
+**测试步骤**:
+1. 导航到 http://localhost:5173/register
+2. 填写邮箱: test@example.com
+3. 填写密码: Pass123
+4. 填写确认密码: Pass123
+5. 填写昵称: 测试用户
+6. 点击注册按钮
+
+**预期结果**: 注册成功，跳转到主页面或登录页
+```
+
+**第二步: 按测试计划执行测试**
+
+```bash
+# 创建测试目录
+TIMESTAMP=$(date +"%Y-%m-%d-%H%M%S")
+REPORT_DIR=".test-report/$TIMESTAMP"
+mkdir -p "$REPORT_DIR"
+cd "$REPORT_DIR"
+
+# 执行测试（记录到日志）
+{
+  echo "=== 开始测试 ==="
+  echo "时间: $(date)"
+
+  # TC001: 用户注册
+  echo ""
+  echo "[TC001] 用户注册测试"
+  browse goto http://localhost:5173/register
+  browse fill "input[type='email']" "test@example.com"
+  browse fill "input[placeholder*='密码']" "Pass123"
+  browse fill "input[placeholder*='确认']" "Pass123"
+  browse fill "input[placeholder*='昵称']" "测试用户"
+  browse screenshot "tc001-before-submit.png"
+  browse click "button[type='submit']"
+  sleep 2
+  browse screenshot "tc001-result.png"
+
+} 2>&1 | tee test-output.log
+```
+
+**第三步: 生成测试报告**
+
+基于测试日志生成 `TEST-REPORT.md`
+
+### 快速复现问题
+
+```bash
+# 方法1: 运行测试脚本
+cd .test-report/{TIMESTAMP}
+./test-script.sh
+
+# 方法2: 查看最新测试
+cd .test-report/LATEST && ./test-script.sh
 ```
