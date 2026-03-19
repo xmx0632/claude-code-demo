@@ -183,9 +183,17 @@ SDLC-Framework/
 │   └── qa.md                      # QA 角色
 │
 ├── guards/                        # 质量约束
+│   ├── README.md                  # 约束说明
 │   ├── security.md                # 安全约束
 │   ├── performance.md             # 性能约束
-│   └── compatibility.md           # 兼容性约束
+│   └── infra.md                   # 基础设施约束
+│
+├── guides/                        # 使用指南
+│   └── getting-started.md         # 快速开始
+│
+├── scripts/                       # 工具脚本
+│   ├── sdlc-status.sh             # 文档状态管理
+│   └── sdlc-detect.sh             # 场景检测
 │
 └── config/                        # 配置文件
     └── framework.yaml             # 框架配置
