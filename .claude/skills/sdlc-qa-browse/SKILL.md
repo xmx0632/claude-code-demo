@@ -100,9 +100,67 @@ $B dialog
 
 **Ref 使用**: `@e1, @e2...` (interactive), `@c1, @c2...` (cursor)
 
+> ⚠️ **重要**: `@e` refs 会随页面变化而改变，**推荐使用稳定的 CSS 选择器**
+
 ```bash
-$B click @e3      $B fill @e4 "value"     $B hover @e1
-$B html @e2       $B css @e5 "color"      $B attrs @e6
+# 推荐: 使用 CSS 选择器
+$B fill "input[placeholder*='邮箱']" "test@example.com"
+$B click "button:has-text('登录')"
+
+# 不推荐: 使用 @e refs（可能变化）
+$B snapshot -i > /dev/null  # 必须先刷新
+$B fill @e1 "test@example.com"  # @e1 可能指向不同元素
+```
+
+## 注意事项
+
+### 1. 命令使用
+
+| 错误写法 | 正确写法 |
+|---------|---------|
+| `gstack browse goto <url>` | `browse goto <url>` |
+| `gstack browse fill <sel> <val>` | `browse fill <sel> <val>` |
+
+使用 `$B` 变量或 `browse` 别名，不是 `gstack browse`。
+
+### 2. 截图路径限制
+
+browse 命令的 screenshot 功能有路径限制，只能保存到：
+- `/tmp` 目录
+- skill 目录 (`/path/to/.claude/skills/sdlc-qa-browse/`)
+
+**解决方案**: 先保存到 `/tmp`，再复制到目标目录
+
+```bash
+screenshot() {
+  local name=$1
+  local tmp_path="/tmp/screenshots/$name.png"
+  local final_path="$TEST_DIR/$name.png"
+  $B screenshot "$tmp_path"
+  cp "$tmp_path" "$final_path"
+}
+```
+
+### 3. 元素选择器稳定性
+
+**CSS 选择器优先级**:
+1. 文本匹配: `button:has-text('登录')`
+2. 属性选择: `input[placeholder*='邮箱']`
+3. 类选择器: `.el-button--primary`
+4. ID 选择器: `#username`
+
+**避免使用**:
+- `@e` refs (会变化)
+- 过于通用的选择器: `input`, `button`
+
+### 4. 页面跳转等待
+
+```bash
+# 导航后等待页面加载
+$B goto $FRONTEND_URL/login
+sleep 2  # 简单等待
+# 或
+$B wait ".login-form" 5  # 等待特定元素
 ```
 
 ## 命令速查表
@@ -175,57 +233,101 @@ $B html @e2       $B css @e5 "color"      $B attrs @e6
 ## 测试报告
 
 QA 测试完成后应生成结构化报告，包含：
+- `TEST-PLAN.md` - 测试用例计划（先制定）⭐
 - `TEST-REPORT.md` - 测试报告
 - `test-script.sh` - 测试复现脚本 ⭐
+- `test-output.log` - 测试执行日志
 - `screenshot-*.png` - 测试截图
-- `test-output.log` - 测试执行日志（可选）
 
 详见: `.claude/skills/sdlc-qa-browse/REPORT-TEMPLATE.md`
+
+**核心原则**:
+1. **browse 命令优先**: 当 browse 可执行时，直接使用，不进行编译
+2. **测试用例驱动**: 按照测试用例计划执行测试
+3. **脚本可复现**: 测试脚本能够独立复现测试场景
+4. **路径明确**: 所有文件路径使用绝对路径
+5. **使用 gstack browse**: 不使用 MCP Playwright
 
 **报告结构** (按时间戳分目录):
 ```
 .test-report/
-├── 2026-03-19-143022/          # 时间戳目录
-│   ├── TEST-REPORT.md          # 测试报告
-│   ├── test-script.sh          # 测试复现脚本 ⭐
-│   ├── test-output.log         # 执行日志（可选）
-│   ├── screenshot-1.png
-│   └── screenshot-2.png
-├── 2026-03-19-150845/
+├── 2026-03-19-170034/          # 时间戳目录 (YYYY-MM-DD-HHMMSS)
+│   ├── TEST-PLAN.md              # 测试用例计划（先制定）⭐
+│   ├── TEST-REPORT.md             # 测试报告
+│   ├── test-script.sh             # 测试复现脚本 ⭐
+│   ├── test-output.log            # 测试执行日志
+│   ├── screenshot-1.png           # 测试截图
 │   └── ...
-└── LATEST -> 2026-03-19-150845  # 符号链接指向最新
+├── 2026-03-19-170145/
+│   └── ...
+└── LATEST -> 2026-03-19-170145  # 符号链接指向最新测试
 ```
 
-### 生成测试脚本
+### 测试流程
 
-在测试时同时生成可复现的脚本：
+**第一步: 制定测试用例计划**
+
+在开始测试前，先制定测试用例计划 `TEST-PLAN.md`：
+
+```markdown
+# TodoList SDLC - 注册登录功能测试计划
+
+## 测试范围
+- 用户注册功能
+- 用户登录功能
+- 表单验证
+- 错误处理
+
+## 测试用例
+
+### TC001: 用户注册 - 正常流程
+**优先级**: P0
+**前置条件**: 访问注册页面
+
+**测试步骤**:
+1. 导航到 http://localhost:5173/register
+2. 填写邮箱: test@example.com
+3. 填写密码: Pass123
+4. 填写确认密码: Pass123
+5. 填写昵称: 测试用户
+6. 点击注册按钮
+
+**预期结果**: 注册成功，跳转到主页面或登录页
+```
+
+**第二步: 按测试计划执行测试**
 
 ```bash
-# 1. 创建时间戳目录
+# 创建测试目录
 TIMESTAMP=$(date +"%Y-%m-%d-%H%M%S")
 REPORT_DIR=".test-report/$TIMESTAMP"
 mkdir -p "$REPORT_DIR"
+cd "$REPORT_DIR"
 
-# 2. 创建测试脚本（记录每一步操作）
-cat > "$REPORT_DIR/test-script.sh" << 'EOF'
-#!/bin/bash
-# 登录功能测试复现脚本
-ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
-B="$ROOT/.claude/skills/sdlc-qa-browse/dist/browse"
+# 执行测试（记录到日志）
+{
+  echo "=== 开始测试 ==="
+  echo "时间: $(date)"
 
-echo "=== 登录功能测试 ==="
-$B goto http://localhost:3000
-$B fill "#username" "test@example.com"
-$B fill "#password" "password123"
-$B click "#login-button"
-$B wait --text "欢迎" 5 || echo "登录超时"
-$B screenshot "$REPORT_DIR/login-result.png"
-EOF
-chmod +x "$REPORT_DIR/test-script.sh"
+  # TC001: 用户注册
+  echo ""
+  echo "[TC001] 用户注册测试"
+  gstack browse goto http://localhost:5173/register
+  gstack browse fill "input[type='email']" "test@example.com"
+  gstack browse fill "input[placeholder*='密码']" "Pass123"
+  gstack browse fill "input[placeholder*='确认']" "Pass123"
+  gstack browse fill "input[placeholder*='昵称']" "测试用户"
+  gstack browse screenshot "tc001-before-submit.png"
+  gstack browse click "button[type='submit']"
+  sleep 2
+  gstack browse screenshot "tc001-result.png"
 
-# 3. 执行测试时记录到日志
-./test-script.sh 2>&1 | tee "$REPORT_DIR/test-output.log"
+} 2>&1 | tee test-output.log
 ```
+
+**第三步: 生成测试报告**
+
+基于测试日志生成 `TEST-REPORT.md`
 
 ### 快速复现问题
 
@@ -234,9 +336,6 @@ chmod +x "$REPORT_DIR/test-script.sh"
 cd .test-report/{TIMESTAMP}
 ./test-script.sh
 
-# 方法2: 查看测试日志
-cat .test-report/{TIMESTAMP}/test-output.log
-
-# 方法3: 查看最新测试
+# 方法2: 查看最新测试
 cd .test-report/LATEST && ./test-script.sh
 ```
