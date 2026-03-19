@@ -174,19 +174,69 @@ $B html @e2       $B css @e5 "color"      $B attrs @e6
 
 ## 测试报告
 
-QA 测试完成后应生成结构化报告，详见:
-```
-.claude/skills/sdlc-qa-browse/REPORT-TEMPLATE.md
-```
+QA 测试完成后应生成结构化报告，包含：
+- `TEST-REPORT.md` - 测试报告
+- `test-script.sh` - 测试复现脚本 ⭐
+- `screenshot-*.png` - 测试截图
+- `test-output.log` - 测试执行日志（可选）
+
+详见: `.claude/skills/sdlc-qa-browse/REPORT-TEMPLATE.md`
 
 **报告结构** (按时间戳分目录):
 ```
 .test-report/
 ├── 2026-03-19-143022/          # 时间戳目录
-│   ├── TEST-REPORT.md
+│   ├── TEST-REPORT.md          # 测试报告
+│   ├── test-script.sh          # 测试复现脚本 ⭐
+│   ├── test-output.log         # 执行日志（可选）
 │   ├── screenshot-1.png
 │   └── screenshot-2.png
 ├── 2026-03-19-150845/
 │   └── ...
 └── LATEST -> 2026-03-19-150845  # 符号链接指向最新
+```
+
+### 生成测试脚本
+
+在测试时同时生成可复现的脚本：
+
+```bash
+# 1. 创建时间戳目录
+TIMESTAMP=$(date +"%Y-%m-%d-%H%M%S")
+REPORT_DIR=".test-report/$TIMESTAMP"
+mkdir -p "$REPORT_DIR"
+
+# 2. 创建测试脚本（记录每一步操作）
+cat > "$REPORT_DIR/test-script.sh" << 'EOF'
+#!/bin/bash
+# 登录功能测试复现脚本
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+B="$ROOT/.claude/skills/sdlc-qa-browse/dist/browse"
+
+echo "=== 登录功能测试 ==="
+$B goto http://localhost:3000
+$B fill "#username" "test@example.com"
+$B fill "#password" "password123"
+$B click "#login-button"
+$B wait --text "欢迎" 5 || echo "登录超时"
+$B screenshot "$REPORT_DIR/login-result.png"
+EOF
+chmod +x "$REPORT_DIR/test-script.sh"
+
+# 3. 执行测试时记录到日志
+./test-script.sh 2>&1 | tee "$REPORT_DIR/test-output.log"
+```
+
+### 快速复现问题
+
+```bash
+# 方法1: 运行测试脚本
+cd .test-report/{TIMESTAMP}
+./test-script.sh
+
+# 方法2: 查看测试日志
+cat .test-report/{TIMESTAMP}/test-output.log
+
+# 方法3: 查看最新测试
+cd .test-report/LATEST && ./test-script.sh
 ```
