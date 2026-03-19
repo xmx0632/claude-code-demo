@@ -179,10 +179,14 @@ QA 测试完成后应生成结构化报告，详见:
 .claude/skills/sdlc-qa-browse/REPORT-TEMPLATE.md
 ```
 
-报告结构:
+**报告结构** (按时间戳分目录):
 ```
 .test-report/
-├── TEST-REPORT.md
-├── screenshot-1.png
-└── ...
+├── 2026-03-19-143022/          # 时间戳目录
+│   ├── TEST-REPORT.md
+│   ├── screenshot-1.png
+│   └── screenshot-2.png
+├── 2026-03-19-150845/
+│   └── ...
+└── LATEST -> 2026-03-19-150845  # 符号链接指向最新
 ```
