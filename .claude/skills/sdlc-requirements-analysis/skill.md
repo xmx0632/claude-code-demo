@@ -193,7 +193,7 @@ mindmap
 ## 模板位置
 
 ```
-SDLC-Framework/01-requirements-analysis/templates/
+templates/
 ├── requirements-template.md
 ├── user-stories-template.md
 ├── acceptance-criteria-template.md

@@ -161,11 +161,8 @@ sequenceDiagram
 ## 模板位置
 
 ```
-SDLC-Framework/03-architecture-design/templates/
+templates/
 ├── architecture-template.md
-├── adr-template.md
-├── tech-stack-template.md
-└── deployment-template.md
 ```
 
 ## 下一步

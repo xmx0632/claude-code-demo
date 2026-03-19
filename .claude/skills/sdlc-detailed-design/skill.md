@@ -195,11 +195,8 @@ DELETE /api/v1/users/{id}     # 删除用户
 ## 模板位置
 
 ```
-SDLC-Framework/04-detailed-design/templates/
+templates/
 ├── api-spec-template.md
-├── data-model-template.md
-├── class-design-template.md
-└── database-design-template.md
 ```
 
 ## 下一步

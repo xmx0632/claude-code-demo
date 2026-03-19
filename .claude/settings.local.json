@@ -30,7 +30,9 @@
       "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse snapshot:*)",
       "Bash(**/.claude/skills/sdlc-qa-browse/dist/browse js:*)",
       "Bash(mkdir -p .test-report)",
-      "Bash(cp /tmp/browse-*.png .test-report/)"
+      "Bash(cp /tmp/browse-*.png .test-report/)",
+      "Bash(mkdir -p /Users/xmx0632/code/claude-code-demo-gitee/claude-code-demo/.claude/skills/sdlc-detailed-design/templates)",
+      "Bash(cp /Users/xmx0632/code/claude-code-demo-gitee/claude-code-demo/SDLC-Framework/04-detailed-design/templates/* /Users/xmx0632/code/claude-code-demo-gitee/claude-code-demo/.claude/skills/sdlc-detailed-design/templates/)"
     ]
   },
   "hooks": {
