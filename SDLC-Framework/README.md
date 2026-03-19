@@ -1,186 +1,151 @@
 # SDLC Framework
 
-> 完整的软件开发生命周期框架，基于 Claude Code + Skills + Subagents + SDD 增强
+> 简化高效的软件开发框架，基于文档驱动的角色协同机制
 
-[![Framework Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com)
+[![Framework Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![SDD Enhanced](https://img.shields.io/badge/SDD-Enhanced-purple.svg)](./SDD-IMPROVEMENT-PLAN.md)
 
 ---
 
 ## 概述
 
-SDLC Framework 是一个生产级的软件开发生命周期框架，旨在帮助开发团队使用 Claude Code 完成从需求分析到系统部署的完整开发流程。它提供了 15 个精心设计的阶段、8 种专业角色、完整的模板体系和灵活的工作流编排。
+SDLC Framework v2.0 是一个简化的软件开发框架，通过**文档驱动的上下文传递**实现角色间高效协同。框架保留 10 个核心技能、3 个精简角色，支持三种场景的灵活切换。
+
+**核心设计理念**：
+- 文档是信息传递的载体
+- 角色通过文档协作，减少上下文丢失
+- 不同场景使用不同的文档组合
+- 质量门禁确保交付质量
 
 ---
 
 ## 核心特性
 
-### 🎯 完整的 SDLC 覆盖
+### 📄 文档驱动协作
 
-15 个开发阶段，覆盖软件开发的完整生命周期：
-
-1. **需求分析** - 收集和分析业务需求
-2. **产品设计** - 创建产品原型和线框图
-3. **系统架构设计** - 设计系统架构和技术选型
-4. **系统详细设计** - 设计 API、数据模型和类图
-5. **数据库迁移脚本** - 创建和管理数据库迁移
-6. **前后端代码开发** - 实现业务逻辑
-7. **单元测试** - 编写和执行单元测试
-8. **集成测试** - 执行集成测试
-9. **系统测试方案** - 制定测试策略
-10. **测试用例编写** - 编写测试用例
-11. **系统验收** - 执行验收测试
-12. **系统用户手册** - 编写用户文档
-13. **系统运维手册** - 编写运维文档
-14. **系统部署说明** - 创建部署指南
-15. **系统增量升级说明** - 编写升级指南
-
-### 👥 专业角色模拟
-
-8 种 Subagent 角色，模拟真实团队协作：
-
-| 角色 | 职责 |
-|------|------|
-| **Product Manager** | 需求收集、干系人管理、用户故事定义 |
-| **Architect** | 系统架构设计、技术选型、架构决策 |
-| **Backend Developer** | 后端代码实现、API 开发、单元测试 |
-| **Frontend Developer** | UI 组件实现、前端集成、用户体验 |
-| **QA Engineer** | 测试策略、测试用例、质量保证 |
-| **DevOps Engineer** | 部署、CI/CD、基础设施、监控 |
-| **DB Administrator** | 数据库设计、迁移、优化 |
-| **Technical Writer** | 文档编写、用户手册、API 文档 |
-
-### 📄 专业模板体系
-
-每个阶段都配有专业的模板，确保文档质量和一致性：
-
-- 需求规格说明书模板
-- 用户故事模板
-- 验收标准模板
-- 架构设计文档模板
-- API 规范模板
-- 测试用例模板
-- 部署指南模板
-- 等 50+ 个专业模板
-
-### ✅ 质量门禁
-
-每个阶段都有严格的质量门禁：
-
-- 自动化检查（代码覆盖率、测试通过率、安全扫描）
-- 手动审查（代码审查、设计审查、干系人批准）
-- 确保每个阶段的质量达标后才进入下一阶段
-
-### 🔄 灵活工作流
-
-支持多种工作流模式：
-
-- **Full SDLC**: 完整的 15 阶段工作流
-- **Agile Sprint**: 敏捷 Sprint 工作流
-- **Bug Fix**: Bug 修复工作流（含框架反馈循环）
-
-### 📋 顶层指导文档（SDD 增强）
-
-借鉴 SDD 方法论，新增两层指导文档：
-
-- **Constitution（项目宪法）**: 定义项目的基本原则和约束
-- **Steering Docs（方向指导）**: 针对特定领域的详细规范
-- **框架反馈循环**: 从每个 Bug 中学习，持续改进框架
-
-详见 [指导文档索引](./guidance/index.md)
-
-### 🔄 框架反馈循环（SDD 增强）
-
-基于 SDD 方法论，每个 Bug 修复后进行框架反思：
+6 个核心文档构成信息传递链：
 
 ```
-Bug 报告 → 复现定位 → 框架反思 → 修复实现 → 验证关闭 → 框架更新
+需求文档 (Requirements.md)
+    │
+    ▼
+架构文档 (Architecture.md)
+    │
+    ├───▶ API规范 (API-Specs.md)
+    │
+    ├───▶ 数据模型 (Data-Models.md)
+    │
+    └───▶ 测试计划 (Test-Plan.md)
+             │
+             ▼
+       部署文档 (Deployment.md)
 ```
 
-**缺口分类**:
-- **A: 规范→实现** - 规范清楚但实现跑偏
-- **B: 意图→规范** - 需求遗漏导致规范缺失
-- **C: 角色协作** - 角色交接时信息丢失
+### 🎯 三种场景
 
-详见 [Bug 修复工作流](./workflows/bug-fix-workflow.md)
+| 场景 | 触发条件 | 必需文档 | 预计时间 |
+|------|---------|---------|---------|
+| **新项目开发** | 目录为空 | 6 个核心文档 | 1-8 周 |
+| **遗留项目维护** | 有 pom.xml/package.json | 变更需求、变更设计、测试清单 | 1 天-2 周 |
+| **Bug 修复** | 意图含 "fix/bug/issue" | Bug分析报告、修复验证报告 | 1 小时-2 天 |
 
-### 📦 本地需求管理（SDD 增强）
+### 👥 三角色协同
 
-基于 Markdown 的轻量级需求管理，与 SDLC 深度集成：
+| 角色 | 职责 | 输出文档 |
+|------|------|---------|
+| **Architect** | 需求分析、架构设计、API/数据模型 | 需求、架构、API规范、数据模型 |
+| **Developer** | 代码实现、单元测试 | 代码、测试用例 |
+| **QA** | 测试计划、测试执行、部署验证 | 测试计划、测试报告、部署文档 |
+
+### 🔄 文档状态追踪
 
 ```
-requirements/
-├── backlog/      # 待处理需求
-├── active/       # 进行中需求
-└── completed/    # 已完成需求
+draft ──▶ in_review ──▶ approved
+  │                    │
+  │                    └──▶ blocked ──▶ draft
+  │
+  └────────────────────▶ deprecated
 ```
 
-**特性**:
-- 需求文件内置 SDLC 进度追踪表
-- 状态自动流转 (backlog → active → completed)
-- 与 SDLC 阶段双向同步
+每个文档有独立的状态追踪，依赖关系自动处理阻塞。
 
-详见 [需求管理工作流](./workflows/requirement-sync-workflow.md)
+### 📦 10 个核心技能
 
-### 🤖 角色约束智能体（SDD 增强）
+保留的高价值技能：
 
-自动注入领域知识的约束智能体：
-
-| 智能体 | 关注领域 | 触发阶段 |
-|--------|----------|----------|
-| **Security Agent** | 安全检查、输入验证、权限控制 | 编码/测试/部署 |
-| **Performance Agent** | 性能基准、缓存策略、查询优化 | 设计/编码/测试 |
-| **Infra Agent** | 部署配置、监控告警、资源限制 | 编码/部署/运维 |
-
-**触发方式**:
-- 按阶段自动触发
-- 按关键词触发 (登录、查询、部署等)
-- 手动指令触发
-
-详见 [智能体注入工作流](./workflows/agent-injection-workflow.md)
+| Skill | 用途 |
+|-------|------|
+| `sdlc-requirements-analysis` | 需求分析 |
+| `sdlc-architecture-design` | 架构设计 |
+| `sdlc-detailed-design` | 详细设计 |
+| `sdlc-code-development` | 代码开发 |
+| `sdlc-testing` | 测试 |
+| `sdlc-code-review` | 代码审查 |
+| `sdlc-qa-browse` | QA 浏览器测试 |
+| `sdlc-qa-browse-legacy` | QA 浏览器测试 (旧版 macOS) |
+| `sdlc-flyway-migration` | 数据库迁移 |
+| `sdlc-deployment` | 部署发布 |
 
 ---
 
 ## 快速开始
 
-### 1. 执行完整工作流
+### 场景 1: 新项目开发
 
 ```bash
-# 从需求分析开始，执行完整的 SDLC
-/sdlc-full "创建用户认证系统，支持 OAuth2 登录"
+# 步骤 1: 需求分析 (Architect)
+/sdlc-requirements-analysis "用户认证系统，支持 OAuth2"
+
+# 步骤 2: 架构设计 (Architect)
+/sdlc-architecture-design
+
+# 步骤 3: 详细设计 (Architect)
+/sdlc-detailed-design
+
+# 步骤 4: 代码开发 (Developer)
+/sdlc-code-development
+
+# 步骤 5: 测试 (QA)
+/sdlc-testing
+
+# 步骤 6: 部署 (QA)
+/sdlc-deployment
 ```
 
-### 2. 分阶段执行
+### 场景 2: 遗留项目维护
 
 ```bash
-# 步骤 1: 需求分析
-/requirements-analysis "创建用户认证系统"
+# 步骤 1: 变更需求 (Architect)
+/sdlc-requirements-analysis "添加用户头像上传功能" --scope=change
 
-# 步骤 2: 架构设计
-/architecture-design
+# 步骤 2: 变更设计 (Architect)
+/sdlc-detailed-design --update
 
-# 步骤 3: 详细设计
-/detailed-design
+# 步骤 3: 代码实现 (Developer)
+/sdlc-code-development
 
-# 步骤 4: 数据库迁移
-/flyway-migration create --table=sys_user
+# 步骤 4: 测试验证 (QA)
+/sdlc-testing
 
-# 步骤 5: 代码生成
-/ruoyi-crud sys_user
-
-# 步骤 6: 单元测试
-/test-gen UserService
-
-# 步骤 7: 代码审查
-/code-review
+# 步骤 5: 部署 (QA)
+/sdlc-deployment
 ```
 
-### 3. 从特定阶段恢复
+### 场景 3: Bug 修复
 
 ```bash
-# 从架构设计阶段恢复
-/sdlc-resume --from-stage=architecture-design
+# 步骤 1: Bug 分析 (Architect)
+# 创建 Bug-Analysis.md
+/sdlc-requirements-analysis "修复登录超时问题" --scope=bug
+
+# 步骤 2: 修复实现 (Developer)
+/sdlc-code-development
+
+# 步骤 3: 验证 (QA)
+/sdlc-testing
+
+# 步骤 4: 创建修复报告
+# 创建 Fix-Verification.md
 ```
 
 ---
@@ -190,280 +155,199 @@ requirements/
 ```
 SDLC-Framework/
 ├── README.md                      # 框架概览（本文件）
-├── SDD-IMPROVEMENT-PLAN.md        # SDD 改进计划
-├── framework-config.yaml          # 全局配置
 │
-├── 01-requirements-analysis/      # 阶段 1: 需求分析
-├── 02-product-design/             # 阶段 2: 产品设计
-├── 03-architecture-design/        # 阶段 3: 系统架构设计
-├── 04-detailed-design/            # 阶段 4: 系统详细设计
-├── 05-database-migration/         # 阶段 5: 数据库迁移
-├── 06-code-development/           # 阶段 6: 代码开发
-├── 07-unit-testing/               # 阶段 7: 单元测试
-├── 08-integration-testing/        # 阶段 8: 集成测试
-├── 09-system-testing/             # 阶段 9: 系统测试
-├── 10-test-case-writing/          # 阶段 10: 测试用例编写
-├── 11-system-acceptance/          # 阶段 11: 系统验收
-├── 12-user-manual/                # 阶段 12: 用户手册
-├── 13-operations-manual/          # 阶段 13: 运维手册
-├── 14-deployment-instructions/    # 阶段 14: 部署说明
-├── 15-incremental-upgrade/        # 阶段 15: 增量升级
+├── docs/                          # 核心文档定义
+│   ├── core-docs.md               # 6 个核心文档定义
+│   ├── status-tracking.md         # 文档状态追踪机制
+│   └── templates/                 # 文档模板
+│       ├── requirements-template.md
+│       ├── architecture-template.md
+│       ├── api-specs-template.md
+│       ├── data-models-template.md
+│       ├── test-plan-template.md
+│       └── deployment-template.md
 │
-├── roles/                     # Subagent 角色定义
-│   ├── product-manager-agent.md
-│   ├── architect-agent.md
-│   ├── backend-developer-agent.md
-│   ├── frontend-developer-agent.md
-│   ├── qa-engineer-agent.md
-│   ├── devops-engineer-agent.md
-│   ├── db-admin-agent.md
-│   └── technical-writer-agent.md
+├── workflows/                     # 工作流定义
+│   └── scenarios/                 # 三种场景
+│       ├── new-project.md         # 新项目开发
+│       ├── legacy-maintenance.md  # 遗留项目维护
+│       └── bug-fix.md             # Bug 修复
 │
-├── guards/                        # 约束智能体（SDD 增强）
-│   ├── security-agent.md          # 安全约束
-│   ├── performance-agent.md       # 性能约束
-│   └── infra-agent.md             # 基础设施约束
+├── roles/                         # 角色定义
+│   ├── architect.md               # 架构师角色
+│   ├── developer.md               # 开发者角色
+│   └── qa.md                      # QA 角色
 │
-├── requirements/                  # 本地需求管理（SDD 增强）
-│   ├── README.md                  # 使用说明
-│   ├── TEMPLATE.md                # 需求模板
-│   ├── backlog/                   # 待处理
-│   ├── active/                    # 进行中
-│   └── completed/                 # 已完成
-│
-├── workflows/                     # 工作流编排
-│   ├── full-sdlc-workflow.md      # 完整 SDLC 工作流
-│   ├── agile-sprint-workflow.md   # 敏捷 Sprint 工作流
-│   ├── bug-fix-workflow.md        # Bug 修复工作流
-│   ├── requirement-sync-workflow.md   # 需求同步工作流
-│   └── agent-injection-workflow.md    # 智能体注入工作流
-│
-├── guides/                        # 框架指南
-│   ├── getting-started.md         # 快速开始
-│   ├── subagent-guide.md          # Subagent 指南
-│   ├── skill-integration-guide.md # 技能集成指南
-│   └── best-practices.md          # 最佳实践
-│
-├── guidance/                      # 顶层指导文档（SDD 增强）
-│   ├── CONSTITUTION.md            # 项目宪法
-│   ├── STEERING-DOCS.md           # 方向指导索引
-│   ├── templates/                 # 规范模板
-│   └── feedback/                  # 框架反馈记录
-│       ├── FRAMEWORK-FEEDBACK.md  # 反馈总览
-│       └── templates/             # 反思模板
+├── guards/                        # 质量约束
+│   ├── security.md                # 安全约束
+│   ├── performance.md             # 性能约束
+│   └── compatibility.md           # 兼容性约束
 │
 └── config/                        # 配置文件
-    ├── stage-dependencies.yaml    # 阶段依赖关系
-    ├── skill-mapping.yaml         # 技能映射
-    └── quality-gates.yaml         # 质量门禁
+    └── framework.yaml             # 框架配置
 ```
 
 ---
 
-## 使用场景
+## 文档状态追踪
 
-### 场景 1: 新项目启动
+### 状态文件
 
-适用于从零开始的新项目：
+`.sdlc/docs-status.yaml` 记录所有文档状态：
 
-```bash
-# 执行完整的 SDLC
-/sdlc-full "电商平台订单管理系统"
+```yaml
+project:
+  name: "用户认证系统"
+  type: "new"
+  created_at: "2026-03-19"
+  scenario: "new-project"
+
+documents:
+  requirements.md:
+    status: "approved"
+    version: "v1.0"
+    owner: "Architect"
+    dependencies: []
+    blocking: ["architecture.md"]
+
+  architecture.md:
+    status: "in_review"
+    version: "v0.9"
+    owner: "Architect"
+    dependencies: ["requirements.md"]
+    blocking: ["api-specs.md", "data-models.md"]
 ```
 
-### 场景 2: 功能新增
-
-适用于为现有系统添加新功能：
+### 查看文档状态
 
 ```bash
-# 只执行需要的阶段
-/sdlc-stages --stages=requirements-analysis,detailed-design,code-development
-```
+# 查看所有文档状态
+cat .sdlc/docs-status.yaml
 
-### 场景 3: 敏捷开发
-
-适用于 2 周的敏捷 Sprint：
-
-```bash
-# 使用敏捷 Sprint 工作流
-/agile-sprint --sprint=23 --stories=5
-```
-
-### 场景 4: Bug 修复
-
-适用于快速修复 Bug：
-
-```bash
-# 使用 Bug 修复工作流
-/bug-fix --ticket=BUG-123
+# 生成状态看板
+sdlc-docs dashboard
 ```
 
 ---
 
-## 输出文档
+## 质量门禁
 
-使用框架后，你的项目将包含完整的文档体系：
+### 新项目场景
+
+- [ ] 需求文档已批准
+- [ ] 架构文档已审查
+- [ ] API 规范已定义
+- [ ] 测试用例已覆盖
+- [ ] 部署方案已验证
+
+### 遗留项目维护场景
+
+- [ ] 变更影响已评估
+- [ ] 回归测试已定义
+- [ ] 向后兼容已验证
+- [ ] 回滚方案已准备
+
+### Bug 修复场景
+
+- [ ] Bug 根因已确认
+- [ ] 修复方案已评审
+- [ ] 回归测试已通过
+- [ ] 部署回滚方案已准备
+
+---
+
+## 技能映射
+
+### Architect 负责的技能
+
+| 阶段 | 技能 | 输出 |
+|------|------|------|
+| 需求分析 | `sdlc-requirements-analysis` | Requirements.md |
+| 架构设计 | `sdlc-architecture-design` | Architecture.md |
+| 详细设计 | `sdlc-detailed-design` | API-Specs.md, Data-Models.md |
+| 代码审查 | `sdlc-code-review` | 审查意见 |
+
+### Developer 负责的技能
+
+| 阶段 | 技能 | 输出 |
+|------|------|------|
+| 代码开发 | `sdlc-code-development` | 源代码 |
+| 数据库迁移 | `sdlc-flyway-migration` | 迁移脚本 |
+
+### QA 负责的技能
+
+| 阶段 | 技能 | 输出 |
+|------|------|------|
+| 测试 | `sdlc-testing` | 测试报告 |
+| 浏览器测试 | `sdlc-qa-browse` | 测试报告 + 截图 |
+| 部署 | `sdlc-deployment` | Deployment.md |
+
+---
+
+## 输出文档结构
+
+使用框架后，项目将包含：
 
 ```
 your-project/
+├── .sdlc/
+│   └── docs-status.yaml           # 文档状态追踪
+│
 ├── docs/
-│   ├── requirements/              # 需求文档
-│   │   ├── requirements-spec.md
-│   │   ├── user-stories.md
-│   │   └── acceptance-criteria.md
-│   ├── design/                    # 设计文档
-│   │   ├── wireframes.md
-│   │   └── ui-flow.md
-│   ├── architecture/              # 架构文档
-│   │   ├── architecture.md
-│   │   └── adr-records.md
-│   ├── detailed-design/           # 详细设计
-│   │   ├── api-specs.md
-│   │   └── data-models.md
-│   ├── testing/                   # 测试文档
-│   │   ├── test-plan.md
-│   │   └── test-cases.md
-│   ├── user/                      # 用户文档
-│   │   ├── user-manual.md
-│   │   └── quick-start.md
-│   ├── operations/                # 运维文档
-│   │   ├── ops-manual.md
-│   │   └── monitoring.md
-│   ├── deployment/                # 部署文档
-│   │   └── deployment-guide.md
-│   └── upgrade/                   # 升级文档
-│       └── upgrade-guide.md
+│   ├── requirements.md             # 需求文档
+│   ├── architecture.md             # 架构文档
+│   ├── api-specs.md               # API 规范
+│   ├── data-models.md             # 数据模型
+│   ├── test-plan.md               # 测试计划
+│   └── deployment.md              # 部署文档
+│
 └── src/                           # 源代码
 ```
 
 ---
 
-## 配置和自定义
-
-### 项目级配置
-
-创建 `.sdlc/config.yaml` 自定义框架行为：
-
-```yaml
-framework_version: "1.0"
-
-stages:
-  - requirements-analysis
-  - architecture-design
-  - code-development
-
-quality_gates:
-  code_coverage: 0.9
-
-custom_templates:
-  requirements: .sdlc/templates/custom-requirements.md
-```
-
-### 自定义模板
-
-1. 复制默认模板
-2. 根据需求修改
-3. 在配置中引用
-
-详细说明请参考 [快速开始指南](./guides/getting-started.md)。
-
----
-
-## 集成现有 Skills
-
-框架集成了现有的 Skills：
-
-- `ruoyi-crud` - CRUD 代码生成
-- `code-review` - 代码审查
-- `test-gen` - 单元测试生成
-- `api-doc` - API 文档生成
-- `sql-optimizer` - SQL 优化
-- `flyway-migration` - Flyway 迁移管理
-
-并添加了新的 Skills：
-
-- `requirements-analysis` - 需求分析
-- `architecture-design` - 架构设计
-- `product-design` - 产品设计
-- `detailed-design` - 详细设计
-- 等等...
-
----
-
 ## 最佳实践
 
-1. **按顺序执行**: 除非明确说明可以并行，否则按阶段顺序执行
-2. **质量优先**: 不通过质量门禁不要进入下一阶段
-3. **文档同步**: 保持文档与代码同步更新
-4. **版本控制**: 所有文档和代码都应该版本控制
-5. **定期审查**: 每个阶段完成后进行审查
-6. **沟通协作**: 保持与干系人的定期沟通
-
-详细的最佳实践请参考 [最佳实践指南](./guides/best-practices.md)。
+1. **文档先行**: 任何代码实现前，先完成相应文档
+2. **状态同步**: 文档状态变更时，更新 `.sdlc/docs-status.yaml`
+3. **依赖管理**: 依赖文档未批准时，阻塞文档状态设为 `blocked`
+4. **质量门禁**: 不通过质量门禁不进入下一阶段
+5. **场景识别**: 开始前明确项目场景，选择合适的工作流
 
 ---
 
-## 文档
+## 版本历史
 
-- [快速开始指南](./guides/getting-started.md) - 如何快速上手
-- [Subagent 指南](./guides/subagent-guide.md) - 如何使用 Subagents
-- [技能集成指南](./guides/skill-integration-guide.md) - 如何集成自定义 Skills
-- [最佳实践](./guides/best-practices.md) - 框架使用的最佳实践
-- [完整 SDLC 工作流](./workflows/full-sdlc-workflow.md) - 15 个阶段详解
+### v2.0.0 (2026-03-19)
 
----
+**重大简化**:
+- ✨ 技能从 20 简化到 10
+- ✨ 角色从 8 简化到 3
+- ✨ 文档驱动协作机制
+- ✨ 三种场景工作流
+- ✨ 文档状态追踪系统
 
-## 优势
+**保留技能**:
+- sdlc-requirements-analysis
+- sdlc-architecture-design
+- sdlc-detailed-design
+- sdlc-code-development
+- sdlc-testing
+- sdlc-code-review
+- sdlc-qa-browse
+- sdlc-qa-browse-legacy
+- sdlc-flyway-migration
+- sdlc-deployment
 
-1. **完整覆盖**: 15 个阶段覆盖完整 SDLC
-2. **角色分离**: 8 个 Subagent 模拟真实团队协作
-3. **模板驱动**: 确保文档质量和一致性
-4. **质量门禁**: 每个阶段都有质量检查点
-5. **灵活组合**: 支持多种工作流场景
-6. **可扩展**: 易于添加新阶段、新技能、新 Subagent
-7. **生产级**: 可直接应用于实际项目
+### v1.1.0 (2026-03-16)
 
----
+- 本地需求管理
+- 角色约束智能体
+- 框架反馈循环
 
-## 适用场景
+### v1.0.0 (2026-03-01)
 
-- ✅ 新项目开发
-- ✅ 功能模块开发
-- ✅ 敏捷 Sprint
-- ✅ Bug 修复
-- ✅ 技术债务重构
-- ✅ 系统升级迁移
-
----
-
-## 注意事项
-
-1. **模板质量**: 模板需要根据项目特点定制
-2. **Subagent 上下文**: Subagent 需要足够的上下文信息
-3. **阶段依赖**: 确保阶段依赖关系正确
-4. **质量门禁**: 平衡自动化检查和人工审查
-5. **文档维护**: 框架文档需要持续更新
-
----
-
-## 版本
-
-当前版本: **1.1.0** (SDD Enhanced)
-
-### 更新日志
-
-**v1.1.0** (2026-03-16)
-- ✨ 新增本地需求管理（Markdown 格式）
-- ✨ 新增角色约束智能体（Security/Performance/Infra）
-- ✨ 新增智能体注入工作流
-- ✨ 新增需求同步工作流
-- 📝 完善 SDD 改进计划文档
-
-**v1.0.0** (2026-03-01)
-- 🎉 初始版本发布
-- ✅ 15 个 SDLC 阶段
-- ✅ 8 个 Subagent 角色
-- ✅ 50+ 模板
+- 初始版本发布
 
 ---
 
@@ -473,16 +357,4 @@ MIT License - 详见 LICENSE 文件
 
 ---
 
-## 贡献
-
-欢迎贡献！请提交 Pull Request 或 Issue。
-
----
-
-## 联系方式
-
-如有问题或建议，请提交 Issue 到项目仓库。
-
----
-
-**开始使用**: 阅读 [快速开始指南](./guides/getting-started.md) 🚀
+**开始使用**: 阅读 [场景文档](./workflows/scenarios/) 🚀
