@@ -26,6 +26,8 @@ else
   if ! command -v bun &> /dev/null; then
     echo "正在安装 Bun（用于编译 browse）..."
     curl -fsSL https://bun.sh/install | bash
+    # 如果是旧版本的 macOS 版本低于 MacOS 12.1 使用 bun-v1.0.2
+    curl -fsSL https://bun.sh/install | bash -s "bun-v1.0.2"
     export PATH="$HOME/.bun/bin:$PATH"
   fi
 

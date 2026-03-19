@@ -17,7 +17,8 @@ user-invocable: true
 # 检查 bun 是否已安装
 if ! command -v bun &> /dev/null; then
   echo "正在安装 Bun..."
-  curl -fsSL https://bun.sh/install | bash
+  #  curl -fsSL https://bun.sh/install | bash
+  curl -fsSL https://bun.sh/install | bash -s "bun-v1.0.2"
   export PATH="$HOME/.bun/bin:$PATH"
 fi
 
