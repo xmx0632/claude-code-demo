@@ -1,0 +1,22 @@
+{
+  "name": "sdlc-report-html",
+  "version": "1.0.0",
+  "description": "Convert Markdown test reports to single-file HTML with base64 embedded images",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "sdlc-report-html": "./index.js"
+  },
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [
+    "markdown",
+    "html",
+    "report",
+    "base64",
+    "test-report"
+  ],
+  "author": "Claude Code",
+  "license": "MIT"
+}

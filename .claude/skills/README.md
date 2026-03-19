@@ -23,7 +23,9 @@
 │   ├── flyway-migration/        # Flyway 数据库迁移助手
 │   ├── sql-optimizer/           # SQL 优化助手
 │   ├── mermaid-diagram/         # Mermaid 图表生成器
-│   └── ui-ux-pro-max/           # UI/UX 设计助手
+│   ├── ui-ux-pro-max/           # UI/UX 设计助手
+│   ├── qa-browse/               # QA 测试浏览器（新版）
+│   └── qa-browse-legacy/        # QA 测试浏览器（兼容 macOS 11.x）
 ```
 
 ## 🎯 Claude Code 官方规范
@@ -126,6 +128,30 @@ allowed-tools: ["Read", "Write", "Edit"]
 ```bash
 /sdlc-mermaid-diagram --type=architecture --title="系统架构"
 ```
+
+### 8. sdlc-qa-browse
+
+**用途**: 快速无头浏览器，用于 QA 测试和站点验证
+
+**使用**:
+```bash
+/sdlc-qa-browse
+```
+
+### 9. sdlc-qa-browse-legacy
+
+**用途**: 快速无头浏览器（兼容旧版 macOS Big Sur 11.x）
+
+**使用**:
+```bash
+/sdlc-qa-browse-legacy
+```
+
+**说明**:
+- **Playwright 1.58.2** (需要 macOS 12+)
+- **Playwright 1.25.2** (兼容 macOS 11.x)
+
+如果你的电脑是 macOS Big Sur 11.x 或更早版本，请使用 `sdlc-qa-browse-legacy`。
 
 ---
 
