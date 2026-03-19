@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
+    "chrome-remote-interface": "^0.34.0",
     "diff": "^7.0.0",
     "playwright": "1.25.2"
   }

@@ -1,0 +1,8 @@
+#!/bin/bash
+# browse - Wrapper for browse-hybrid (macOS 11 compatible)
+# This script uses bun to run the TypeScript source directly
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Use bun run to execute the TypeScript source
+bun run "$SCRIPT_DIR/src/browse-hybrid.ts" "$@"

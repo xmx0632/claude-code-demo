@@ -48,12 +48,7 @@ export class BrowserManager {
   private dialogPromptText: string | null = null;
 
   async launch() {
-    // Use chromium-1019 for macOS 11 compatibility
-    const chromiumPath = `${process.env.HOME}/Library/Caches/ms-playwright/chromium-1019/chrome-mac/Chromium.app/Contents/MacOS/Chromium`;
-    this.browser = await chromium.launch({
-      headless: true,
-      executablePath: chromiumPath
-    });
+    this.browser = await chromium.launch({ headless: true });
 
     // Chromium crash → exit with clear message
     this.browser.on('disconnected', () => {
