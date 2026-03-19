@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+bun.lockb
+
+# Build output
+dist/
+
+# State files
+.gstack/
+*.log
+
+# OS files
+.DS_Store

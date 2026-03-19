@@ -1,0 +1,10 @@
+{
+  "name": "sdlc-qa-puppeteer",
+  "version": "1.0.0",
+  "description": "QA Testing & Dogfooding with Puppeteer (macOS 11 compatible)",
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
+    "puppeteer": "13.7.0"
+  }
+}
