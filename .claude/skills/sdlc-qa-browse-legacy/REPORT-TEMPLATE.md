@@ -1,30 +1,43 @@
 # 测试报告模板
 
-使用 **browse** 命令进行 QA 测试后，应生成结构化的测试报告并保存到 `.test-report/` 目录。
+使用 **browse** 命令进行 QA 测试后，应生成结构化的测试报告并保存到被测试项目的 `.test-report/` 目录。
 
-> **重要**: 使用 `browse` 命令，不是 `gstack browse`。browse 命令位于 `.claude/skills/sdlc-qa-browse-legacy/dist/browse`
+> **重要**:
+> 1. 使用 `browse` 命令，不是 `gstack browse`。browse 命令位于 `.claude/skills/sdlc-qa-browse-legacy/dist/browse`
+> 2. 测试报告应保存在**被测试项目**的 `.test-report/` 目录下，而非仓库根目录
 
 ## 核心原则
 
 1. **browse 命令优先**: 当 browse 可执行时，直接使用，不进行编译
 2. **测试用例驱动**: 按照测试用例计划执行测试
 3. **脚本可复现**: 测试脚本能够独立复现测试场景
-4. **路径明确**: 所有文件路径使用绝对路径
+4. **路径明确**: 测试报告位于被测试项目目录下
+5. **先进入项目目录**: 执行测试前必须先 `cd` 到被测试项目目录
 
 ## 报告结构
 
 ```
-.test-report/
-├── 2026-03-19-170034/          # 时间戳目录 (YYYY-MM-DD-HHMMSS)
-│   ├── TEST-PLAN.md              # 测试用例计划（先制定）⭐
-│   ├── TEST-REPORT.md             # 测试报告
-│   ├── test-script.sh             # 测试复现脚本 ⭐
-│   ├── test-output.log            # 测试执行日志
-│   ├── screenshot-1.png           # 测试截图
-│   └── ...
-├── 2026-03-19-170145/
-│   └── ...
-└── LATEST -> 2026-03-19-170145  # 符号链接指向最新测试
+projects/todolist-sdlc/          # 被测试项目目录
+└── .test-report/                # 项目级测试报告目录
+    ├── 2026-03-19-170034/       # 时间戳目录 (YYYY-MM-DD-HHMMSS)
+    │   ├── TEST-PLAN.md              # 测试用例计划（先制定）⭐
+    │   ├── TEST-REPORT.md             # 测试报告
+    │   ├── test-script.sh             # 测试复现脚本 ⭐
+    │   ├── test-output.log            # 测试执行日志
+    │   ├── screenshot-1.png           # 测试截图
+    │   └── ...
+    ├── 2026-03-19-170145/
+    │   └── ...
+    └── LATEST -> 2026-03-19-170145  # 符号链接指向最新测试
+```
+
+## 测试流程
+
+### 第一步: 进入被测试项目目录
+
+```bash
+# 示例：测试 todolist-sdlc 项目
+cd projects/todolist-sdlc
 ```
 
 ## 测试流程
@@ -324,22 +337,25 @@ log "=== 测试完成 ==="
 ## 快捷命令
 
 ```bash
-# 1. 创建新的测试目录
+# 1. 进入被测试项目目录
+cd projects/todolist-sdlc
+
+# 2. 创建新的测试目录
 TIMESTAMP=$(date +"%Y-%m-%d-%H%M%S")
 mkdir -p ".test-report/$TIMESTAMP"
 cd ".test-report/$TIMESTAMP"
 
-# 2. 制定测试计划
+# 3. 制定测试计划
 # 编辑 TEST-PLAN.md
 
-# 3. 按计划执行测试
+# 4. 按计划执行测试
 ./test-script.sh
 
-# 4. 生成测试报告
+# 5. 生成测试报告
 # 基于 test-output.log 生成 TEST-REPORT.md
 
-# 5. 查看最新测试
-cd .test-report/LATEST
+# 6. 查看最新测试
+cd ../LATEST
 ```
 
 ## 测试报告模板

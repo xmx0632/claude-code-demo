@@ -198,7 +198,16 @@ QA 测试完成后应生成结构化报告，包含：
 
 ### 测试流程
 
-**第一步: 制定测试用例计划**
+**重要**: 测试报告应保存在被测试项目的 `.test-report/` 目录下，而非仓库根目录。
+
+**第一步: 进入被测试项目目录**
+
+```bash
+# 示例：测试 todolist-sdlc 项目
+cd projects/todolist-sdlc
+```
+
+**第二步: 制定测试用例计划**
 
 在开始测试前，先制定测试用例计划 `TEST-PLAN.md`：
 
@@ -228,10 +237,10 @@ QA 测试完成后应生成结构化报告，包含：
 **预期结果**: 注册成功，跳转到主页面或登录页
 ```
 
-**第二步: 按测试计划执行测试**
+**第三步: 按测试计划执行测试**
 
 ```bash
-# 创建测试目录
+# 创建测试目录（在项目目录下）
 TIMESTAMP=$(date +"%Y-%m-%d-%H%M%S")
 REPORT_DIR=".test-report/$TIMESTAMP"
 mkdir -p "$REPORT_DIR"
@@ -265,10 +274,26 @@ cd "$REPORT_DIR"
 ### 快速复现问题
 
 ```bash
-# 方法1: 运行测试脚本
+# 方法1: 运行测试脚本（需先进入项目目录）
+cd projects/todolist-sdlc
 cd .test-report/{TIMESTAMP}
 ./test-script.sh
 
 # 方法2: 查看最新测试
-cd .test-report/LATEST && ./test-script.sh
+cd projects/todolist-sdlc/.test-report/LATEST
+./test-script.sh
+```
+
+### 测试报告目录结构
+
+```
+projects/todolist-sdlc/          # 被测试项目目录
+└── .test-report/                # 项目级测试报告目录
+    ├── 2026-03-19-170034/       # 时间戳目录
+    │   ├── TEST-PLAN.md
+    │   ├── TEST-REPORT.md
+    │   ├── test-script.sh
+    │   └── test-output.log
+    ├── 2026-03-19-170145/
+    └── LATEST -> 2026-03-19-170145
 ```
