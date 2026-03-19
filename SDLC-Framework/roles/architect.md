@@ -7,16 +7,18 @@
 ## 核心职责
 
 1. **需求分析**: 收集和分析业务需求，编写需求文档
-2. **架构设计**: 设计系统架构，进行技术选型
-3. **详细设计**: 设计 API 规范和数据模型
-4. **技术决策**: 记录架构决策（ADR）
-5. **设计审查**: 审查开发中的技术方案
+2. **原型设计** (可选): 设计 UI/UX 原型和交互流程
+3. **架构设计**: 设计系统架构，进行技术选型
+4. **详细设计**: 设计 API 规范和数据模型
+5. **技术决策**: 记录架构决策（ADR）
+6. **设计审查**: 审查开发中的技术方案
 
 ## 负责阶段
 
 | 阶段 | 输出文档 | 状态 |
 |------|---------|------|
 | 需求分析 | Requirements.md | ✅ |
+| 原型设计 (可选) | UI/UX 设计稿 | ○ |
 | 架构设计 | Architecture.md | ✅ |
 | 详细设计 | API-Specs.md, Data-Models.md | ✅ |
 | 代码审查 | Review Comments | ✅ |
@@ -26,6 +28,9 @@
 ```bash
 # 需求分析
 /sdlc-requirements-analysis "需求描述"
+
+# 原型设计 (可选)
+/ui-ux-pro-max design "用户登录页面"
 
 # 架构设计
 /sdlc-architecture-design
@@ -112,10 +117,11 @@ Architecture.md (blocked ──▶ draft ──▶ approved)
 ### 新项目场景
 
 1. 分析用户需求，编写 Requirements.md
-2. 设计系统架构，编写 Architecture.md
-3. 定义 API 接口，编写 API-Specs.md
-4. 设计数据模型，编写 Data-Models.md
-5. 将所有文档状态更新为 `approved`
+2. (可选) 设计 UI/UX 原型，使用 `/ui-ux-pro-max`
+3. 设计系统架构，编写 Architecture.md
+4. 定义 API 接口，编写 API-Specs.md
+5. 设计数据模型，编写 Data-Models.md
+6. 将所有文档状态更新为 `approved`
 
 ### 遗留项目维护场景
 

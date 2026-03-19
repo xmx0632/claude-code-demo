@@ -53,7 +53,7 @@ SDLC Framework v2.0 是一个简化的软件开发框架，通过**文档驱动�
 
 | 角色 | 职责 | 输出文档 |
 |------|------|---------|
-| **Architect** | 需求分析、架构设计、API/数据模型 | 需求、架构、API规范、数据模型 |
+| **Architect** | 需求分析、原型设计(可选)、架构设计、API/数据模型 | 需求、原型(可选)、架构、API规范、数据模型 |
 | **Developer** | 代码实现、单元测试 | 代码、测试用例 |
 | **QA** | 测试计划、测试执行、部署验证 | 测试计划、测试报告、部署文档 |
 
@@ -69,22 +69,23 @@ draft ──▶ in_review ──▶ approved
 
 每个文档有独立的状态追踪，依赖关系自动处理阻塞。
 
-### 📦 10 个核心技能
+### 📦 核心技能
 
 保留的高价值技能：
 
-| Skill | 用途 |
-|-------|------|
-| `sdlc-requirements-analysis` | 需求分析 |
-| `sdlc-architecture-design` | 架构设计 |
-| `sdlc-detailed-design` | 详细设计 |
-| `sdlc-code-development` | 代码开发 |
-| `sdlc-testing` | 测试 |
-| `sdlc-code-review` | 代码审查 |
-| `sdlc-qa-browse` | QA 浏览器测试 |
-| `sdlc-qa-browse-legacy` | QA 浏览器测试 (旧版 macOS) |
-| `sdlc-flyway-migration` | 数据库迁移 |
-| `sdlc-deployment` | 部署发布 |
+| Skill | 用途 | 角色 |
+|-------|------|------|
+| `sdlc-requirements-analysis` | 需求分析 | Architect |
+| `ui-ux-pro-max` | UI/UX 原型设计 | Architect (可选) |
+| `sdlc-architecture-design` | 架构设计 | Architect |
+| `sdlc-detailed-design` | 详细设计 | Architect |
+| `sdlc-code-development` | 代码开发 | Developer |
+| `sdlc-testing` | 测试 | QA |
+| `sdlc-code-review` | 代码审查 | Architect |
+| `sdlc-qa-browse` | QA 浏览器测试 | QA |
+| `sdlc-qa-browse-legacy` | QA 浏览器测试 (旧版 macOS) | QA |
+| `sdlc-flyway-migration` | 数据库迁移 | Developer |
+| `sdlc-deployment` | 部署发布 | QA |
 
 ---
 
@@ -96,19 +97,22 @@ draft ──▶ in_review ──▶ approved
 # 步骤 1: 需求分析 (Architect)
 /sdlc-requirements-analysis "用户认证系统，支持 OAuth2"
 
-# 步骤 2: 架构设计 (Architect)
+# 步骤 2: 原型设计 (可选) (Architect)
+/ui-ux-pro-max design "用户登录页面"
+
+# 步骤 3: 架构设计 (Architect)
 /sdlc-architecture-design
 
-# 步骤 3: 详细设计 (Architect)
+# 步骤 4: 详细设计 (Architect)
 /sdlc-detailed-design
 
-# 步骤 4: 代码开发 (Developer)
+# 步骤 5: 代码开发 (Developer)
 /sdlc-code-development
 
-# 步骤 5: 测试 (QA)
+# 步骤 6: 测试 (QA)
 /sdlc-testing
 
-# 步骤 6: 部署 (QA)
+# 步骤 7: 部署 (QA)
 /sdlc-deployment
 ```
 

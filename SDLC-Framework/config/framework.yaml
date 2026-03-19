@@ -1,0 +1,194 @@
+# SDLC Framework 配置文件
+
+framework:
+  version: "2.0.0"
+  name: "SDLC Framework"
+
+# 项目配置
+project:
+  # 项目类型检测
+  type_detection:
+    new_project:
+      - directory_empty: true
+      - no_pom_xml: true
+      - no_package_json: true
+
+    legacy_maintenance:
+      - has_pom_xml: true
+      - has_package_json: true
+      - has_source_code: true
+
+    bug_fix:
+      - intent_keywords: ["fix", "bug", "issue", "修复"]
+
+# 文档配置
+documents:
+  # 核心文档定义
+  core:
+    - name: "requirements.md"
+      owner: "Architect"
+      template: "SDLC-Framework/docs/templates/requirements-template.md"
+
+    - name: "architecture.md"
+      owner: "Architect"
+      template: "SDLC-Framework/docs/templates/architecture-template.md"
+      dependencies: ["requirements.md"]
+
+    - name: "api-specs.md"
+      owner: "Architect"
+      template: "SDLC-Framework/docs/templates/api-specs-template.md"
+      dependencies: ["architecture.md"]
+
+    - name: "data-models.md"
+      owner: "Architect"
+      template: "SDLC-Framework/docs/templates/data-models-template.md"
+      dependencies: ["architecture.md"]
+
+    - name: "test-plan.md"
+      owner: "QA"
+      template: "SDLC-Framework/docs/templates/test-plan-template.md"
+      dependencies: ["api-specs.md"]
+
+    - name: "deployment.md"
+      owner: "QA"
+      template: "SDLC-Framework/docs/templates/deployment-template.md"
+      dependencies: ["test-plan.md"]
+
+  # 场景文档映射
+  scenarios:
+    new-project:
+      - "requirements.md"
+      - "architecture.md"
+      - "api-specs.md"
+      - "data-models.md"
+      - "test-plan.md"
+      - "deployment.md"
+
+    legacy-maintenance:
+      - "change-request.md"
+      - "change-design.md"
+      - "test-checklist.md"
+
+    bug-fix:
+      - "bug-analysis.md"
+      - "fix-verification.md"
+
+# 文档状态定义
+status:
+  values:
+    draft: "草稿，编辑中"
+    in_review: "待审查"
+    approved: "已批准，可作为依据"
+    deprecated: "已废弃，不可使用"
+    blocked: "被阻塞，等待依赖"
+
+  transitions:
+    draft: [in_review, deprecated]
+    in_review: [approved, blocked, draft]
+    approved: [deprecated]
+    blocked: [draft]
+    deprecated: []
+
+# 角色定义
+roles:
+  architect:
+    name: "Architect"
+    responsibilities:
+      - "需求分析"
+      - "架构设计"
+      - "API 设计"
+      - "数据模型设计"
+    skills:
+      - "sdlc-requirements-analysis"
+      - "sdlc-architecture-design"
+      - "sdlc-detailed-design"
+      - "sdlc-code-review"
+
+  developer:
+    name: "Developer"
+    responsibilities:
+      - "代码开发"
+      - "单元测试"
+      - "数据库迁移"
+    skills:
+      - "sdlc-code-development"
+      - "sdlc-test-gen"
+      - "sdlc-flyway-migration"
+
+  qa:
+    name: "QA"
+    responsibilities:
+      - "测试计划"
+      - "测试执行"
+      - "部署验证"
+    skills:
+      - "sdlc-testing"
+      - "sdlc-qa-browse"
+      - "sdlc-qa-browse-legacy"
+      - "sdlc-deployment"
+
+# 质量门禁
+quality_gates:
+  new-project:
+    - check: "需求文档已批准"
+      document: "requirements.md"
+      status: "approved"
+
+    - check: "架构文档已审查"
+      document: "architecture.md"
+      status: "approved"
+
+    - check: "API 规范已定义"
+      document: "api-specs.md"
+      status: "approved"
+
+    - check: "测试用例已覆盖"
+      document: "test-plan.md"
+      status: "approved"
+
+    - check: "部署方案已验证"
+      document: "deployment.md"
+      status: "approved"
+
+  legacy-maintenance:
+    - check: "变更影响已评估"
+      document: "change-request.md"
+      status: "approved"
+
+    - check: "回归测试已定义"
+      document: "test-checklist.md"
+      status: "approved"
+
+    - check: "向后兼容已验证"
+      document: "change-design.md"
+      status: "approved"
+
+  bug-fix:
+    - check: "Bug 根因已确认"
+      document: "bug-analysis.md"
+      status: "approved"
+
+    - check: "修复方案已评审"
+      document: "bug-analysis.md"
+      status: "approved"
+
+    - check: "回归测试已通过"
+      document: "fix-verification.md"
+      status: "approved"
+
+# 状态文件配置
+status_file:
+  path: ".sdlc/docs-status.yaml"
+  auto_create: true
+  auto_update: true
+
+# 模板配置
+templates:
+  base_path: "SDLC-Framework/docs/templates"
+  custom_path: ".sdlc/templates"
+
+# 输出配置
+output:
+  docs_path: "docs"
+  use_timestamp: false
+  backup_before_update: true
